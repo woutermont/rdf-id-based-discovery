@@ -1,5 +1,5 @@
 
-= Agent Interactions
+# Agent Interactions
 
 When discovering information and possible interactions with an Entity,
 Agents can use Entry Points such as the Entity's RDF-ID. However, since such an Identifier can only
