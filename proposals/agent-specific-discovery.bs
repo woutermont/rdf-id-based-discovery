@@ -1,0 +1,148 @@
+<pre class="metadata">
+Title: Agent-Specific Discovery
+Shortname: asd
+Level: 1
+Max ToC Depth: 2
+Status: w3c/UD
+Group: w3c
+URL: https://solid.github.io/woutermont/rdf-id-based-discovery/agent-specific-discovery
+Repository: https://github.com/woutermont/rdf-id-based-discovery
+Inline Github Issues: title
+Editor: Wouter Termont
+Markup Shorthands: markdown yes
+Boilerplate: style-darkmode off, conformance no
+Abstract:
+  This specification details how Agents can find additional  
+  discovery endpoints about an Entity in order to interact with it.
+</pre>
+
+
+<pre class="biblio">
+{
+  "shapetrees": {
+    "href": "https://shapetrees.org/TR/specification/",
+    "title": "Shape Trees",
+    "authors": [
+      "Justin Bingham",
+      "Eric Prud'hommeaux"
+    ]
+  },
+  "interop": {
+    "href": "https://solid.github.io/data-interoperability-panel/specification/",
+    "title": "Web Access Control"
+  },
+  "webid": {
+    "href": "https://www.w3.org/2005/Incubator/webid/spec/identity/",
+    "title": "WebID 1.0",
+    "authors": [
+      "Tim Berners-Lee",
+      "Henry Story",
+      "Andrei Sambra"
+    ]
+  },
+  "did": {
+    "href": "https://www.w3.org/TR/did-core/",
+    "title": "Decentralized Identifiers (DIDs) v1.0",
+    "authors": [
+      "Drummond Reed",
+      "Manu Sporney",
+      "Dave Longley",
+      "Christopher Allen",
+      "Ryan Grant",
+      "Markus Sabadello"
+    ]
+  },
+  "shex": {
+    "href": "http://shex.io/shex-semantics/index.html",
+    "title": "Shape Expressions Language 2.1",
+    "authors": [
+      "Eric Prud'hommeaux",
+      "Iovka Boneva",
+      "Jose Emilio Labra Gayo",
+      "Gregg Kellogg"
+    ]
+  },
+  "shacl": {
+    "href": "https://www.w3.org/TR/shacl/",
+    "title": "Shapes Constraint Language (SHACL)",
+    "authors": [
+      "Holger Knublauch",
+      "Dimitris Kontokostas"
+    ]
+  },
+  "solid-oidc": {
+    "href": "https://solid.github.io/solid-oidc/",
+    "title": "Solid-OIDC Specification",
+    "authors": [
+      "Dmitri Zagidulin",
+      "Aaron Coburn",
+      "elf Pavlik"
+    ]
+  }
+}
+</pre>
+
+
+Terminology {#terms}
+=================================
+
+<dfn>Entity</dfn>: an RDF 1.1 [=Resource=], i.e. "something in the world".
+
+<dfn>Agent</dfn>: an [=Entity=] that acts, either on its own or by some [=Social Agent=].
+
+<dfn>Application</dfn>: a software-based Agent that a [=Social Agent=] uses to access, manipulate, and manage the data in their control, as well as the data they’ve been granted access to.
+
+<dfn>Social Agent</dfn>: a strongly identifiable individual, group, or organization that can own or be responsible for data, and provide authorization to the access of that data by other Agents.
+
+<dfn>Identity</dfn>: a subset of an [=Entity's=] complete set of characteristics, that still uniquely distinguishes it from other [=Entities=].
+
+<dfn>Identifier</dfn>: a minimal [=Identity=], allowing to refer to the [=Entity=], which is then called the [=referent=] of the [=Identifier=].
+
+<dfn>Dereferenceable Identifier</dfn>: an [=Identifier=] that can be dereferenced to a [=Resource=] describing the referent [=Entity=].
+
+<dfn>RDF-Dereferenceable Identifier</dfn>: a [=Dereferenceable Identifier=] that dereferences to an [=RDF Source=].
+
+<dfn>Identity Document</dfn>: 
+
+<dfn>Service</dfn>: 
+
+<dfn>Endpoint</dfn>: 
+
+
+Agent-Specific Endpoints {#ases}
+=================================
+
+Based on [SAI Application Registrations](https://solid.github.io/data-interoperability-panel/specification/#ar)). The [=Application Registration=], in its role as provider of application-specific information, is here called an [=Agent-Specific Endpoint=].
+
+When discovering information about an [=Entity=] (e.g. a [=Social Agent=]), and possible ways to interact with it, [=Agents=] use certain [=Endpoints=] (i.e. points of entry), such as the [=Entity's=] [=Identifier=] (e.g. WebID) and the [=Endpoints=] found in its corresponding [=Identity Document=] (e.g. WebID Document).  Starting from the same initial point of entry, however, [=Agents=] will never discover [=Endpoints=] unique to them. This makes it hard to impose privacy and security restrictions, without resorting to badly performing trial-and-error approaches, in which the [=Agent=] tries to access every [=Endpoint=] until it finds one that returns a successful response. While these might work for toy examples and proofs of concept, they are not scalable: 
+discovering [=Agents=] would have to check the access to hundreds or thousands of resources in order to find the ones they can access. 
+
+To mitigate this, an [=Entity=] should be able to have [=Agent-Specific Endpoints=], accessible by a subset of [=Agents=], of which other [=Agents=] have no knowledge at all. Such [=Agent-Specific Endpoints=] could be used to provide specific information (tailored indexes, restricted API endpoints, user preferences, application state and metadata ...) to any number of [=Agents=] and groups of [=Agents=], without cluttering the lookup-space of every other [=Agent=].
+
+<dfn>Agent-Specific Endpoint</dfn>: 
+
+Endpoint Discovery Hub {#edh}
+==============================
+
+Based on [SAI Authorization Agent Discovery](https://solid.github.io/data-interoperability-panel/specification/#authorization-agent-discovery). The [=Authorization Agent=], in its role as discovery mechanism, is here called the [=Endpoint Discovery Hub=].
+
+Because of the reason explained in [[#ases]], [=Agents=] cannot simply rely on simple requests to discover their [=Agent-Specific Endpoints=], since the [=Endpoint=] for such a request would itself be visible to every other [=Agent=]. Therefore, a single [=Endpoint=] should be discoverable, running a [=Service=] at which each [=Agent=] can identify itself in return for its [=Agent-Specific Endpoints=] (if it has any). Let's call this [=Service=] the [=Endpoint Discovery Hub=].
+
+<dfn>Endpoint Discovery Hub</dfn>: a [=Service=], linked to an [=Entity=], providing [=Agents=] interacting with that [=Entity=] quick access to their [=Agent-Specific Endpoints=].
+
+The [=Endpoint Discovery Hub=] for a given [=Entity=] can be discovered by dereferencing the [=Identifier=] of that [=Entity=], and extracting the object value of the `ased:endpoints` statement with the [=Identifier=] as subject in the returned [=Identity Document=]. The extracted IRI of the [=Endpoint Discovery Hub=] <em class="rfc2119">MUST</em> be unique to that [=Entity=]. In scenarios where an [=Endpoint Discovery Hub=] services multiple [=Entities=], this may be facilitated through a unique sub-domain or path.
+
+Note that this is ortogonal to the concrete RDF-ID used, and can thus be optimised if the RDF-ID server also functions as AIH.
+
+
+Agent-Specific Endpoint Discovery {#ased}
+==========================================
+
+Based on [SAI Agent Registration Discovery](https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery).
+
+An [=Agent=] that needs to discover its [=Agent-Specific Endpoints=] related to a target [=Entity=] can now query the [=Endpoint Discovery Hub=] discovered in that [=Entity's=] [=Identity Document=]. The requesting [=Agent=] therefore performs an `HTTP HEAD` or `HTTP GET` request on the IRI, in which the `HTTP Authorization` header is set to an Access Token containing the [=Identifier=] of the Agent. After checking the Access Token, the [=Endpoint Discovery Hub=] will send a response including an `HTTP Link` header relating the [=Agent-Specific Endpoints=] to the [=Agent=] making the request via the `http://www.w3.org/ns/solid/ased#endpoint` link relation.
+
+If no [=Agent-Specific Endpoint=] was found for the requesting [=Agent=], the [=Endpoint Discovery Hub=] must respond with status code `404`. In those cases, as well as when no [=Endpoint Discovery Hub=] is listed in the [=Entity's=] [=Identity Document=], the requesting [=Agent=] must take this [=Identity Document=] to contain the only [=Endpoints=] available.
+
+
+
