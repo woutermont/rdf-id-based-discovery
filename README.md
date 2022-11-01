@@ -1,3 +1,4 @@
-# RDF-ID-based Discovery
 
-In this repo I try to bring together some proposals on discovery mechanisms that are based in identity mechanisms using identifiers that dereference to RDF-resources (e.g. WebID).
+# Solid: thoughts, notes and proposals
+
+In this repo I try to bring together thoughts, notes and proposals on different mechanisms within the Solid ecosystem.
