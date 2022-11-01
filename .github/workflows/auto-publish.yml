@@ -12,5 +12,5 @@ jobs:
         with:
           GH_PAGES_BRANCH: gh-pages
           TOOLCHAIN: bikeshed
-          SOURCE: proposals/
-          DESTINATION: specification/
+          SOURCE: proposals/agent-specific-discovery.bs
+          DESTINATION: specification/agent-specific-discovery.html
