@@ -110,7 +110,17 @@ Text Macro: ASE <l>[=Agent-Specific Endpoint=]</l>
 
 NOTE: The concept of an [ASE] is based on an abstraction of the [Application Registration](https://solid.github.io/data-interoperability-panel/specification/#ar) of [INTEROP]), in its role as provider of application-specific information.
 
-Given a complete set |E| of [=Endpoints=] discoverable by an [=Agent=] |A| with respect to an [=Entity=], let <math><mo>{</mo><mi><var>Y</var></mi><mo>}</mo><mo>,</mo><mo>{</mo><mi><var>N</var></mi><mo>}</mo></math> be the partition of |E| into the set |Y| of [ASE]s and the set |N| of other [=Endpoints=]. Lacking any further information, the performance of |A| will correlate with <math><mfrac><mrow><mo>|</mo><mi>Y</mi><mo>|</mo></mrow><mrow><mo>|</mo><mi>E</mi><mo>|</mo></mrow></mfrac></math>. While this might work for toy examples and proofs of concept, it is not scalable: for increasing <math><mo>|</mo><mi>E</mi><mo>|</mo></math>, |A| would spend ever more time in a trial-and-error search for its [ASE]s.
+<pre class="metadata">
+Text Macro: E <math><mi>E</mi></math>
+Text Macro: A <math><mi>A</mi></math>
+Text Macro: Y <math><mi>Y</mi></math>
+Text Macro: N <math><mi>N</mi></math>
+Text Macro: PART <math><mo>{</mo><mi>Y</mi><mo>,</mo><mi>N</mi><mo>}</mo></math>
+Text Macro: PERF <math><mfrac><mrow><mo>|</mo><mi>Y</mi><mo>|</mo></mrow><mrow><mo>|</mo><mi>E</mi><mo>|</mo></mrow></mfrac></math>
+Text Macro: SIZE <math><mo>|</mo><mi>E</mi><mo>|</mo></math>
+</pre>
+
+Given a complete set [E] of [=Endpoints=] discoverable by an [=Agent=] [A] with respect to an [=Entity=], let [PART] be the partition of [E] into the set [Y] of [ASE]s and the set [N] of other [=Endpoints=]. Lacking any further information, the performance of [A] will correlate with [PERF]. While this might work for toy examples and proofs of concept, it is not scalable: for increasing [SIZE], [A] would spend ever more time in a trial-and-error search for its [ASE]s.
 
 This document specifies a way to discover an [=Agent's=] [ASE]s relating to an [=Entity=] without having to try *all* discoverable [=Endpoints=] related to that [=Entity=], using a *single* [=Endpoint=] per [=Entity=] (TBD: actually per [=Identity=]), that can provide the [=Agent=] with (only) the limited set of [ASE]s, based on the [=Identity=] of the [=Agent=].
 
