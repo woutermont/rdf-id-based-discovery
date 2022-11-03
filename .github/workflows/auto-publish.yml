@@ -4,23 +4,31 @@ on:
     branches: [main]
 jobs:
   main:
-    strategy:
-      max-parallel: 1
-      matrix:
-        include:
-          - source: index.html
-            destination: index.html
-          - source: proposals/rdf-id.bs
-            destination: specification/rdf-id.html
-          - source: proposals/agent-specific-discovery.bs
-            destination: specification/agent-specific-discovery.html
-    name: Deploy to GitHub pages
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: w3c/spec-prod@v2
+
+      - name: checkout
+        uses: actions/checkout@v2.2.0
+
+      - name: setup python
+        uses: actions/setup-python@v2
         with:
-          GH_PAGES_BRANCH: gh-pages
-          TOOLCHAIN: bikeshed
-          SOURCE: ${{ matrix.source }}
-          DESTINATION: ${{ matrix.destination }}
+          python-version: '3.10.0'
+
+      - name: setup bikeshed
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade bikeshed
+          bikeshed update
+
+      - name: run bikeshed
+        run: |
+          bikeshed proposals/rdf-id.bs
+          bikeshed proposals/agent-specific-discovery.bs
+
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./proposals
+          destination-dir: ./specification
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
