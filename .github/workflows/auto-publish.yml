@@ -23,8 +23,8 @@ jobs:
 
       - name: run bikeshed
         run: |
-          bikeshed proposals/rdf-id.bs
-          bikeshed proposals/agent-specific-discovery.bs
+          bikeshed spec proposals/rdf-id.bs
+          bikeshed spec proposals/agent-specific-discovery.bs
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
