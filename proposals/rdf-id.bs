@@ -1,0 +1,239 @@
+
+<pre class="metadata">
+
+Title: RDF Identity
+Shortname: RDF-ID
+
+Editor: Wouter Termont, w3cid 115604, Digita https://digita.ai, https://github.com/woutermont
+
+Group: w3c
+Status: w3c/UD
+Revision: 1
+
+URL: https://solid.github.io/woutermont/solid/specification/rdf-id
+Repository: https://github.com/woutermont/solid
+
+Boilerplate: style-darkmode off
+Markup Shorthands: markdown yes
+Inline Github Issues: title
+Max ToC Depth: 2
+
+Complain About: accidental-2119 yes, broken-links yes, missing-example-ids yes, mixed-indents yes
+
+Text Macro: NONORM *This section is non-normative.*
+
+Abstract: 
+
+  This specification ...
+
+Status Text: 
+
+  This document was published by the Editor(s) for the [Solid Community Group](https://www.w3.org/community/solid/) as an Unofficial Proposal Draft. The sections that have been incorporated have <strong>NOT</strong> been reviewed following the [Solid process](https://github.com/solid/process). The information in this document is still subject to change. You are invited to [contribute](https://github.com/woutermont/solid/issues) any feedback, comments, or questions you might have. Publication as an Unofficial Proposal Draft does not imply endorsement by the W3C Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress. This document was produced by a group operating under the [W3C Community Contributor License Agreement (CLA)](https://www.w3.org/community/about/process/cla/). A human-readable [summary](https://www.w3.org/community/about/process/cla-deed/) is available.
+
+</pre>
+
+
+# Introduction # {#sec-intro}
+
+[NONORM]
+
+This short document aims to provide some core definitions of terms that are central in discussions revolving around the topic of identity in the context of Linked Data. With this, the Editor(s) hope to shed some clarification in sometimes murky debates, and to form a sound basis for many conversations to come.
+
+
+# Representation # {#sec-representation}
+
+[NONORM]
+
+Talking about the Web equals talking about (potential) <span id="dfn-information"><dfn>Information</dfn>: that which is (potentially) *informative*, i.e. the occurrence of which is (potentially) unexpected, or useful in any other way</span>.
+
+[=Information=] has *intentionality*, i.e. it is always *about* some <span id="dfn-entity"><dfn lt="Entity|Resource|Object|Phenomenon">Entity</dfn>: something in the world, be it concrete or abstract, physical or mental, real or imaginary, factual or fictitious, practical or theoretical, empirical or analytical ... that can be shown, seen, perceived, observed, intuited, imagined, constructed, thought, understood, known, meant etc. In their broadest possible sense, the following terms are synonyms: [=Thing=], [=Phenomenon=], [=Object=], [=Resource=] [[!RDF-CONCEPTS|RDF 1.1]]</span>.
+
+The elemental pieces of [=Information=], the atoms of decision making, are <span id="dfn-data"><dfn lt="Data|Datum">Data</dfn> (sing. *datum*): basic units of meaning (e.g. quantities, qualities, statistics ...), from which inferences may be drawn.</span>
+
+  Note: [=Data=] are not facts (i.e. *true* propositions). They may [=Represent=] facts, but they may just as well [=Represent=] *false* propositions. One could therefore characterise *factual data* as the data that is worth taking into account.
+
+[=Data=] are collected ([=Interpreted=]) or expressed ([=Represented=]) via a <span id="dfn-sign-system"><dfn>Sign System</dfn> (e.g. a language): a combination of the [=Semantic=], [=Syntactic=] and [=Pragmatic=] models necessary to maintain the meaningful *sign relation* between the *signifier* and the *signified* throughout the sign processes (*semioses*) of [=Interpretation=] and [=Representation=]</span>.
+
+  Note: <dfn>Signs</dfn> (icons; indices; symbols, a.k.a. marks or tokens) form the basic units of [=Interpretation=] and [=Representation=]. They are **signifiers** that stand in for and take the place of something **signified**, by which the signified is known or identified, and which can be used to indicate, notice, imagine or think of it. All [=Data=] are [=Signs=], even though not all [=Signs=] are [=Data=].
+
+<span id="dfn-representation">A <dfn lt="Representation|Represent">Representation</dfn> (a.k.a. a **model**, in one of its many senses) of an [=Entity=] is another [=Entity=] that represents the first one in some way.</span> An [=Interpretation=] is the inverse, but can be defined in different ways, as explained below.
+
+  Note: The term [=Data=] is somewhat ambiguous, as it is used for both the *[=Representation=] of* basic units of meaning and the *[=Interpretation=] as* those units of meaning. 
+
+When [=Data=] are [=Represented=] in their initial form, i.e. with the [=Signs=] in which their meaning was first collected/expressed, and without processing or transforming them into another form, they are called **raw data**. Often, but not always, raw data are presented with little to no structure apart from their individual initial [=Signs=]: they are **unstructured data**. This [=Data=] can be processed into **structured data** by transforming it to a [=Representation=] that is an *element* of a <span id="dfn-structure"><dfn>Structure</dfn>: a domain of [=Entities=] with a number of associated relations between them, whose behavior adheres to some axioms.
+
+
+## Semantics ## {#sec-semantics}
+
+Focussing on the [=Interpretation=] process, [=Semantics=] can be seen either as a *descriptive* model, or as a *normative* model, of this process; or as the study of such models.
+
+From a *descriptive* perspective, [=Semantics=] provide <span id="dfn-interpretation">an <dfn>Interpretation</dfn> of concrete *instances* of [=Representation=]: it expresses what a [=Representation=] means, by picking one of the possibly many other [=Entites=] whose [=Structure=] can be mapped onto the [=Structure=] of the [=Representation=], i.e. it relates all the elements of the former [=Structure=] to [=Entities=] in the latter [=Structure=] in a way that is *structure-preserving*. The term "interpretation" can both stand for the selected [=Structure=], or for the map itself, which we can then interpret as the *process* of [=Interpretation=].</span>
+
+  Note: In *model theory*, the term "interpretation" stands more precisely for the surjective map from a subset of a cartesian power of the [=Interpretation=] [=Structure=] to the [=Represention=] [=Structure=], paired with the power itself.
+
+As a *normative* approach, a [=Semantic=] model is <span id="ontology">a conceptual schema, domain model, or <dfn>Ontology</dfn>: it provides a structural metadata commonality or shared context, modelling how an interpreter *should* [=Interpret=] a [=Representation=]. Such models are often created together with the [=Syntax=] of a [=Sign System=], where it *identifies* and *defines* a selected amount of informational needs, i.e. the meaningful or significant aspects pertinent to a particular domain: individual entities, their nature (concepts, categories, types, roles ...), their characteristics (attributes, properties ...), and their relationships. A model, in this sense, is the intended *standard interpretation* of a [=Syntax=] in a [=Sign System=]. Itself independent of the [=Syntax=], the ontology can have a strong influence over it, e.g. in its choice of primitive signs and formation rules.</span>
+
+
+## Syntax ## {#sec-syntax}
+
+Focussing on the [=Representation=] process, a [=Syntax=] (a.k.a. a schema, design, shape, form, pattern, or type) defines the structural properties and constraints of a [=Sign System=], i.e. what the language looks like, regardless of its [=Semantics=]. The study of such theories/models is known as [=Syntactics=]. 
+
+A [=Syntax=] is based on <span id="dfn-alphabet">an <dfn>Alphabet</dfn> of all [=Signs=] it uses as atomic primitives:[=Non-Logical Constants=], [=Logical constants=] and some **auxiliary signs**, like brackets, other punctation, and sometimes variables.</span> Of these three categories, <span id="dfn-non-logical-constants">only <dfn>Non-Logical Constants</dfn> are necessary to form a basic [=Syntax=]: they are the undefined *primitive* [=Terms=] (a.k.a. "letters" or *categoremata*) composing the *lexicon* or **vocabulary**. Independently introduced into the language, they designate the [=Entities=] *identified* in a preceding [=Conceptual Model=]. They are often also held to include the *variables* representing unspecified [=Enitities=].
+
+Based on this vocabulary, <span id="dfn-signature">a [=Syntax=] defines a <dfn>Signature</dfn>: a structural description or *interface*, that list and describes the [=Non-Logical Constants=] by specifying their **arities** (i.e. how many other terms it needs to form a expression) and **sorts** (i.e. what kind of terms it needs to form an expression).</span> In line with this [=Signature=], the full [=Syntax=] contains all the <span id="dfn-expression"><dfn lt="Expression|Phrase|Term">Expressions</dfn> (*phrases* or *terms*) that it holds to be **well-formed** (i.e. *valid*) compositions of the *primitive terms*. These [=Expressions=] can be further composed into more complex [=Expressions=], but always refer to some [=Entity=]: a *ground* [=Term=], i.e. one that does not contain variables, can be evaluated to a primitive term, denoting a named object from the domain of discourse; a term that is not ground denotes a function that will evaluate to a (ground) term when given another expression.</span> Often, it is possible to describe or define these *well-formed* [=Expressions=] in terms of a **grammar**, consisting of axioms and formation rules.
+
+  <aside class="note">
+  <span id="dfn-logical-constant">The <dfn>Logical Constants</dfn> or **syncategoremata** (which are often also held to include the *meta-variables* representing unspecified [=Assertions=]) do not designate any [=Entity=]. They form a *meta-syntax*, added over the [=Non-Logical Constants=] of the *object-syntax*, and only have meaning as a **formal system**</span>: an abstract structure concerned with specific qualities/values (e.g. truth, provability, justification, belief) of its <span id="dfn-assertion">[=Assertions=]: specific (meta-)[=Expressions=] (a.k.a. *statements* or *formulae*) formed by applying the [=Logical Constants=] to the (object-)[=Expressions=] (then called *atomic formulae*).</span> If a *formal system* allows one to infer *theorems* from *axioms* based on rules that preserve the qualities of interest without refering to the semantics of the underlying system, it is also called a *deductive system* or *calculus*.
+  
+  A *formal system* allows one to formulate <span id="dfn-theory"><dfn>Theories</dfn>: [=Statements=] (called *theorems*) constraining the possible interpretations of the [=Signature=] of the (object-)[=Syntax=]. These constraints can sometimes be visualised in a *schematic*: a concrete [=Representation=] of the schema. A [=Theory=] can also be seen as a measure of the degree to which a [=Structure=] has a particular (structural) property.</span> <span id="dfn-model">A [=Structure=] that adheres to a [=Theory=], i.e. in which the property measured by that [=Theory=] is expressed, is called a <dfn>Model</dfn> of that [=Theory=].</span> There are multiple [=Theories=] that can be formulated about one [=Structure=], highlighting the different properties it has. Combined, they form the *complete* [=Theory=] of that [=Structure=], containing all [=Assertions=] that can be made about it.
+  </aside>
+
+In a [=Representation=], one can make a distinction between the part of a [=Structure=] that models the [=Represented=] directly, i.e. which has a direct counterpart in the [=Interpretation=]; and the part of it that does not, but which is necessary for the [=Representation=] to be possible or useable some sense (e.g. performant, secure). Within a [=Sign System=], an [=Abstract Syntax=] defines the former, while a [=Concrete Syntax=] defines the latter. 
+
+
+### Abstract syntax ### {#sec-abstract}
+
+A *logical schema* or [=Abstract Syntax=] captures the *deep structure* (a.k.a. *logical form* or *representational logic*) of a sign system. It is an **abstract data type**: a [=Theory=] constraining [=Representations=] *indirectly*, by placing restrictions on the possible [=Concrete Syntaxes=]. It is thus an *approach* to modelling/representing: it defines WHAT must/can be representable, not HOW it should be represented. It forms a *class* of [=Structures=] that have the same behavior; or a syntax-invariant *syntactic category* representing the isomorphisms between these [=Structures=]. 
+
+The [=Abstract Syntax=] decides on the [=Non-Logical Constants=] (i.e. the vocabulary) and their [=Signature=], often inspired by the [=Entities=] identified in the [=Conceptual Model=]. These [=Entities=] capture all the meaningfull/significant [=Structure=] of their [=Representations=]. While in itself unable to discriminate between any of the possible [=Interpretations=] of its vocabulary, the [=Abstract Syntax=] forms the sufficient basis for a *formal system* to formulate a [=Theory=] about them. 
+
+While it can already anticipate certain efficiencies, it is independent of implementation in any particular [=Concrete Syntax=] of the sign system. It is therefore the [=Syntax=] of an *internal*, *ideal* [=Representation=]. 
+
+
+### Concrete syntax ### {#sec-concrete}
+
+Where the [=Abstract Syntax=] constitutes a modelling approach, which provides a [=Theory=] over [=Structures=] with a certain [=Signatures=], a *physical (data) structure* or [=Concrete Syntax=] specifies a concrete modeling language, defining precisely HOW something is represented in a particular <span id="dfn-medium"><dfn>Medium</dfn> (the infrastructure or other means in or through which something, e.g. [=Representation=], is achieved, forming the surface or interface between the environment and that which it carries or channels)</span>.
+
+The [=Abstract Syntax=] is thus the [=Syntax=] of an *external*, *real* [=Representation=], including additional syntactical features (e.g. parentheses) which form a *surface structure* (or *physical form*) that is already implicit in the [=Abstract Syntax=], but is nevertheless syntactically significant: it includes sufficient details to achieve certain specific goals over the [=Medium=] (e.g. security, performance). Note that this can also mean leaving some operators invisible (e.g. multiplication). A number of synonyms can be used to stress the different ways in which this significance can be understood.
+
+  - : <dfn>Notation</dfn>
+    :: A system of signs used to express or record information in a concrete (data) structure.
+
+  - : <dfn>Format</dfn>
+    :: A particular convention or standard for representing data.
+
+  - : <dfn>Encoding</dfn>
+    :: A syntax particularly fit for specific applications, such as aspects of communication in a particular medium (e.g. efficiency, reliability, security), or the process of transforming or converting a [=Representation=] without such properties to a [=Representation=]that has those properties in a way that the structure can be maintained (throughout transmission and storage) and easily reconstructed and interpreted later.
+
+  - : <dfn>Serialization</dfn>
+    :: An encoding that transforms or converts a (complex) data structure or object state into a sequence of simpler units/elements that facilitates transmission or storage through/in a particular medium.
+
+A [=Concrete Syntax=] therefore always depends both on its [=Abstract Syntax=] and on the technology in which the latter is implemented (i.e. the [=Medium=]). A physical (data) structure implementing an [=Abstract Syntax=] has to provide one procedure or function for each abstract operation. In doing so, their [=Structure=] becomes a [=Model=] for the [=Theory=] of the latter: it is an [=Interpretation=] of the operations specified in the[=Signature=], i.e. it provides [=Semantics=] to the behavior of the abstract data type. On the other hand, the [=Concrete Syntax=] is also a [=Theory=] itself, constraining its *(data) instances*. Note that [=Terms=] in different [=Concrete Syntaxes=] can denote the same term in a single [=Abstract Syntax=]. Such [=Terms=] are said to be *definitionally equivalent*: they are isomorphic with each other and with the abstract [=Term=].
+
+Note: As [=Syntaxes=] in real life are used via one or more *implementations*: ways to actually perform the specified operations. Since there might be slight differences between these different impelmentations, we distinguish these as multiple *configurations* of the same [=Syntax=]. These configuration differences are often described in or derivable from the as-built documentation.
+
+
+## Pragmatics ## {#sec-pragmatics}
+
+[=Pragmatics=] is the study of how [=Context=] contributes to the [=Interpretion=] of a [=Representation=]. <span id="dfn-context"><dfn>Context</dfn> is an *umbrella-term* for the circumstances surrounding the *interpretative event*, which provide the [=Interpreter=] with the resources for (appropriate) [=Interpretation=], in terms of which the [=Interpretation=] can be fully understood.</span> This includes, amongst others, the influence of the [=Interpreter's=] [=Semantics=], their beliefs about the possible [=Representer's=] [=Context=] (e.g. identity, intentions, beliefs), the possible relationship between the [=Representer=] and the [=Interpreter=], as well as other background knowledge. 
+
+An important part of [=Pragmatics=] is the inference of additional (implicit) [=Information=] from the already explicit [=Content=] of a [=Representation=]. This <span id="dfn-content"><dfn>Content</dfn>
+:: The significant meaning of a [=Message=], i.e. the matter which the sender wants to communicate purposefully to the receiver. This meaning can be expressed explicitly, upon which it is derived from the [=Message=] by applying [=Semantics=] to the [=Syntax=]; or implicitly, upon which it is can be correctly infered from the explicit meaning and the [=Context=]. [=Content=] therefore acts like a measure (i.e. a method of assigning a size) for the total, maximal or potential [=Information=] contained within a [=Message=]. [=Content=] does not include misinterpretation, and is independent of its outward manifestations in a [=Syntax=].</span>
+
+From the above, it is clear that [=Information=] is a *subjective* notion. [=Data=] only *becomes* [=Information=] to the extent that it is *novel* to the interpreter; so [=Data=] only leads to [=Information=] *dependant* on the [=Context=]. In much the same way, [=Information=] only leads to **knowledge** dependant on the [=Context=]. Different [=Contexts=] can thus lead to different [=Interpretations=] of the same [=Representation=], and thus to different [=Information=] and knowledge. No [=Representation=] has meaning or significance when stripped of all [=Context=].
+
+
+# Documents # {#sec-docs}
+
+Based on the more general definitions in the previous sections, this section is more pragmatic. It will try to overcome an ambiguity around the predominant way to [=Represent=] data on the Web: [=Documents=].
+
+If a <span id="dfn-source"><dfn lt="Source|Data Source">(Data) Source</dfn> is defined as any [=Entity=] from which something originates, and which is possibly mutable (i.e. its state can change over time)</span>, that which originates from it must be seen as a contentful expression of its state, i.e. a [=Representation=]. While the [=Source=], and thus its state, can change, however, [=Representations=] of it do not (necessarily) change accordingly. 
+
+The term "document" is ambiguous in the sense that it sometimes refers to an abstract [=Entity=] in which [=Information=] is recorded, and sometimes to a concrete [=Entity=] representing that [=Information=]. This specification proposes to define a <span id="dfn-document"><dfn>Document</dfn> as a [=Source=] of [=Data=], in an [=Abstract Representation=], i.e. independent of a specific format to be presentable in a specific medium, constructed to provide an original (official), permanent reference, in order to keep and remember its [=Contents=].</span> While a document can be purely conceptual, it is always identifyable, and can be represented concretely as one or multiple <span id="dfn-file">A <dfn>Files</dfn>: [=Concrete Representations=], i.e. bundles, threads or collections of [=Data=] recorded on some [=Medium=] in a certain [=Format=], that have a unique [=Identifier=], which differentiates them from all other [=Files=] and makes it identifiable or even locatable. The same [=Document=] can be [=Represented=] in multiple [=Files=] with different [=Formats=].</span>
+
+  Note: An <dfn>RDF Document</dfn> ([RDF-CONEPTS|RDF 1.1]), which is an [=RDF Source=] that encodes an [=RDF Graph=] or [=RDF Dataset=] in a *<a lt="concrete syntax">Concrete RDF Syntax</a>*, would therefore more aptly be named a [=File=], rather than a [=Document=].
+
+
+# Identity # {#sec-identity}
+
+Having disambiguated the notion of a [=Document=], this section will specify different types of [=Identities=] and their [=Identity Documents=].
+
+<span id="dfn-identity">An <dfn>Identity</dfn> is a [=Representation=] of an [=Entity=] consisting of a subset of the [=Entity's=] characteristics that uniquely distinguishes it from other [=Entities=].</span> <span id="dfn-identity">An <dfn lt="ID|Identifier">Identifier</dfn> can then be defined as a *minimal* [=Identity=] (or identity-like [=Representation=]), i.e. <span id="dfn-referent">the smallest set of characteristics that still allows one to uniquely refer to the [=Entity=], which is then called the <dfn>Referent</dfn> of the [=Identifier=]</span>. An [=Identifier=] serves as a **token**, i.e. a sign (often a symbol), referencing the [=Entity=]. Examples of [=Identifiers=] are social security numbers, combinations of names and addresses, or [[WEBID|WebIDs]].</span>
+
+Note: The abbreviation [=ID=] is most often used for [=Identifiers=], not for other [=Identities=].
+
+<pre class="metadata">
+Text Macro: IDOC <l>[=Identity Document=]</l>
+</pre>
+
+<span id="dfn-identity-document">Given an [=Identity=], an <dfn lt="ID Doc|ID Document|Identity Document|Identifier Document">Identity Document</dfn> is a [=Document=] that [=Represents=] that [=Identity=]. Examples of [IDOC]s are passports, visas, or [[WEBID|WebID Documents]].
+
+Note: Contrary to [=ID=], the abbreviation [=ID Document=] (or [=ID Doc=] for short), is mostly used for [=Identity Document=], not [=Identifier Document=].
+
+<pre class="metadata">
+Text Macro: DRID <l>[=Dereferenceable Identifier=]</l>
+Text Macro: RDFID <l>[=RDF-Dereferenceable Identifier=]</l>
+</pre>
+
+<span id="dereferenceable-identifier">A <dfn>Dereferenceable Identifier</dfn> is then an [=Identifier=] that can be dereferenced to an [IDOC] describing the [=Referent=] [=Entity=].</span> <span id="dereferenceable-identifier"> A <dfn>RDF-Dereferenceable Identifier</dfn> is then a [DRID] that dereferences to an [[!RDF-CONCEPTS|RDF 1.1]] [=RDF Source=]. Examples of [RDFID]s ar certain [[WEBID|WebIDs]] or [[DID|DIDs]].
+
+<!-- Bibliography -->
+
+<!-- Includes
+  https://www.specref.org
+  https://drafts.csswg.org/biblio.ref
+-->
+
+<1-- oauth: [[rfc6749|OAuth 2.0]] -->
+
+<pre class="metadata">
+Text Macro: INTEROP <l>[[INTEROP|Solid Application Interoperability]]</l>
+</pre>
+
+<pre class="biblio">
+{
+  "INTEROP": {
+    "href": "https://solid.github.io/data-interoperability-panel/specification/",
+    "title": "Solid Application Interoperability",
+    "authors": [
+      "Justing Bingham",
+      "Eric Prud'hommeaux",
+      "elf Pavlik"
+    ]
+  },
+  "WEBID": {
+    "href": "https://www.w3.org/2005/Incubator/webid/spec/identity/",
+    "title": "WebID 1.0",
+    "authors": [
+      "Tim Berners-Lee",
+      "Henry Story",
+      "Andrei Sambra"
+    ]
+  },
+  "DID": {
+    "href": "https://www.w3.org/TR/did-core/",
+    "title": "Decentralized Identifiers (DIDs) v1.0",
+    "authors": [
+      "Drummond Reed",
+      "Manu Sporney",
+      "Dave Longley",
+      "Christopher Allen",
+      "Ryan Grant",
+      "Markus Sabadello"
+    ]
+  },
+  "OIDC": {
+    "href": "https://openid.net/specs/openid-connect-core-1_0.html",
+    "title": "OpenID Connect Core 1.0",
+    "authors": [
+      "N. Sakimura",
+      "J. Bradley",
+      "M. Jones",
+      "B. de Medeiros",
+      "C. Mortimore"
+    ]
+  },
+  "DPOP": {
+    "href": "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop",
+    "title": "OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer",
+    "authors": [
+      "D. Fett",
+      "B. Campbell",
+      "J. Braidley",
+      "T. Lodderstedt",
+      "M. Jones",
+      "D. Waite"
+    ]
+  }
+}
+</pre>
