@@ -13,7 +13,7 @@ Group: w3c
 Status: w3c/UD
 Revision: 3
 
-URL: https://solid.github.io/woutermont/solid/agent-specific-discovery
+URL: https://solid.github.io/woutermont/solid/specification/agent-specific-discovery
 Repository: https://github.com/woutermont/solid
 
 Boilerplate: style-darkmode off
@@ -38,53 +38,14 @@ Status Text:
 
 # Terminology # {#terms}
 
-
 <pre class="metadata">
 Ignored Terms: Resource, Referent, Document, RDF Source, RDF Document
 </pre>
 
-: <dfn>Entity</dfn>
-:: An [[!RDF-CONCEPTS|RDF 1.1]] [=Resource=], i.e. "something in the world".
+This document borrows the definitions of <dfn>Entity</dfn>, <dfn>Identity</dfn>, <dfn>Identifier</dfn>, <dfn>Identity Document</dfn>, <dfn>Dereferenceable Identifier</dfn> and <dfn>RDF-Dereferenceable Identifier</dfn> from [RDFID].
 
 : <dfn>Agent</dfn>
 :: An [=Entity=] that acts, either on its own or by some other [=Agent=].
-
-: <dfn>Identity</dfn>
-:: A subset of an [=Entity's=] characteristics that uniquely distinguishes it from other [=Entities=].
-
-: <dfn lt="ID|Identifier">Identifier</dfn>
-:: A minimal [=Identity=], allowing to refer to the [=Entity=], which is then called the [=Referent=] of the [=Identifier=]. 
-
-Examples of [=Identifiers=] are social security numbers, combinations of names and addresses, or [[WEBID|WebIDs]].
-
-Note: The abbreviation [=ID=] is most often used for [=Identifiers=], not for other [=Identities=].
-
-: <dfn lt="ID Doc|ID Document|Identity Document|Identifier Document">Identity Document</dfn>
-:: A [=Document=] that encodes an [=Identity=].
-
-<pre class="metadata">
-Text Macro: IDOC <l>[=Identity Document=]</l>
-</pre>
-
-Examples of [IDOC]s are passports, visas, or [[WEBID|WebID Documents]].
-
-Note: Contrary to [=ID=], the abbreviation [=ID Document=] (or [=ID Doc=] for short), is mostly used for [=Identity Document=], not [=Identifier Document=].
-
-: <dfn>Dereferenceable Identifier</dfn>
-:: An [=Identifier=] that can be dereferenced to an [IDOC] describing the [=Referent=] [=Entity=].
-
-<pre class="metadata">
-Text Macro: DRID <l>[=Dereferenceable Identifier=]</l>
-</pre>
-
-: <dfn>RDF-Dereferenceable Identifier</dfn>
-:: A [DRID] that dereferences to an [[!RDF-CONCEPTS|RDF 1.1]] [=RDF Source=].
-
-<pre class="metadata">
-Text Macro: RDFID <l>[=RDF-Dereferenceable Identifier=]</l>
-</pre>
-
-Examples of [RDFID]s are [[WEBID|WebIDs]] or [[DID|DIDs]].
 
 : <dfn>Server</dfn>
 :: An [=Agent=] capable of receiving requests, and serving responses to those requests.
@@ -92,17 +53,18 @@ Examples of [RDFID]s are [[WEBID|WebIDs]] or [[DID|DIDs]].
 : <dfn>Endpoint</dfn>
 :: A *point of entry* to interaction with a [=Server=].
 
+<pre class="metadata">
+Text Macro: IDOC <l>[=Identifier Document=]</l>
+</pre>
 
-# Introduction # {#INTRO}
 
-[NONORM]
-
+# Introduction # {#sec-intro}
 
 When an [=Agent=] wishes to discover information about an [=Entity=] (e.g. a person, document or API), and the possible ways to interact with it, the [=Agent=] uses certain [=Endpoints=] (i.e. *points of entry*), such as the [=Entity's=] [=Identifier=] (e.g. a [[WEBID|WebID]]), and the [=Endpoints=] found in its corresponding [IDOC] (e.g. a [[WEBID|WebID Documents]]). Each discovered [=Endpoint=] can also be explored as a source of even more [=Endpoints=].
 
-An [=Entity=] exposing [=Endpoints=] to [=Agents=] might want to restrict the access to certain [=Endpoints=] to certain [=Agents=] or groups of [=Agents=]. We use *access* here in a broad sense, indicating the usefulness or lack thereof of an [=Endpoint=] for an [=Agent=]. Such access restrictions might be necessary because of privacy or security concerns, or to provide information specific to those [=Agents=]: tailored indexes, user preferences, application state and metadata etc. This leads to the following question: how can an [=Agent=] discover its [=Agent-Specific Endpoints=] between all [=Endpoints=] related to an [=Entity=], in a performant, secure, and privcy-minded manner? 
+An [=Entity=] exposing [=Endpoints=] to [=Agents=] might want to restrict the access to certain [=Endpoints=] to certain [=Agents=] or groups of [=Agents=]. We use *access* here in a broad sense, indicating the usefulness or lack thereof of an [=Endpoint=] for an [=Agent=]. Such access restrictions might be necessary because of privacy or security concerns, or to provide information specific to those [=Agents=]: tailored indexes, user preferences, application state and metadata etc. This leads to the following question: how can an [=Agent=] discover its [=Agent-Specific Endpoints=] between all [=Endpoints=] related to an [=Entity=], in a performant, secure, and privacy-minded manner? 
 
-<dfn lt="ASE|Agent-Specific Endpoint">Agent-Specific Endpoint</dfn>: An [=Endpoint=], related to an [=Entity=] an [=Agent=] wishes to interact with, which is distinguishable, by that [=Agent=], as accessible by that [=Agent=], from the interaction context.
+This specification defines an <dfn lt="ASE|Agent-Specific Endpoint">Agent-Specific Endpoint</dfn>: an [=Endpoint=] related to an [=Entity=] an [=Agent=] wishes to interact with, which is distinguishable, by that [=Agent=], as accessible by that [=Agent=], from the interaction context.
 
 <pre class="metadata">
 Text Macro: ASE <l>[=Agent-Specific Endpoint=]</l>
@@ -125,13 +87,9 @@ Given a complete set [E] of [=Endpoints=] discoverable by an [=Agent=] [A] with 
 This document specifies a way to discover an [=Agent's=] [ASE]s relating to an [=Entity=] without having to try *all* discoverable [=Endpoints=] related to that [=Entity=], using a *single* [=Endpoint=] per [=Entity=] (TBD: actually per [=Identity=]), that can provide the [=Agent=] with (only) the limited set of [ASE]s, based on the [=Identity=] of the [=Agent=].
 
 
-# Endpoint Discovery Hub # {#EDHUB}
+# Endpoint Discovery Hub # {#sec-endpoint-disovery}
 
-
-As explained in [#intro], [=Agents=] cannot simply rely on trial-and-error to discover their [=Agent-Specific Endpoints=] related to an [=Entity=], since this results in an unscalable performance. Instead, an [=Entity=] could expose a single [=Endpoint=], at which each [=Agent=] can identify itself in return for its [=Agent-Specific Endpoints=] (if it has any). Let's call this [=Endpoint=] the [=Endpoint Discovery Hub=].
-
-: <dfn lt="EDH|Hub|Endpoint Discovery Hub">Endpoint Discovery Hub</dfn>
-:: An [=Endpoint=], linked to an [=Entity=], providing [=Agents=] interacting with that [=Entity=] quick access to their [=Agent-Specific Endpoints=].
+As explained in [#intro], [=Agents=] cannot simply rely on trial-and-error to discover their [=Agent-Specific Endpoints=] related to an [=Entity=], since this results in an unscalable performance. Instead, an [=Entity=] could expose a single [=Endpoint=], at which each [=Agent=] can identify itself in return for its [=Agent-Specific Endpoints=] (if it has any). Let's call this [=Endpoint=] the <span id="dfn-edh"><dfn lt="EDH|Hub|Endpoint Discovery Hub">Endpoint Discovery Hub</dfn>: an [=Endpoint=], linked to an [=Entity=], providing [=Agents=] interacting with that [=Entity=] quick access to their [=Agent-Specific Endpoints=].
 
 <pre class="metadata">
 Text Macro: EDH <l>[=Endpoint Discovery Hub=]</l>
@@ -143,7 +101,6 @@ NOTE: The concept of an [EDH] is based on an abstraction of the [Authorization A
 ## Considerations ## {#CONS}
 
 [NONORM]
-
 
 Some considerations can be made when conceptualising the [EDH], and its relation to other [=Endpoints=] and the [=Agent=].
 
@@ -166,7 +123,6 @@ Based on these considerations, the following sections will specify [[#EDHD]] and
 
 # Discovery of the Endpoint Discovery Hub # {#EDHD}
 
-
 NOTE: This section takes inspiration from the [Authorization Agent Discovery](https://solid.github.io/data-interoperability-panel/specification/#authorization-agent-discovery) of [INTEROP].
 
 [=Agents=] wishing to discover the [EDH] for a given [=Entity=] <em class="rfc2119">SHOULD</em> dereference the [=Identifier=] `<id>` of that [=Entity=]. 
@@ -185,7 +141,6 @@ In case an [=Agent=] has found no [EDH] in the response header or body after der
 
 
 # Agent-Specific Endpoint Discovery # {#ASED}
-
 
 NOTE: This section takes inspiration from the [Agent Registration Discovery](https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery) of [INTEROP].
 
@@ -222,6 +177,13 @@ Text Macro: INTEROP <l>[[INTEROP|Solid Application Interoperability]]</l>
 
 <pre class="biblio">
 {
+  "RDFID": {
+    "href": "https://solid.github.io/woutermont/specifications/rdf-id",
+    "title": "RDF-Identifiers",
+    "authors": [
+      "Wouter Termont"
+    ]
+  },
   "INTEROP": {
     "href": "https://solid.github.io/data-interoperability-panel/specification/",
     "title": "Solid Application Interoperability",
