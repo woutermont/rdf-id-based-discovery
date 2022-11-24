@@ -1,8 +1,8 @@
 
 <pre class="metadata">
 
-Title: RDF Identity
-Shortname: RDF-ID
+Title: Concepts of Representation
+Shortname: CONCEPTS
 
 Editor: Wouter Termont, w3cid 115604, Digita https://digita.ai, https://github.com/woutermont
 
@@ -10,7 +10,7 @@ Group: w3c
 Status: w3c/UD
 Revision: 1
 
-URL: https://woutermont.github.io/solid/specification/rdf-id.html
+URL: https://woutermont.github.io/solid/specification/concepts-representation.html
 Repository: https://github.com/woutermont/solid
 
 Boilerplate: style-darkmode off
@@ -24,7 +24,7 @@ Text Macro: NONORM *This section is non-normative.*
 
 Abstract: 
 
-  This specification ...
+  This specification provides definitions for key terms around representations, documents and identity, central concepts in the context of Linked Data. It sketches the sign processes involved in the Web's role as information management tool. It describes the different aspects of a sign system: semantics, syntax and pragmatics; and focusses on the difference between abstract syntax and concrete syntax, as well as the interpretation process. It then applies this to the ambiguous concept of a 'document', and the relation between entities, their identities, and their identity documents.
 
 Status Text: 
 
