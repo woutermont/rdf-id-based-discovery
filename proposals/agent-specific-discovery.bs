@@ -60,7 +60,7 @@ When an [=Agent=] wishes to *discover* [=Information=] about an [=Entity=] (e.g.
 
 An [=Entity=] exposing [=Resources=] to [=Agents=] might want to restrict the access to certain [=Resources=] to certain [=Agents=] or groups of [=Agents=]. We use *access* here in a broad sense, indicating the usefulness or lack thereof of a [=Resource=] for an [=Agent=]. Such access restrictions might be necessary because of privacy or security concerns, or to provide [=Information=] specific to those [=Agents=]: tailored indexes, user preferences, application state and metadata etc. This leads to the following question: how can an [=Agent=] discover these [=Agent-Specific Resources=] between all [=Resources=] related to an [=Entity=], in a performant, secure, and privacy-minded manner? 
 
-This specification defines an <dfn lt="ASE|Agent-Specific Resource">Agent-Specific Resource</dfn>: a [=Resource=] related to an [=Entity=] an [=Agent=] wishes to interact with, which accessible by and possibly relevant for that [=Agent=].
+This specification defines an <dfn lt="Agent-Specific Resource">Agent-Specific Resource</dfn>: a [=Resource=] related to an [=Entity=] an [=Agent=] wishes to interact with, which accessible by and possibly relevant for that [=Agent=].
 
 <pre class="metadata">
 Text Macro: ASR <l>[=Agent-Specific Resource=]</l>
@@ -154,11 +154,8 @@ Upon receiving a request, the [RDH] <em class="rfc2119">MUST</em> check the vali
 
 In case the [=Client=] receives a response from the [RDH] with no [[!RFC9110|HTTP]] `Link` header, the requesting [=Client=] <em class="rfc2119">SHOULD</em> take the [=Identity Document=] of the [=Entity=] to contain the only [=Information=] immediately available.
 
-  ADVISEMENT: To reduce header bloat, a [RDH] <em class="rfc2119">SHOULD</em> only advertise a single [ASR] to the requesting [=Client=]. In scenarios where a [RDH] has multiple [ASR]s for the requesting [=Client=], the [RDH] <em class="rfc2119">SHOULD</em> provide an <dfn lt="ASDD|Agent-Specific Discovery Document">Agent-Specific Discovery Document</dfn>, encoding an RDF Graph relating the [=Entity=] to each of the [ASR]s with the relevant link type. The single [=ASE=] communicated in the response should then be the IRI of that [ASDD] 
+To reduce header bloat, a [RDH] <em class="rfc2119">SHOULD</em> only advertise a single [ASR] to the requesting [=Client=]. In scenarios where a [RDH] has multiple [ASR]s for the requesting [=Client=], the [RDH] <em class="rfc2119">SHOULD</em> provide an <dfn lt="Agent-Specific Discovery Document">Agent-Specific Discovery Document</dfn>, encoding an RDF Graph relating the [=Entity=] to each of the [ASR]s with the relevant link type. The single [ASR] communicated in the response should then be the IRI of that [=Agent-Specific Discovery Document=].
 
-<pre class="metadata">
-Text Macro: ASDD <l>[=Agent-Specific Discovery Document=]</l>
-</pre>
 
 <!-- Bibliography -->
 
