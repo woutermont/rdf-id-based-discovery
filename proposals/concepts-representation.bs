@@ -8,7 +8,7 @@ Editor: Wouter Termont, w3cid 115604, Digita https://digita.ai, https://github.c
 
 Group: w3c
 Status: w3c/UD
-Revision: 1
+Revision: 5
 
 URL: https://woutermont.github.io/solid/specification/concepts-representation.html
 Repository: https://github.com/woutermont/solid
