@@ -13,7 +13,7 @@ Revision: 5
 URL: https://woutermont.github.io/solid/specification/concepts-representation.html
 Repository: https://github.com/woutermont/solid
 
-Boilerplate: style-darkmode off
+Boilerplate: copyright off, style-darkmode off
 Markup Shorthands: markdown yes
 Inline Github Issues: title
 Max ToC Depth: 2
@@ -78,7 +78,7 @@ As a *normative* approach, a [=Semantic=] model is <span id="dfn-ontology">a con
 
 Focussing on the [=Representation=] process, a <dfn lt="Syntax|Syntactic">Syntax</dfn> (a.k.a. a schema, design, shape, form, pattern, or type) defines the structural properties and constraints of a [=Sign System=], i.e. what the language looks like, regardless of its [=Semantics=]. The study of such theories/models is known as [=Syntactics=]. 
 
-A [=Syntax=] is based on <span id="dfn-alphabet">an <dfn>Alphabet</dfn> of all [=Signs=] it uses as atomic primitives:[=Non-Logical Constants=], [=Logical constants=] and some **auxiliary signs**, like brackets, other punctation, and sometimes variables.</span> Of these three categories, <span id="dfn-non-logical-constants">only <dfn lt="Non-Logical Constants|Vocabulary|Lexicon|Letters|Categoremata|Primitive">Non-Logical Constants</dfn> are necessary to form a basic [=Syntax=]: they are the undefined *primitive* [=Terms=] (a.k.a. "letters" or *categoremata*) composing the *lexicon* or **vocabulary**. Independently introduced into the language, they designate the [=Entities=] *identified* in a preceding [=Conceptual Model=]. They are often also held to include the *variables* representing unspecified [=Entities=].
+A [=Syntax=] is based on an **Alphabet** of all [=Signs=] it uses as atomic primitives:[=Non-Logical Constants=], [=Logical constants=] and some **auxiliary signs**, like brackets, other punctation, and sometimes variables.</span> Of these three categories, <span id="dfn-non-logical-constants">only <dfn lt="Non-Logical Constants|Vocabulary|Lexicon|Letters|Categoremata|Primitive">Non-Logical Constants</dfn> are necessary to form a basic [=Syntax=]: they are the undefined *primitive* [=Terms=] (a.k.a. "letters" or *categoremata*) composing the *lexicon* or **vocabulary**. Independently introduced into the language, they designate the [=Entities=] *identified* in a preceding [=Conceptual Model=]. They are often also held to include the *variables* representing unspecified [=Entities=].
 
 Based on this vocabulary, <span id="dfn-signature">a [=Syntax=] defines a <dfn lt="Signature|Interface">Signature</dfn>: a structural description or *interface*, that list and describes the [=Non-Logical Constants=] by specifying their **arities** (i.e. how many other terms it needs to form a expression) and **sorts** (i.e. what kind of terms it needs to form an expression).</span> In line with this [=Signature=], the full [=Syntax=] contains all the <span id="dfn-expression"><dfn lt="Expression|Phrase|Term">Expressions</dfn> (*phrases* or *terms*) that it holds to be **well-formed** (i.e. *valid*) compositions of the *primitive terms*. These [=Expressions=] can be further composed into more complex [=Expressions=], but always refer to some [=Entity=]: a *ground* [=Term=], i.e. one that does not contain variables, can be evaluated to a primitive term, denoting a named object from the domain of discourse; a term that is not ground denotes a function that will evaluate to a (ground) term when given another expression.</span> Often, it is possible to describe or define these *well-formed* [=Expressions=] in terms of a **grammar**, consisting of axioms and formation rules.
 
@@ -156,20 +156,11 @@ Having disambiguated the notion of a [=Document=], this section will specify dif
 
 Note: The abbreviation [=ID=] is most often used for [=Identifiers=], not for other [=Identities=].
 
-<pre class="metadata">
-Text Macro: IDOC <l>[=Identity Document=]</l>
-</pre>
-
-<span id="dfn-identity-document">Given an [=Identity=], an <dfn lt="ID Doc|ID Document|Identity Document|Identifier Document">Identity Document</dfn> is a [=Document=] that [=Represents=] that [=Identity=]. Examples of [IDOC]s are passports, visas, or [[WEBID|WebID Documents]].
+<span id="dfn-identity-document">Given an [=Identity=], an <dfn lt="ID Doc|ID Document|Identity Document|Identifier Document">Identity Document</dfn> is a [=Document=] that [=Represents=] that [=Identity=]. Examples of [=Identity Documents=] are passports, visas, or [[WEBID|WebID Documents]].
 
 Note: Contrary to [=ID=], the abbreviation [=ID Document=] (or [=ID Doc=] for short), is mostly used for [=Identity Document=], not [=Identifier Document=].
 
-<pre class="metadata">
-Text Macro: DRID <l>[=Dereferenceable Identifier=]</l>
-Text Macro: RDFID <l>[=RDF-Dereferenceable Identifier=]</l>
-</pre>
-
-<span id="dfn-dereferenceable-identifier">A <dfn>Dereferenceable Identifier</dfn> is then an [=Identifier=] that can be dereferenced to an [IDOC] describing the [=Referent=] [=Entity=].</span> <span id="dfn-rdf-dereferenceable-identifier"> A <dfn>RDF-Dereferenceable Identifier</dfn> is then a [DRID] that dereferences to an [[!RDF-CONCEPTS|RDF 1.1]] [=RDF Source=]. Examples of [RDFID]s ar certain [[WEBID|WebIDs]] or [[DID|DIDs]].
+<span id="dfn-dereferenceable-identifier">A <dfn>Dereferenceable Identifier</dfn> is then an [=Identifier=] that can be dereferenced to an [=Identity Document=] describing the [=Referent=] [=Entity=].</span> <span id="dfn-rdf-dereferenceable-identifier"> A <dfn>RDF-Dereferenceable Identifier</dfn> is then a [=Dereferenceable Identifier=] that dereferences to an [[!RDF-CONCEPTS|RDF 1.1]] [=RDF Source=]. Examples of [=RDF-Dereferenceable Identifiers=] ar certain [[WEBID|WebIDs]] or [[DID|DIDs]].
 
 <!-- Bibliography -->
 

@@ -1,7 +1,7 @@
 <pre class="metadata">
 
 Title: Data Discovery
-Shortname: DD
+Shortname: DISC
 
 Editor: Wouter Termont, w3cid 115604, Digita https://digita.ai, https://github.com/woutermont
 
@@ -12,7 +12,7 @@ Revision: 1
 URL: https://woutermont.github.io/solid/specification/data-discovery.html
 Repository: https://github.com/woutermont/solid
 
-Boilerplate: style-darkmode off
+Boilerplate: copyright off, style-darkmode off
 Markup Shorthands: markdown yes
 Inline Github Issues: title
 Max ToC Depth: 2
@@ -23,7 +23,7 @@ Text Macro: NONORM *This section is non-normative.*
 
 Abstract: 
 
-  This specification details how Agents can discover specific data based on the Identifier of an Entity
+  This specification details how Agents can discover data about an Entity.
 
 Status Text: 
 
@@ -38,9 +38,9 @@ Status Text:
 Ignored Terms: Resource, Referent, Document, RDF Source, RDF Document
 </pre>
 
-This document borrows the definitions of <dfn>Entity</dfn>, <dfn>Identity</dfn>, <dfn>Identifier</dfn>, <dfn>Identity Document</dfn>, <dfn>Dereferenceable Identifier</dfn> and <dfn>RDF-Dereferenceable Identifier</dfn> from [RDFID].
+This document borrows the definitions of <dfn>Entity</dfn>, <dfn>Identity</dfn>, <dfn>Identifier</dfn>, <dfn>Identity Document</dfn>, <dfn>Dereferenceable Identifier</dfn> and <dfn>RDF-Dereferenceable Identifier</dfn> from ...
 
-This documents borrows the definitions of X, Y, Z from [ASD|Agent-Specific Discovery]
+This documents borrows the definitions of X, Y, Z from [[ASD|Agent-Specific Discovery]]
 
 
 # Introduction # {#sec-intro}
