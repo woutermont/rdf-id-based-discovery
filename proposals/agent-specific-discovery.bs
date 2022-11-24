@@ -13,7 +13,7 @@ Group: w3c
 Status: w3c/UD
 Revision: 4
 
-URL: https://solid.github.io/woutermont/solid/specification/agent-specific-discovery
+URL: https://woutermont.github.io/solid/specification/agent-specific-discovery.html
 Repository: https://github.com/woutermont/solid
 
 Boilerplate: style-darkmode off

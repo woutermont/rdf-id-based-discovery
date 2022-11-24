@@ -10,7 +10,7 @@ Group: w3c
 Status: w3c/UD
 Revision: 1
 
-URL: https://solid.github.io/woutermont/solid/specification/rdf-id
+URL: https://woutermont.github.io/solid/specification/rdf-id.html
 Repository: https://github.com/woutermont/solid
 
 Boilerplate: style-darkmode off
