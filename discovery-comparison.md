@@ -7,8 +7,8 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-UD" rel="stylesheet">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 63e66730b, updated Tue Oct 25 12:35:05 2022 -0700" name="generator">
-  <link href="https://solid.github.io/woutermont/solid/agent-specific-discovery" rel="canonical">
-  <meta content="32159427fba93542b5048f546b877ec182c58d7f" name="document-revision">
+  <link href="https://solid.github.io/woutermont/solid/specification/agent-specific-discovery" rel="canonical">
+  <meta content="acb53afa9c1c7cf806a1c815040bab16e5616339" name="document-revision">
   <link href="https://fred-wang.github.io/MathFonts/LatinModern/mathfonts.css" rel="stylesheet">
 <style>/* style-autolinks */
 
@@ -341,7 +341,7 @@ dfn > a.self-link::before      { content: "#"; }
     <div data-fill-with="spec-metadata">
      <dl>
       <dt>This version:
-      <dd><a class="u-url" href="https://solid.github.io/woutermont/solid/agent-specific-discovery">https://solid.github.io/woutermont/solid/agent-specific-discovery</a>
+      <dd><a class="u-url" href="https://solid.github.io/woutermont/solid/specification/agent-specific-discovery">https://solid.github.io/woutermont/solid/specification/agent-specific-discovery</a>
       <dt>Issue Tracking:
       <dd><a href="https://github.com/woutermont/solid/issues/">GitHub</a>
       <dd><a href="#issues-index">Inline In Spec</a>

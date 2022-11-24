@@ -1,0 +1,252 @@
+
+<link rel="stylesheet" href="https://fred-wang.github.io/MathFonts/LatinModern/mathfonts.css" />
+<script src="https://fred-wang.github.io/mathml.css/mspace.js"></script>
+
+<pre class="metadata">
+
+Title: Agent-Specific Discovery
+Shortname: ASD
+
+Editor: Wouter Termont, w3cid 115604, Digita https://digita.ai, https://github.com/woutermont
+
+Group: w3c
+Status: w3c/UD
+Revision: 4
+
+URL: https://woutermont.github.io/solid/specification/agent-specific-discovery.html
+Repository: https://github.com/woutermont/solid
+
+Boilerplate: copyright off, style-darkmode off
+Markup Shorthands: markdown yes
+Inline Github Issues: title
+Max ToC Depth: 2
+
+Complain About: accidental-2119 yes, broken-links yes, missing-example-ids yes, mixed-indents yes
+
+Text Macro: NONORM *This section is non-normative.*
+
+Abstract: 
+
+  This specification details how Agents can discover the Resource Discovery Hub of an Entity, and how they can interact with it in order to find Agent-Specific Resources related to that Entity.
+
+Status Text: 
+
+  This document was published by the Editor(s) for the [Solid Community Group](https://www.w3.org/community/solid/) as an Unofficial Proposal Draft. The sections that have been incorporated have <strong>NOT</strong> been reviewed following the [Solid process](https://github.com/solid/process). The information in this document is still subject to change. You are invited to [contribute](https://github.com/woutermont/solid/issues) any feedback, comments, or questions you might have. Publication as an Unofficial Proposal Draft does not imply endorsement by the W3C Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress. This document was produced by a group operating under the [W3C Community Contributor License Agreement (CLA)](https://www.w3.org/community/about/process/cla/). A human-readable [summary](https://www.w3.org/community/about/process/cla-deed/) is available.
+
+</pre>
+
+
+# Terminology # {#terms}
+
+<pre class="metadata">
+Ignored Terms: Resource, Source, RDF Document, Entity, Identity, Identifier, Document, Identity Document, Dereferenceable Identifier, RDF-Dereferenceable Identifier, Information, Representation, Referent
+</pre>
+
+This document borrows the definitions of [=Resource=], [=Source=] and [=RDF Document=] from [[RDF-CONCEPTS]], as well as the following definitions from [[RDFID]]: [=Entity=], [=Identity=], [=Identifier=], [=Document=], [=Identity Document=], [=Dereferenceable Identifier=], [=RDF-Dereferenceable Identifier=], [=Information=], [=Representation=], [=Referent=]. Furthermore, it uses the terms [=Agent=], [=Server=] and [=Client=] in the following sense.
+
+: <dfn>Agent</dfn>
+:: An [=Entity=] that acts, either on its own or via some other [=Agent=].
+
+: <dfn>Server</dfn>
+:: An [=Agent=] capable of receiving requests, and serving responses to those requests.
+
+: <dfn>Client</dfn>
+:: An [=Agent=] interacting with a [=Server=], by sending requests and receiving responses.
+
+
+# Introduction # {#sec-intro}
+
+When an [=Agent=] wishes to *discover* [=Information=] about an [=Entity=] (e.g. a person, document or API), and the possible ways to interact with that [=Entity=], the [=Agent=] typically starts its inquiry at one or more *initial* [=Source|Sources=] of [=Information=], such as the [=Identity Document=] (e.g. a [[WEBID|WebID Document]]) corresponding to one of the [=Entity|Entity's=] [=Identifier|Identifiers=] (e.g. a [[WEBID|WebID]]). In the [=Representations=] of these initial [=Source|Sources=], other [=Resources=] might be referenced, which in turn might be further [=Source|Sources=] of [=Information=].
+
+An [=Entity=] exposing [=Resources=] to [=Agents=] might want to restrict the access to certain [=Resources=] to certain [=Agents=] or groups of [=Agents=]. We use *access* here in a broad sense, indicating the usefulness or lack thereof of a [=Resource=] for an [=Agent=]. Such access restrictions might be necessary because of privacy or security concerns, or to provide [=Information=] specific to those [=Agents=]: tailored indexes, user preferences, application state and metadata etc. This leads to the following question: how can an [=Agent=] discover these [=Agent-Specific Resources=] between all [=Resources=] related to an [=Entity=], in a performant, secure, and privacy-minded manner? 
+
+This specification defines an <dfn lt="Agent-Specific Resource">Agent-Specific Resource</dfn>: a [=Resource=] related to an [=Entity=] an [=Agent=] wishes to interact with, which accessible by and possibly relevant for that [=Agent=].
+
+<pre class="metadata">
+Text Macro: ASR <l>[=Agent-Specific Resource=]</l>
+</pre>
+
+  NOTE: The concept of an [ASR] is based on an abstraction of the [Application Registration](https://solid.github.io/data-interoperability-panel/specification/#ar) of [INTEROP], in its role as provider of application-specific information.
+
+<pre class="metadata">
+Text Macro: R <math><mi>R</mi></math>
+Text Macro: A <math><mi>A</mi></math>
+Text Macro: Y <math><mi>Y</mi></math>
+Text Macro: N <math><mi>N</mi></math>
+Text Macro: PART <math><mo>{</mo><mi>Y</mi><mo>,</mo><mi>N</mi><mo>}</mo></math>
+Text Macro: PERF <math><mfrac><mrow><mo>|</mo><mi>Y</mi><mo>|</mo></mrow><mrow><mo>|</mo><mi>E</mi><mo>|</mo></mrow></mfrac></math>
+Text Macro: SIZE <math><mo>|</mo><mi>E</mi><mo>|</mo></math>
+</pre>
+
+Given a complete set [R] of [=Resources=] discoverable by an [=Agent=] [A] with respect to an [=Entity=], let [PART] be the partition of [R] into the set [Y] of [ASR]s and the set [N] of other [=Resources=]. Lacking any further information, the performance of [A] will correlate with [PERF]. While this might work for toy examples and proofs of concept, it is not scalable: for increasing [SIZE], [A] would spend ever more time in a trial-and-error search for its [ASR]s.
+
+  Note: This is the approach taken in [[WEBID-PROFILE]] and [[TYPE-INDEXES]].
+
+This document specifies a way to discover an [=Agent's=] [ASR]s relating to an [=Entity=] without having to try *all* discoverable [=Resources=] related to that [=Entity=], using a *single* [=Source=] of [=Information=] that can provide the [=Agent=] with (only) the limited set of [ASR]s, based on the [=Identity=] of the [=Agent=].
+
+
+# Resource Discovery Hub # {#sec-resource-disovery-hub}
+
+As explained in [#sec-intro], [=Agents=] cannot simply rely on trial-and-error to discover their [=Agent-Specific Resources=] related to an [=Entity=], since this results in an unscalable performance. Instead, an [=Entity=] could expose a single [=Source=] of [=Information=], at which each [=Agent=] can identify itself in return for its [=Agent-Specific Resources=] (if it has any). Let's call this [=Endpoint=] the <span id="dfn-rdh"><dfn lt="RDH|Hub|Resource Discovery Hub">Resource Discovery Hub</dfn>: a micro-[=Server=], linked to an [=Entity=], providing [=Client=] [=Agents=] interacting with that [=Entity=] quick access to their [=Agent-Specific Resources=].</span>
+
+<pre class="metadata">
+Text Macro: RDH <l>[=Resource Discovery Hub=]</l>
+</pre>
+
+  NOTE: The concept of a [RDH] is based on an abstraction of the [Authorization Agent](https://solid.github.io/data-interoperability-panel/specification/#authorization-agent-discovery) of [INTEROP], in its role as discovery mechanism.
+
+
+## Considerations ## {#sec-considerations}
+
+[NONORM]
+
+Some considerations can be made when conceptualising the [RDH], and its relation to other [=Resources=] and the inquiring [=Client=].
+
+. In order to use a [RDH] to discover the [ASR]s related to an [=Entity=], the [=Client=] should be able to discover the [RDH] starting from a [=Dereferenceable Identifier=] of that [=Entity=]. 
+
+. It should be possible, but not necessary, to integrate the [RDH] into other services, such as the [=Dereferenceable Identifier=] provider. This would, for example, allow for optimization of the [[#sec-asr-discovery]].
+
+  - The response provided by the [RDH] should be applicable to all document types the other service might respond with.
+
+  - The response provided by a [RDH] should be minimal, as not to cause to much bloat in case the purpose of the request was purely the result provided by the other service.
+
+  - [ASR]s might not always be related to the [=Entity=] in the same way that the response of the other service is. The [=Client=] should therefore always be capable of distinguishing the different parts of the combined response.
+
+  - While a read operation on the combined service might combine the info of both services, the presence of the [RDH] should not disturb the other operations on the other service (e.g. write operations).
+
+. Since [ASR]s will in many cases remain the same for long periods of time, [ASR]s presented by the [RDH] should be cacheable by the [=Client=].
+
+Based on these considerations, the following sections will specify [[#sec-rdh-discovery]] and [[#sec-asr-discovery]].
+
+
+# Discovery of the Resource Discovery Hub # {#sec-rdh-discovery}
+
+  NOTE: This section takes inspiration from the [Authorization Agent Discovery](https://solid.github.io/data-interoperability-panel/specification/#authorization-agent-discovery) of [INTEROP].
+
+[=Clients=] wishing to discover the [RDH] for a given [=Entity=] <em class="rfc2119">SHOULD</em> dereference the [=Identifier=] `<id>` of that [=Entity=]. 
+
+If the response contains an [[!RFC8288|HTTP Link header]] with <mark>relation</mark> type `rel="TBD"`, the [=Client=] <em class="rfc2119">SHOULD</em> take the link target of the header to be the IRI of the [RDH] of the [=Entity=]. 
+
+If no such header is present, and the response contains an [[!RDF-CONCEPTS|RDF 1.1]] [=RDF Document=], the [=Client=] <em class="rfc2119">MAY</em> parse it. If the document contains a <mark>statement of the form</mark> `<id> <TBD> <rdh>`, the [=Client=] <em class="rfc2119">SHOULD</em> take the value `rdh` to be the IRI of the [RDH] of the [=Entity=]. 
+
+  ISSUE: Relation type TBD (marked)
+
+Each [=Entity=] <em class="rfc2119">SHOULD</em> only have a single [RDH] related to it. The IRI of this [RDH] <em class="rfc2119">MUST</em> be unique to that [=Entity=]. In scenarios where a [RDH] services [=Clients=] for multiple [=Entity|Entities=], this may be facilitated through a unique sub-domain or path.
+
+  ISSUE: Advantages of multiple RDHs?
+
+In case a [=Client=] has found no [RDH] in the response header or body after dereferencing an [=Entity|Entity's=] [=Identifier=] to the [=Entity|Entity's=] [=Identity Document=], the requesting [=Client=] <em class="rfc2119">SHOULD</em> take there to be no [RDH] for that [=Entity=], and the [=Client=] <em class="rfc2119">SHOULD</em> take this [=Identity Document=] to contain the only [=Information=] immediately available.
+
+
+# Agent-Specific Resource Discovery # {#sec-asr-discovery}
+
+  NOTE: This section takes inspiration from the [Agent Registration Discovery](https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery) of [INTEROP].
+
+Once the [RDH] related to an [=Entity=] is known, a [=Client=] wishing to discover its [ASR]s related to that [=Entity=] <em class="rfc2119">SHOULD</em> query the [RDH] by sending an [[!RFC9110|HTTP]] `HEAD` or `GET` request to the [RDH]'s IRI, in which the value of the [[!RFC9110|HTTP]] `Authorization` header is set to a <mark>TBD Token</mark> containing the <mark>[=Identifier=] of the [=Client=]</mark>.
+
+  ISSUE: claims TBD
+
+  ISSUE: oauth access token, oidc id token, or more general (e.g. HttpSig, VC in body...) ?
+
+  ISSUE: need for Entity's ID as well ?
+
+Upon receiving a request, the [RDH] <em class="rfc2119">MUST</em> check the validity of the <mark>TBD Token</mark>. If the <mark>TBD Token</mark> is valid, the [RDH] <em class="rfc2119">MUST</em> send a response including, for each [ASR] `<asr>` of the requesting [=Client=], an [[!RFC9110|HTTP]] `Link` header with `<asr>` as target value and the relevant link type relating it to the [=Entity=]; or, in case no [ASR] was found for the requesting [=Client=], no (extra)  [[!RFC9110|HTTP]] `Link` headers.
+
+In case the [=Client=] receives a response from the [RDH] with no [[!RFC9110|HTTP]] `Link` header, the requesting [=Client=] <em class="rfc2119">SHOULD</em> take the [=Identity Document=] of the [=Entity=] to contain the only [=Information=] immediately available.
+
+To reduce header bloat, a [RDH] <em class="rfc2119">SHOULD</em> only advertise a single [ASR] to the requesting [=Client=]. In scenarios where a [RDH] has multiple [ASR]s for the requesting [=Client=], the [RDH] <em class="rfc2119">SHOULD</em> provide an <dfn lt="Agent-Specific Discovery Document">Agent-Specific Discovery Document</dfn>, encoding an RDF Graph relating the [=Entity=] to each of the [ASR]s with the relevant link type. The single [ASR] communicated in the response should then be the IRI of that [=Agent-Specific Discovery Document=].
+
+
+<!-- Bibliography -->
+
+<!-- Includes
+  https://www.specref.org
+  https://drafts.csswg.org/biblio.ref
+-->
+
+<1-- oauth: [[rfc6749|OAuth 2.0]] -->
+
+<pre class="metadata">
+Text Macro: INTEROP <l>[[INTEROP|Solid Application Interoperability]]</l>
+</pre>
+
+<pre class="biblio">
+{
+  "RDFID": {
+    "href": "https://woutermont.github.io/solid/specifications/rdf-id",
+    "title": "RDF-Identifiers",
+    "authors": [
+      "Wouter Termont"
+    ]
+  },
+  "INTEROP": {
+    "href": "https://solid.github.io/data-interoperability-panel/specification/",
+    "title": "Solid Application Interoperability",
+    "authors": [
+      "Justing Bingham",
+      "Eric Prud'hommeaux",
+      "elf Pavlik"
+    ]
+  },
+  "TYPE-INDEXES": {
+    "href": "https://solid.github.io/type-indexes/",
+    "title": "Type Indexes",
+    "authors": [
+      "Timea Turdean"
+    ]
+  },
+  "WEBID-PROFILE": {
+    "href": "https://solid.github.io/webid-profile/",
+    "title": "Solid WebID Profile",
+    "authors": [
+      "Virginia Balseiro",
+      "Timea Turdean",
+      "Jeff Zucker"
+    ]
+  },
+  "WEBID": {
+    "href": "https://www.w3.org/2005/Incubator/webid/spec/identity/",
+    "title": "WebID 1.0",
+    "authors": [
+      "Tim Berners-Lee",
+      "Henry Story",
+      "Andrei Sambra"
+    ]
+  },
+  "DID": {
+    "href": "https://www.w3.org/TR/did-core/",
+    "title": "Decentralized Identifiers (DIDs) v1.0",
+    "authors": [
+      "Drummond Reed",
+      "Manu Sporney",
+      "Dave Longley",
+      "Christopher Allen",
+      "Ryan Grant",
+      "Markus Sabadello"
+    ]
+  },
+  "OIDC": {
+    "href": "https://openid.net/specs/openid-connect-core-1_0.html",
+    "title": "OpenID Connect Core 1.0",
+    "authors": [
+      "N. Sakimura",
+      "J. Bradley",
+      "M. Jones",
+      "B. de Medeiros",
+      "C. Mortimore"
+    ]
+  },
+  "DPOP": {
+    "href": "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop",
+    "title": "OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer",
+    "authors": [
+      "D. Fett",
+      "B. Campbell",
+      "J. Braidley",
+      "T. Lodderstedt",
+      "M. Jones",
+      "D. Waite"
+    ]
+  }
+}
+</pre>
