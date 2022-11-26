@@ -5,6 +5,7 @@ Title: Concepts of Representation
 Shortname: CONCEPTS
 
 Editor: Wouter Termont, w3cid 115604, Digita https://digita.ai, https://github.com/woutermont
+!Author: Wouter Termont
 
 Group: w3c
 Status: w3c/UD
