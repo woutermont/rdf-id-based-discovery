@@ -31,6 +31,10 @@ Status Text:
 
 </pre>
 
+<div boilerplate="copyright">
+MIT License Copyright 2019 - 2021 W3C Solid Community Group
+</div>
+
 
 # Terminology # {#terms}
 
