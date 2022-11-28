@@ -27,6 +27,9 @@ jobs:
           bikeshed spec proposals/agent-specific-discovery.bs
           bikeshed spec proposals/data-discovery.bs
 
+      - name: generate svg
+        run: for diagram in proposals/*/diagrams/*.mmd; do docker run --rm -v "$PWD:/data" minlag/mermaid-cli -i /data/$diagram; done
+
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
