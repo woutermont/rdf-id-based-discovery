@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 63e66730b, updated Tue Oct 25 12:35:05 2022 -0700" name="generator">
   <link href="https://woutermont.github.io/solid/agent-specific-discovery.html" rel="canonical">
-  <meta content="c7cb49f2e8ad663a7b44f88f73e7b7a04722c7cb" name="document-revision">
+  <meta content="9ea0c515c0176162ea5fb132bc3dccdb11f5ea2b" name="document-revision">
   <link href="https://fred-wang.github.io/MathFonts/LatinModern/mathfonts.css" rel="stylesheet">
 <style>
     .note,
@@ -457,6 +457,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <li><a href="#sec-rdh-discovery"><span class="secno">4</span> <span class="content">Discovery of the Resource Discovery Hub</span></a>
     <li><a href="#sec-asr-discovery"><span class="secno">5</span> <span class="content">Agent-Specific Resource Discovery</span></a>
     <li><a href="#sec-agent-registration"><span class="secno">6</span> <span class="content">Agent Registration</span></a>
+    <li><a href="#appendix-a-summary-sequence-diagram"><span class="secno"></span> <span class="content">Appendix A: Summary Sequence Diagram</span></a>
     <li>
      <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
      <ol class="toc">
@@ -652,6 +653,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    </div>
    <p>The effect of such a valid request to the <a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.1" id="ref-for-section-3.1①">target</a> <em class="rfc2119">MUST</em> be that an <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration④">Agent Registration</a> is created for the requesting <a data-link-type="dfn" href="#client" id="ref-for-client③⑦">Client</a> at the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub④①">Resource Discovery Hub</a> of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity④⓪">Entity</a>; the response on such requests <em class="rfc2119">SHOULD</em> be a [:201 Created:], with the IRI of the newly created <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration⑤">Agent Registration</a> in the <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#location" id="ref-for-location">Location</a></code>`</span> header.</p>
    <p class="issue" id="issue-68a18869①"><a class="self-link" href="#issue-68a18869①"></a> oauth access token, oidc id token, or more general (e.g. HttpSig, VC in body...) ?</p>
+   <h2 class="no-num heading settled" id="appendix-a-summary-sequence-diagram"><span class="content">Appendix A: Summary Sequence Diagram</span><a class="self-link" href="#appendix-a-summary-sequence-diagram"></a></h2>
+   <p><img class="sequence-diagram" src="diagrams/agent-specific-discovery.mmd.svg"></p>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
