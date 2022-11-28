@@ -55,6 +55,22 @@ This documents borrows the definitions of X, Y, Z from [[ASD|Agent-Specific Disc
 
 
 
+# Default [ASRs] # {#sec-default-asrs}
+
+As pointed out in [[#sec-rdh-discovery]] and [[#sec-asr-discovery]], if a [=Client=] has found no [RDH] in the response header or body after dereferencing an [=Entity's=] [=Identifier=] to the [=Entity's=] [=Identity Document=], or if a [=Client=] did find an [RDH] but receives a response from this [RDH] with no [[!RFC9110|HTTP]] `Link` header of the <mark>type `rel="TBD"`</mark>, then that [=Client=] should take the [=Identity Document=] of the [=Entity=] to contain the only [=Information=] immediately available.
+
+<!-- One can alternatively interpret this as follows. The [=Clients=] that find themselves in the above situation, related to the same [=Identity Document=], are part of an equivalence class of which we identify an arbitrary *representative* with the [=Identifier=] <mark>`<TBD>`</mark>. ISSUE: pick public agent id -->
+
+For [=Clients=] that *do* receive [ASRS] from the [RDH], on the other hand, the [=Identity Document=] of the [=Entity=] contains *additionally* available [=Information=].
+
+...
+
+The [=Identity Document=] serves as [=Agent-Specific Discovery Document=] for **every** [=Agent=].
+
+ISSUE: Todo: use webid as public agent asr
+
+ISSUE: Todo: mandate specific priority rule: webid as default + asr as overrides
+
 
 
 <!-- Bibliography -->
