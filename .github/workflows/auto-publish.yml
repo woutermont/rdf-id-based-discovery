@@ -30,6 +30,11 @@ jobs:
       - name: generate svg
         run: for diagram in proposals/diagrams/*.mmd; do docker run --rm -v "$PWD:/data" minlag/mermaid-cli -i /data/$diagram; done
 
+      - name: run pandoc
+        uses: docker://pandoc/core:2.9
+        with:
+          args: response-tim-ruben.md -so response-tim-ruben.html
+
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
