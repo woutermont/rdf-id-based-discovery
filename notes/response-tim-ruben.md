@@ -1,5 +1,6 @@
 ---
-title: Analysis of Tim's response to Ruben
+title: About Tim's response to Ruben
+author: Wouter Termont
 ---
 
 I'm not sure which appals me most: the fact that [such a
