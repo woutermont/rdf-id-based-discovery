@@ -13,7 +13,7 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10.0'
+          python-version: '3.12.0'
 
       - name: setup bikeshed
         run: |
@@ -33,7 +33,7 @@ jobs:
       - name: run pandoc
         uses: docker://pandoc/core:2.9
         with:
-          args: response-tim-ruben.md -so response-tim-ruben.html
+          args: "response-tim-ruben.md -so response-tim-ruben.html"
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
