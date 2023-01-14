@@ -35,9 +35,16 @@ jobs:
         with:
           args: "./notes/response-tim-ruben.md -so ./notes/response-tim-ruben.html"
 
-      - name: deploy
+      - name: deploy proposals
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_dir: ./proposals
           destination_dir: ./specification
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: deploy notes
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./notes
+          destination_dir: ./notes
           personal_token: ${{ secrets.GITHUB_TOKEN }}
