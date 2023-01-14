@@ -1,0 +1,1149 @@
+<!doctype html><html lang="en">
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Solid Application Interoperability: Agent-Specific Discovery</title>
+  <meta content="w3c/UD" name="w3c-status">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-UD" rel="stylesheet">
+  <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
+  <meta content="Bikeshed version 2aae228dc, updated Thu Jan 12 16:52:25 2023 -0800" name="generator">
+  <link href="https://woutermont.github.io/solid/agent-specific-discovery.html" rel="canonical">
+  <meta content="c26e05c7795bfcd009b307932a0c560e29a813a8" name="document-revision">
+  <link href="https://fred-wang.github.io/MathFonts/LatinModern/mathfonts.css" rel="stylesheet">
+<style>
+    .note,
+    .issue,
+    .example,
+    .assertion,
+    .advisement {
+        font-size: 0.9em;
+    }
+    pre {
+        font-size: .8em;
+    }
+    em.rfc2119 {
+        text-transform: lowercase;
+        font-variant: small-caps;
+        font-style: normal;
+        font-size: 18px;
+        color: #900;
+    }
+</style>
+<style>/* style-autolinks */
+
+.css.css, .property.property, .descriptor.descriptor {
+    color: var(--a-normal-text);
+    font-size: inherit;
+    font-family: inherit;
+}
+.css::before, .property::before, .descriptor::before {
+    content: "‘";
+}
+.css::after, .property::after, .descriptor::after {
+    content: "’";
+}
+.property, .descriptor {
+    /* Don't wrap property and descriptor names */
+    white-space: nowrap;
+}
+.type { /* CSS value <type> */
+    font-style: italic;
+}
+pre .property::before, pre .property::after {
+    content: "";
+}
+[data-link-type="property"]::before,
+[data-link-type="propdesc"]::before,
+[data-link-type="descriptor"]::before,
+[data-link-type="value"]::before,
+[data-link-type="function"]::before,
+[data-link-type="at-rule"]::before,
+[data-link-type="selector"]::before,
+[data-link-type="maybe"]::before {
+    content: "‘";
+}
+[data-link-type="property"]::after,
+[data-link-type="propdesc"]::after,
+[data-link-type="descriptor"]::after,
+[data-link-type="value"]::after,
+[data-link-type="function"]::after,
+[data-link-type="at-rule"]::after,
+[data-link-type="selector"]::after,
+[data-link-type="maybe"]::after {
+    content: "’";
+}
+
+[data-link-type].production::before,
+[data-link-type].production::after,
+.prod [data-link-type]::before,
+.prod [data-link-type]::after {
+    content: "";
+}
+
+[data-link-type=element],
+[data-link-type=element-attr] {
+    font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: .9em;
+}
+[data-link-type=element]::before { content: "<" }
+[data-link-type=element]::after  { content: ">" }
+
+[data-link-type=biblio] {
+    white-space: pre;
+}</style>
+<style>/* style-colors */
+
+/* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
+:root {
+    color-scheme: light dark;
+
+    --text: black;
+    --bg: white;
+
+    --unofficial-watermark: url(https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark);
+
+    --logo-bg: #1a5e9a;
+    --logo-active-bg: #c00;
+    --logo-text: white;
+
+    --tocnav-normal-text: #707070;
+    --tocnav-normal-bg: var(--bg);
+    --tocnav-hover-text: var(--tocnav-normal-text);
+    --tocnav-hover-bg: #f8f8f8;
+    --tocnav-active-text: #c00;
+    --tocnav-active-bg: var(--tocnav-normal-bg);
+
+    --tocsidebar-text: var(--text);
+    --tocsidebar-bg: #f7f8f9;
+    --tocsidebar-shadow: rgba(0,0,0,.1);
+    --tocsidebar-heading-text: hsla(203,20%,40%,.7);
+
+    --toclink-text: var(--text);
+    --toclink-underline: #3980b5;
+    --toclink-visited-text: var(--toclink-text);
+    --toclink-visited-underline: #054572;
+
+    --heading-text: #005a9c;
+
+    --hr-text: var(--text);
+
+    --algo-border: #def;
+
+    --del-text: red;
+    --del-bg: transparent;
+    --ins-text: #080;
+    --ins-bg: transparent;
+
+    --a-normal-text: #034575;
+    --a-normal-underline: #bbb;
+    --a-visited-text: var(--a-normal-text);
+    --a-visited-underline: #707070;
+    --a-hover-bg: rgba(75%, 75%, 75%, .25);
+    --a-active-text: #c00;
+    --a-active-underline: #c00;
+
+    --blockquote-border: silver;
+    --blockquote-bg: transparent;
+    --blockquote-text: currentcolor;
+
+    --issue-border: #e05252;
+    --issue-bg: #fbe9e9;
+    --issue-text: var(--text);
+    --issueheading-text: #831616;
+
+    --example-border: #e0cb52;
+    --example-bg: #fcfaee;
+    --example-text: var(--text);
+    --exampleheading-text: #574b0f;
+
+    --note-border: #52e052;
+    --note-bg: #e9fbe9;
+    --note-text: var(--text);
+    --noteheading-text: hsl(120, 70%, 30%);
+    --notesummary-underline: silver;
+
+    --assertion-border: #aaa;
+    --assertion-bg: #eee;
+    --assertion-text: black;
+
+    --advisement-border: orange;
+    --advisement-bg: #fec;
+    --advisement-text: var(--text);
+    --advisementheading-text: #b35f00;
+
+    --warning-border: red;
+    --warning-bg: hsla(40,100%,50%,0.95);
+    --warning-text: var(--text);
+
+    --amendment-border: #330099;
+    --amendment-bg: #F5F0FF;
+    --amendment-text: var(--text);
+    --amendmentheading-text: #220066;
+
+    --def-border: #8ccbf2;
+    --def-bg: #def;
+    --def-text: var(--text);
+    --defrow-border: #bbd7e9;
+
+    --datacell-border: silver;
+
+    --indexinfo-text: #707070;
+
+    --indextable-hover-text: black;
+    --indextable-hover-bg: #f7f8f9;
+
+    --outdatedspec-bg: rgba(0, 0, 0, .5);
+    --outdatedspec-text: black;
+    --outdated-bg: maroon;
+    --outdated-text: white;
+    --outdated-shadow: red;
+
+    --editedrec-bg: darkorange;
+}</style>
+<style>/* style-counters */
+
+body {
+    counter-reset: example figure issue;
+}
+.issue {
+    counter-increment: issue;
+}
+.issue:not(.no-marker)::before {
+    content: "Issue " counter(issue);
+}
+
+.example {
+    counter-increment: example;
+}
+.example:not(.no-marker)::before {
+    content: "Example " counter(example);
+}
+.invalid.example:not(.no-marker)::before,
+.illegal.example:not(.no-marker)::before {
+    content: "Invalid Example" counter(example);
+}
+
+figcaption {
+    counter-increment: figure;
+}
+figcaption:not(.no-marker)::before {
+    content: "Figure " counter(figure) " ";
+}</style>
+<style>/* style-dfn-panel */
+
+:root {
+    --dfnpanel-bg: #ddd;
+    --dfnpanel-text: var(--text);
+}
+.dfn-panel {
+    position: absolute;
+    z-index: 35;
+    height: auto;
+    width: -webkit-fit-content;
+    width: fit-content;
+    max-width: 300px;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.75em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: var(--dfnpanel-bg);
+    color: var(--dfnpanel-text);
+    border: outset 0.2em;
+}
+.dfn-panel:not(.on) { display: none; }
+.dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
+.dfn-panel > b { display: block; }
+.dfn-panel a { color: var(--dfnpanel-text); }
+.dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
+.dfn-panel > b + b { margin-top: 0.25em; }
+.dfn-panel ul { padding: 0; }
+.dfn-panel li { list-style: inside; }
+.dfn-panel.activated {
+    display: inline-block;
+    position: fixed;
+    left: .5em;
+    bottom: 2em;
+    margin: 0 auto;
+    max-width: calc(100vw - 1.5em - .4em - .5em);
+    max-height: 30vh;
+}
+
+.dfn-paneled { cursor: pointer; }
+</style>
+<style>/* style-issues */
+
+a[href].issue-return {
+    float: right;
+    float: inline-end;
+    color: var(--issueheading-text);
+    font-weight: bold;
+    text-decoration: none;
+}
+</style>
+<style>/* style-md-lists */
+
+/* This is a weird hack for me not yet following the commonmark spec
+   regarding paragraph and lists. */
+[data-md] > :first-child {
+    margin-top: 0;
+}
+[data-md] > :last-child {
+    margin-bottom: 0;
+}</style>
+<style>/* style-selflinks */
+
+:root {
+    --selflink-text: white;
+    --selflink-bg: gray;
+    --selflink-hover-text: black;
+}
+.heading, .issue, .note, .example, li, dt {
+    position: relative;
+}
+a.self-link {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * (3.5rem - 26px));
+    width: calc(3.5rem - 26px);
+    height: 2em;
+    text-align: center;
+    border: none;
+    transition: opacity .2s;
+    opacity: .5;
+}
+a.self-link:hover {
+    opacity: 1;
+}
+.heading > a.self-link {
+    font-size: 83%;
+}
+.example > a.self-link,
+.note > a.self-link,
+.issue > a.self-link {
+    /* These blocks are overflow:auto, so positioning outside
+       doesn't work. */
+    left: auto;
+    right: 0;
+}
+li > a.self-link {
+    left: calc(-1 * (3.5rem - 26px) - 2em);
+}
+dfn > a.self-link {
+    top: auto;
+    left: auto;
+    opacity: 0;
+    width: 1.5em;
+    height: 1.5em;
+    background: var(--selflink-bg);
+    color: var(--selflink-text);
+    font-style: normal;
+    transition: opacity .2s, background-color .2s, color .2s;
+}
+dfn:hover > a.self-link {
+    opacity: 1;
+}
+dfn > a.self-link:hover {
+    color: var(--selflink-hover-text);
+}
+
+a.self-link::before            { content: "¶"; }
+.heading > a.self-link::before { content: "§"; }
+dfn > a.self-link::before      { content: "#"; }
+</style>
+<style>/* style-syntax-highlighting */
+
+code.highlight { padding: .1em; border-radius: .3em; }
+pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
+
+.highlight:not(.idl) { background: rgba(0, 0, 0, .03); }
+c-[a] { color: #990055 } /* Keyword.Declaration */
+c-[b] { color: #990055 } /* Keyword.Type */
+c-[c] { color: #708090 } /* Comment */
+c-[d] { color: #708090 } /* Comment.Multiline */
+c-[e] { color: #0077aa } /* Name.Attribute */
+c-[f] { color: #669900 } /* Name.Tag */
+c-[g] { color: #222222 } /* Name.Variable */
+c-[k] { color: #990055 } /* Keyword */
+c-[l] { color: #000000 } /* Literal */
+c-[m] { color: #000000 } /* Literal.Number */
+c-[n] { color: #0077aa } /* Name */
+c-[o] { color: #999999 } /* Operator */
+c-[p] { color: #999999 } /* Punctuation */
+c-[s] { color: #a67f59 } /* Literal.String */
+c-[t] { color: #a67f59 } /* Literal.String.Single */
+c-[u] { color: #a67f59 } /* Literal.String.Double */
+c-[cp] { color: #708090 } /* Comment.Preproc */
+c-[c1] { color: #708090 } /* Comment.Single */
+c-[cs] { color: #708090 } /* Comment.Special */
+c-[kc] { color: #990055 } /* Keyword.Constant */
+c-[kn] { color: #990055 } /* Keyword.Namespace */
+c-[kp] { color: #990055 } /* Keyword.Pseudo */
+c-[kr] { color: #990055 } /* Keyword.Reserved */
+c-[ld] { color: #000000 } /* Literal.Date */
+c-[nc] { color: #0077aa } /* Name.Class */
+c-[no] { color: #0077aa } /* Name.Constant */
+c-[nd] { color: #0077aa } /* Name.Decorator */
+c-[ni] { color: #0077aa } /* Name.Entity */
+c-[ne] { color: #0077aa } /* Name.Exception */
+c-[nf] { color: #0077aa } /* Name.Function */
+c-[nl] { color: #0077aa } /* Name.Label */
+c-[nn] { color: #0077aa } /* Name.Namespace */
+c-[py] { color: #0077aa } /* Name.Property */
+c-[ow] { color: #999999 } /* Operator.Word */
+c-[mb] { color: #000000 } /* Literal.Number.Bin */
+c-[mf] { color: #000000 } /* Literal.Number.Float */
+c-[mh] { color: #000000 } /* Literal.Number.Hex */
+c-[mi] { color: #000000 } /* Literal.Number.Integer */
+c-[mo] { color: #000000 } /* Literal.Number.Oct */
+c-[sb] { color: #a67f59 } /* Literal.String.Backtick */
+c-[sc] { color: #a67f59 } /* Literal.String.Char */
+c-[sd] { color: #a67f59 } /* Literal.String.Doc */
+c-[se] { color: #a67f59 } /* Literal.String.Escape */
+c-[sh] { color: #a67f59 } /* Literal.String.Heredoc */
+c-[si] { color: #a67f59 } /* Literal.String.Interpol */
+c-[sx] { color: #a67f59 } /* Literal.String.Other */
+c-[sr] { color: #a67f59 } /* Literal.String.Regex */
+c-[ss] { color: #a67f59 } /* Literal.String.Symbol */
+c-[vc] { color: #0077aa } /* Name.Variable.Class */
+c-[vg] { color: #0077aa } /* Name.Variable.Global */
+c-[vi] { color: #0077aa } /* Name.Variable.Instance */
+c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
+</style>
+ <body class="h-entry">
+  <div class="head">
+   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
+   <h1 class="p-name no-ref" id="title">Solid Application Interoperability: Agent-Specific Discovery</h1>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#UD">Unofficial Proposal Draft</a>, <time class="dt-updated" datetime="2023-01-14">14 January 2023</time></p>
+   <details open>
+    <summary>More details about this document</summary>
+    <div data-fill-with="spec-metadata">
+     <dl>
+      <dt>This version:
+      <dd><a class="u-url" href="https://woutermont.github.io/solid/agent-specific-discovery.html">https://woutermont.github.io/solid/agent-specific-discovery.html</a>
+      <dt>Issue Tracking:
+      <dd><a href="https://github.com/woutermont/solid/issues/">GitHub</a>
+      <dd><a href="#issues-index">Inline In Spec</a>
+      <dt class="editor">Editor:
+      <dd class="editor p-author h-card vcard" data-editor-id="115604"><a class="p-name fn u-url url" href="https://github.com/woutermont">Wouter Termont</a> (<a class="p-org org" href="https://digita.ai">Digita</a>)
+      <dt>Contributor:
+      <dd>Wouter Termont
+     </dl>
+    </div>
+   </details>
+   <div data-fill-with="warning"></div>
+   <p class="copyright" data-fill-with="copyright"> MIT License Copyright 2019 - 2021 W3C Solid Community Group </p>
+   <hr title="Separator for header">
+  </div>
+  <div class="p-summary" data-fill-with="abstract">
+   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
+   <p>This specification details how Agents can discover the Resource Discovery Hub of an Entity, and how they can interact with it in order to find Agent-Specific Resources related to that Entity.</p>
+  </div>
+  <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
+  <div data-fill-with="status">
+   <p></p>
+   <p>This document was published by the Editor(s) for the <a href="https://www.w3.org/community/solid/">Solid Community Group</a> as an Unofficial Proposal Draft. The sections that have been incorporated have <strong>NOT</strong> been reviewed following the <a href="https://github.com/solid/process">Solid process</a>. The information in this document is still subject to change. You are invited to <a href="https://github.com/woutermont/solid/issues">contribute</a> any feedback, comments, or questions you might have. Publication as an Unofficial Proposal Draft does not imply endorsement by the W3C Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress. This document was produced by a group operating under the <a href="https://www.w3.org/community/about/process/cla/">W3C Community Contributor License Agreement (CLA)</a>. A human-readable <a href="https://www.w3.org/community/about/process/cla-deed/">summary</a> is available.</p>
+  </div>
+  <div data-fill-with="at-risk"></div>
+  <nav data-fill-with="table-of-contents" id="toc">
+   <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
+   <ol class="toc" role="directory">
+    <li><a href="#terms"><span class="secno">1</span> <span class="content">Terminology</span></a>
+    <li><a href="#sec-intro"><span class="secno">2</span> <span class="content">Introduction</span></a>
+    <li>
+     <a href="#sec-resource-disovery-hub"><span class="secno">3</span> <span class="content">Resource Discovery Hub</span></a>
+     <ol class="toc">
+      <li><a href="#sec-considerations"><span class="secno">3.1</span> <span class="content">Considerations</span></a>
+     </ol>
+    <li><a href="#sec-rdh-discovery"><span class="secno">4</span> <span class="content">Discovery of the Resource Discovery Hub</span></a>
+    <li><a href="#sec-asr-discovery"><span class="secno">5</span> <span class="content">Agent-Specific Resource Discovery</span></a>
+    <li><a href="#sec-agent-registration"><span class="secno">6</span> <span class="content">Agent Registration</span></a>
+    <li><a href="#appendix-a-summary-sequence-diagram"><span class="secno"></span> <span class="content">Appendix A: Summary Sequence Diagram</span></a>
+    <li>
+     <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
+     <ol class="toc">
+      <li><a href="#w3c-conventions"><span class="secno"></span> <span class="content">Document conventions</span></a>
+      <li><a href="#w3c-conformant-algorithms"><span class="secno"></span> <span class="content">Conformant Algorithms</span></a>
+     </ol>
+    <li>
+     <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
+     <ol class="toc">
+      <li><a href="#index-defined-here"><span class="secno"></span> <span class="content">Terms defined by this specification</span></a>
+      <li><a href="#index-defined-elsewhere"><span class="secno"></span> <span class="content">Terms defined by reference</span></a>
+     </ol>
+    <li>
+     <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
+     <ol class="toc">
+      <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
+      <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
+     </ol>
+    <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
+   </ol>
+  </nav>
+  <main>
+<script src="https://fred-wang.github.io/mathml.css/mspace.js"></script>
+   <h2 class="heading settled" data-level="1" id="terms"><span class="secno">1. </span><span class="content">Terminology</span><a class="self-link" href="#terms"></a></h2>
+   <p>This document relies heavily on parts of the architecture proposed in <a data-link-type="biblio" href="#biblio-interop" title="Solid Application Interoperability">Solid Application Interoperability</a>. It borrows some definitions from <a data-link-type="biblio" href="#biblio-rdf11-concepts" title="RDF 1.1 Concepts and Abstract Syntax">RDF 1.1</a> and concepts from <a data-link-type="biblio" href="#biblio-con-web-rep" title="Concepts in Web Representation">Concepts in Web Representation</a>. <a data-link-type="biblio" href="#biblio-webid" title="WebID 1.0">[WEBID]</a> and <a data-link-type="biblio" href="#biblio-did" title="Decentralized Identifiers (DIDs) v1.0">[DID]</a> as used as examples. For conformance, terms from <a data-link-type="biblio" href="#biblio-rfc9110" title="HTTP Semantics">HTTP</a> semantics and <a data-link-type="biblio" href="#biblio-web-linking" title="RFC 8288: Web Linking">Web-Linking</a> are used. References to all these are linked throughout the text, and in <a href="#index-defined-elsewhere">Terms defined by reference</a>. Furthermore, this document uses the terms <a data-link-type="dfn" href="#agent" id="ref-for-agent">Agent</a>, <a data-link-type="dfn" href="#server" id="ref-for-server">Server</a> and <a data-link-type="dfn" href="#client" id="ref-for-client">Client</a> in the following sense.</p>
+   <dl>
+    <dt data-md><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="agent">Agent</dfn>
+    <dd data-md>
+     <p>An <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity">Entity</a> that acts, either on its own or via some other <a data-link-type="dfn" href="#agent" id="ref-for-agent①">Agent</a>. This corresponds to the notion of <a data-link-type="dfn" href="#agent" id="ref-for-agent②">Agents</a> as defined in <a data-link-type="biblio" href="#biblio-interop" title="Solid Application Interoperability">Solid Application Interoperability</a>.</p>
+    <dt data-md><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="server">Server</dfn>
+    <dd data-md>
+     <p>An <a data-link-type="dfn" href="#agent" id="ref-for-agent③">Agent</a> capable of receiving requests, and serving responses to those requests.</p>
+    <dt data-md><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="client">Client</dfn>
+    <dd data-md>
+     <p>An <a data-link-type="dfn" href="#agent" id="ref-for-agent④">Agent</a> interacting with a <a data-link-type="dfn" href="#server" id="ref-for-server①">Server</a>, by sending requests and receiving responses.</p>
+   </dl>
+   <h2 class="heading settled" data-level="2" id="sec-intro"><span class="secno">2. </span><span class="content">Introduction</span><a class="self-link" href="#sec-intro"></a></h2>
+   <p>When an <a data-link-type="dfn" href="#agent" id="ref-for-agent⑤">Agent</a> wishes to <em>discover</em> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information">Information</a> about an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①">Entity</a> (e.g. a person, document or API), and the possible ways to interact with that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②">Entity</a>, the <a data-link-type="dfn" href="#agent" id="ref-for-agent⑥">Agent</a> typically starts its inquiry at one or more *initial <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#source" id="ref-for-source">Source</a> of <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information①">Information</a>*, such as the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identity-document" id="ref-for-identity-document">Identity Document</a> corresponding to one of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③">Entity’s</a> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identifier" id="ref-for-identifier">Identifier</a> (e.g. the <a data-link-type="dfn" href="https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-profile-document" id="ref-for-dfn-profile-document">Profile Document</a> of a <a data-link-type="dfn" href="https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-webid" id="ref-for-dfn-webid">WebID</a> or <a data-link-type="dfn" href="https://www.w3.org/TR/did-core/#dfn-did-documents" id="ref-for-dfn-did-documents">DID Document</a> of a <a data-link-type="dfn" href="https://www.w3.org/TR/did-core/#dfn-decentralized-identifiers" id="ref-for-dfn-decentralized-identifiers">Decentralized Identifier</a>). In the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#representation" id="ref-for-representation">Representations</a> of these initial <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#source" id="ref-for-source①">Source</a>, other <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource">Resources</a> might be referenced, which in turn might be further <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#source" id="ref-for-source②">Source</a> of <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information②">Information</a>.</p>
+   <p>An <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity④">Entity</a> exposing <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource①">Resources</a> to <a data-link-type="dfn" href="#agent" id="ref-for-agent⑦">Agents</a> might want to restrict the access to certain <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource②">Resources</a> to certain <a data-link-type="dfn" href="#agent" id="ref-for-agent⑧">Agents</a> or groups of <a data-link-type="dfn" href="#agent" id="ref-for-agent⑨">Agents</a>. We use <em>access</em> here in a broad sense, indicating the usefulness or lack thereof of a <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource③">Resource</a> to an <a data-link-type="dfn" href="#agent" id="ref-for-agent①⓪">Agent</a>. Such access restrictions might be necessary because of privacy or security concerns, or to provide <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information③">Information</a> specific to those <a data-link-type="dfn" href="#agent" id="ref-for-agent①①">Agents</a>: tailored indexes, user preferences, application state ... in other words, the <span id="dfn-asr"><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="agent-specific-resources">Agent-Specific Resources</dfn>: <em><a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource④">Resources</a> related to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity⑤">Entity</a> an <a data-link-type="dfn" href="#agent" id="ref-for-agent①②">Agent</a> wishes to interact with, which are accessible by and possibly relevant for that <a data-link-type="dfn" href="#agent" id="ref-for-agent①③">Agent</a>.</em></span> This leads to the following question: how can an <a data-link-type="dfn" href="#agent" id="ref-for-agent①④">Agent</a> discover these <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources">Agent-Specific Resources</a> between all other <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource⑤">Resources</a> related to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity⑥">Entity</a>, in a performant, secure, and privacy-minded manner?</p>
+   <p class="note" role="note"><span class="marker">NOTE:</span> The concept of an <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①">Agent-Specific Resource</a> is based on an abstraction of the <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration">Agent Registration</a> of <a data-link-type="biblio" href="#biblio-interop" title="Solid Application Interoperability">Solid Application Interoperability</a>, in its role as provider of agent-specific information. They divide <a data-link-type="dfn" href="#agent" id="ref-for-agent①⑤">Agents</a> into <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent" id="ref-for-social-agent">Social Agents</a> and <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#App" id="ref-for-App">Applications</a>: <q><em><a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent" id="ref-for-social-agent①">Social Agents</a> manage the other [Agents] they interact with by registering these <a data-link-type="dfn" href="#agent" id="ref-for-agent①⑥">Agents</a> in their <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#agent-registry" id="ref-for-agent-registry">Agent Registry</a>. A <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent-registration" id="ref-for-social-agent-registration">Social Agent Registration</a> provides the <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent" id="ref-for-social-agent②">Social Agent</a> with a place to track and manage other <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent" id="ref-for-social-agent③">Social Agents</a> they interact with. An <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#application-registration" id="ref-for-application-registration">Application Registration</a> provides the <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent" id="ref-for-social-agent④">Social Agent</a> with a place to maintain metadata, state, preferences, and other application-specific data associated with a given <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#App" id="ref-for-App①">Application</a> they have elected to use.</em></q></p>
+   <p>
+    Given a complete set 
+    <math>
+     <mi>R</mi>
+    </math>
+     of <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource⑥">Resources</a> discoverable by an <a data-link-type="dfn" href="#agent" id="ref-for-agent①⑦">Agent</a> 
+    <math>
+     <mi>A</mi>
+    </math>
+     with respect to a certain <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity⑦">Entity</a>, let 
+    <math>
+     <mo>{</mo>
+     <mi>Y</mi>
+     <mo>,</mo>
+     <mi>N</mi>
+     <mo>}</mo>
+    </math>
+     be the partition of 
+    <math>
+     <mi>R</mi>
+    </math>
+     into the set 
+    <math>
+     <mi>Y</mi>
+    </math>
+     of <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources②">Agent-Specific Resources</a> and the set 
+    <math>
+     <mi>N</mi>
+    </math>
+     of other <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource⑦">Resources</a>. Lacking any further information, the performance of 
+    <math>
+     <mi>A</mi>
+    </math>
+     will correlate with 
+    <math>
+     <mfrac>
+      <mrow>
+       <mo>|</mo>
+       <mi>Y</mi>
+       <mo>|</mo>
+      </mrow>
+      <mrow>
+       <mo>|</mo>
+       <mi>R</mi>
+       <mo>|</mo>
+      </mrow>
+     </mfrac>
+    </math>
+    . While this might work for toy examples and proofs of concept, it is not scalable: for increasing 
+    <math>
+     <mo>|</mo>
+     <mi>N</mi>
+     <mo>|</mo>
+    </math>
+    , 
+    <math>
+     <mi>A</mi>
+    </math>
+     would spend ever more time in a trial-and-error search for its <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources③">Agent-Specific Resources</a>.
+   </p>
+   <p class="note" role="note"><span class="marker">Note:</span> This is the approach taken in the <a data-link-type="biblio" href="#biblio-prof" title="Solid WebID Profile">Solid WebID Profile</a> and <a data-link-type="biblio" href="#biblio-ti" title="Type Indexes">Type Indexes</a> specifications.</p>
+   <p>This document specifies a way to discover an <a data-link-type="dfn" href="#agent" id="ref-for-agent①⑧">Agent’s</a> <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources④">Agent-Specific Resources</a> relating to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity⑧">Entity</a> without having to try <em>all</em> discoverable <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource⑧">Resources</a> related to that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity⑨">Entity</a>, using a <em>single</em> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#source" id="ref-for-source③">Source</a> of <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information④">Information</a> that can provide the <a data-link-type="dfn" href="#agent" id="ref-for-agent①⑨">Agent</a> with <em>only</em> the limited set of <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources⑤">Agent-Specific Resources</a>, based on the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identity" id="ref-for-identity">Identity</a> of the <a data-link-type="dfn" href="#agent" id="ref-for-agent②⓪">Agent</a>.</p>
+   <h2 class="heading settled" data-level="3" id="sec-resource-disovery-hub"><span class="secno">3. </span><span class="content">Resource Discovery Hub</span><a class="self-link" href="#sec-resource-disovery-hub"></a></h2>
+   <p>As explained in [#sec-intro], <a data-link-type="dfn" href="#agent" id="ref-for-agent②①">Agents</a> cannot simply rely on trial-and-error to discover their <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources⑥">Agent-Specific Resources</a> related to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①⓪">Entity</a>, since this results in an unscalable performance. Instead, an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①①">Entity</a> could expose a single <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#source" id="ref-for-source④">Source</a> of <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information⑤">Information</a>, at which each <a data-link-type="dfn" href="#agent" id="ref-for-agent②②">Agent</a> can identify itself in return for its <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources⑦">Agent-Specific Resources</a> (if it has any). Let’s call this <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource⑨">Resource</a> the <span id="dfn-rdh"><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="resource-discovery-hub">Resource Discovery Hub</dfn>: a <a data-link-type="dfn" href="#server" id="ref-for-server②">Server</a> <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource①⓪">Resource</a>, linked to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①②">Entity</a>, that provides <a data-link-type="dfn" href="#client" id="ref-for-client①">Client</a> <a data-link-type="dfn" href="#agent" id="ref-for-agent②③">Agents</a> interacting with that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①③">Entity</a> quick access to their <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources⑧">Agent-Specific Resources</a>.</span></p>
+   <p class="note" role="note"><span class="marker">NOTE:</span> The concept of a <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub">Resource Discovery Hub</a> is based on an abstraction of the <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#authorization-agent" id="ref-for-authorization-agent">Authorization Agent</a> of <a data-link-type="biblio" href="#biblio-interop" title="Solid Application Interoperability">Solid Application Interoperability</a>, in its role as mechanism for <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery" id="ref-for-agent-registration-discovery">Agent Registration Discovery</a>: <q><em>An <a data-link-type="dfn" href="#agent" id="ref-for-agent②④">Agent</a> that needs to discover whether a target <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent" id="ref-for-social-agent⑤">Social Agent</a> has a corresponding <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration①">Agent Registration</a> for them can query the <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#authorization-agent" id="ref-for-authorization-agent①">Authorization Agent</a> for that target <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#social-agent" id="ref-for-social-agent⑥">Social Agent</a>.</em></q></p>
+   <h3 class="heading settled" data-level="3.1" id="sec-considerations"><span class="secno">3.1. </span><span class="content">Considerations</span><a class="self-link" href="#sec-considerations"></a></h3>
+   <p><em>This section is non-normative.</em></p>
+   <p>Some considerations can be made when conceptualizing the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①">Resource Discovery Hub</a>, and its relation to other <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource①①">Resources</a> and inquiring <a data-link-type="dfn" href="#client" id="ref-for-client②">Clients</a>.</p>
+   <ol>
+    <li data-md>
+     <p>In order to use a <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②">Resource Discovery Hub</a> to discover the <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources⑨">Agent-Specific Resources</a> related to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①④">Entity</a>, the <a data-link-type="dfn" href="#client" id="ref-for-client③">Client</a> should be able to discover the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③">Resource Discovery Hub</a> starting from a <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#dereferenceable-identifier" id="ref-for-dereferenceable-identifier">Dereferenceable Identifier</a> of that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①⑤">Entity</a>.</p>
+    <li data-md>
+     <p>It should be possible, but not necessary, to integrate the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub④">Resource Discovery Hub</a> into other services, such as the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#dereferenceable-identifier" id="ref-for-dereferenceable-identifier①">Dereferenceable Identifier</a> provider. This would, for example, allow for optimization of the <a href="#sec-asr-discovery">§ 5 Agent-Specific Resource Discovery</a>.</p>
+     <ol>
+      <li data-md>
+       <p>The response provided by the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub⑤">Resource Discovery Hub</a> should be applicable to all document types the other service might respond with.</p>
+      <li data-md>
+       <p>The response provided by a <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub⑥">Resource Discovery Hub</a> should be minimal, as not to cause too much bloat in case the purpose of a request was purely the response provided by the other service.</p>
+      <li data-md>
+       <p><a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①⓪">Agent-Specific Resources</a> might not always be related to the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①⑥">Entity</a> in the same way that the response of the other service is. The <a data-link-type="dfn" href="#client" id="ref-for-client④">Client</a> should therefore always be capable of distinguishing the different parts of the combined response.</p>
+      <li data-md>
+       <p>While a read operation on the combined service might combine the info of both services (in a distinguishable way), the presence of the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub⑦">Resource Discovery Hub</a> should not disturb the other operations on the other service (e.g. write operations).</p>
+     </ol>
+    <li data-md>
+     <p>Since <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①①">Agent-Specific Resources</a> will in many cases remain the same for long periods of time, <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①②">Agent-Specific Resources</a> presented by the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub⑧">Resource Discovery Hub</a> should be cacheable by the <a data-link-type="dfn" href="#client" id="ref-for-client⑤">Client</a>.</p>
+   </ol>
+   <p>Based on these considerations, the following sections will specify <a href="#sec-rdh-discovery">§ 4 Discovery of the Resource Discovery Hub</a> and <a href="#sec-asr-discovery">§ 5 Agent-Specific Resource Discovery</a>.</p>
+   <h2 class="heading settled" data-level="4" id="sec-rdh-discovery"><span class="secno">4. </span><span class="content">Discovery of the Resource Discovery Hub</span><a class="self-link" href="#sec-rdh-discovery"></a></h2>
+   <p class="note" role="note"><span class="marker">NOTE:</span> This section takes inspiration from the <a data-link-type="dfn" href="https://solid.github.io/data-interoperability-panel/specification/#authorization-agent-discovery" id="ref-for-authorization-agent-discovery">Authorization Agent Discovery</a> of <a data-link-type="biblio" href="#biblio-interop" title="Solid Application Interoperability">Solid Application Interoperability</a>.</p>
+   <p><a data-link-type="dfn" href="#client" id="ref-for-client⑥">Clients</a> wishing to discover the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub⑨">Resource Discovery Hub</a> for a given <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①⑦">Entity</a> <em class="rfc2119">SHOULD</em> dereference an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identifier" id="ref-for-identifier①">Identifier</a> <code>&lt;id></code> of that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①⑧">Entity</a>.</p>
+   <p>If the response contains an <a data-link-type="biblio" href="#biblio-rfc8288" title="Web Linking">HTTP Link header</a> with <mark>relation</mark> type <code>rel="TBD"</code>, the <a data-link-type="dfn" href="#client" id="ref-for-client⑦">Client</a> <em class="rfc2119">SHOULD</em> take the link target of the header to be the IRI of the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①⓪">Resource Discovery Hub</a> of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity①⑨">Entity</a>.</p>
+   <p>If <strong>no</strong> such header is present, and the response contains an <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-document" id="ref-for-dfn-rdf-document">RDF Document</a>, the <a data-link-type="dfn" href="#client" id="ref-for-client⑧">Client</a> <em class="rfc2119">MAY</em> parse it. If the document contains a <mark>statement of the form</mark> <code>&lt;id> &lt;TBD> &lt;rdh></code>, the <a data-link-type="dfn" href="#client" id="ref-for-client⑨">Client</a> <em class="rfc2119">SHOULD</em> take the object value <code>&lt;rdh></code> to be the IRI of the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①①">Resource Discovery Hub</a> of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②⓪">Entity</a>.</p>
+   <div class="example" id="ex-rdh-discover">
+    <a class="self-link" href="#ex-rdh-discover"></a> 
+    <p>Example <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#get" id="ref-for-get">GET</a></code>`</span> request to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②①">Entity</a> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identifier" id="ref-for-identifier②">Identifier</a>, and two possible responses: one <em>with</em> Link header, and one <em>without</em>.</p>
+<pre class="highlight"><c- nf>GET</c-> <c- nn>&lt;id></c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
+</pre>
+<pre class="highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>200</c-> <c- ne>OK</c->
+<c- e>Link</c-><c- o>:</c-> <c- l>&lt;rdh>; rel="TBD"</c->
+</pre>
+<pre class="highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>200</c-> <c- ne>OK</c->
+ 
+&lt;id> &lt;TBD> &lt;rdh> .
+</pre>
+   </div>
+   <p class="issue" id="issue-7a620132"><a class="self-link" href="#issue-7a620132"></a> Relation type TBD (marked)</p>
+   <p>Each <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②②">Entity</a> <em class="rfc2119">SHOULD</em> only have a single <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①②">Resource Discovery Hub</a> related to it. The IRI of that <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①③">Resource Discovery Hub</a> <em class="rfc2119">MUST</em> be unique to that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②③">Entity</a>. In scenarios where a <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①④">Resource Discovery Hub</a> services <a data-link-type="dfn" href="#client" id="ref-for-client①⓪">Clients</a> for multiple <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②④">Entities</a>, this may be facilitated through a unique sub-domain or path.</p>
+   <p class="issue" id="issue-7e80e0cd"><a class="self-link" href="#issue-7e80e0cd"></a> Advantages of multiple RDHs?</p>
+   <p>In case a <a data-link-type="dfn" href="#client" id="ref-for-client①①">Client</a> has found <strong>no</strong> <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①⑤">Resource Discovery Hub</a> in the response header or body after dereferencing an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②⑤">Entity’s</a> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identifier" id="ref-for-identifier③">Identifier</a> to the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②⑥">Entity’s</a> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identity-document" id="ref-for-identity-document①">Identity Document</a>, the requesting <a data-link-type="dfn" href="#client" id="ref-for-client①②">Client</a> <em class="rfc2119">SHOULD</em> take there to be <strong>no</strong> <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①⑥">Resource Discovery Hub</a> for that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②⑦">Entity</a>, and the <a data-link-type="dfn" href="#client" id="ref-for-client①③">Client</a> <em class="rfc2119">SHOULD</em> take the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identity-document" id="ref-for-identity-document②">Identity Document</a> to contain the only <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information⑥">Information</a> immediately available.</p>
+   <h2 class="heading settled" data-level="5" id="sec-asr-discovery"><span class="secno">5. </span><span class="content">Agent-Specific Resource Discovery</span><a class="self-link" href="#sec-asr-discovery"></a></h2>
+   <p class="note" role="note"><span class="marker">NOTE:</span> This section takes inspiration from the <a href="https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery" id="termref-for-agent-registration-discovery">Agent Registration Discovery</a> of <a data-link-type="biblio" href="#biblio-interop" title="Solid Application Interoperability">Solid Application Interoperability</a>.</p>
+   <p>Once the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①⑦">Resource Discovery Hub</a> related to an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②⑧">Entity</a> is known, a <a data-link-type="dfn" href="#client" id="ref-for-client①④">Client</a> wishing to discover its <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①③">Agent-Specific Resources</a> related to that <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity②⑨">Entity</a> <em class="rfc2119">SHOULD</em> query the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①⑧">Resource Discovery Hub</a> by sending a <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#head" id="ref-for-head">HEAD</a></code>`</span> or <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#get" id="ref-for-get①">GET</a></code>`</span> request to the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub①⑨">Resource Discovery Hub</a>’s IRI, in which the value of the <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#authorization" id="ref-for-authorization">Authorization</a></code>`</span> header is set to a <mark>TBD Token</mark> containing the <mark><a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identifier" id="ref-for-identifier④">Identifier</a> of the <a data-link-type="dfn" href="#client" id="ref-for-client①⑤">Client</a></mark>.</p>
+   <div class="example" id="ex-rdh-request">
+    <a class="self-link" href="#ex-rdh-request"></a> Example <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#head" id="ref-for-head①">HEAD</a></code>`</span> request to an <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②⓪">Resource Discovery Hub</a>. 
+<pre class="highlight"><c- nf>HEAD</c-> <c- nn>&lt;id></c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
+<c- e>Authorization</c-><c- o>:</c-> <c- l>TBD ...</c->
+</pre>
+   </div>
+   <p class="issue" id="issue-d0132fb5"><a class="self-link" href="#issue-d0132fb5"></a> claims TBD</p>
+   <p class="issue" id="issue-68a18869"><a class="self-link" href="#issue-68a18869"></a> oauth access token, oidc id token, or more general (e.g. HttpSig, VC in body...) ?</p>
+   <p class="issue" id="issue-784b969f"><a class="self-link" href="#issue-784b969f"></a> need for Entity’s ID as well ?</p>
+   <p>Upon receiving a request, the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②①">Resource Discovery Hub</a> <em class="rfc2119">MUST</em> check the validity of the <mark>TBD Token</mark>. If the <mark>TBD Token</mark> is valid, the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②②">Resource Discovery Hub</a> <em class="rfc2119">MUST</em> send a response including, for each <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①④">Agent-Specific Resource</a> <code>&lt;asr></code> of the requesting <a data-link-type="dfn" href="#client" id="ref-for-client①⑥">Client</a>, an <span>`<code><a data-link-type="http-header" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3" id="ref-for-section-3">Link</a></code>`</span> header with <code>&lt;asr></code> as target value and the <mark>relation <code>rel="TBD"</code></mark> relating it to either the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③⓪">Entity</a> or to the <a data-link-type="dfn" href="#client" id="ref-for-client①⑦">Client</a> with the <span>`<code><a data-link-type="http-header" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.2" id="ref-for-section-3.2">anchor</a></code>`</span> attribute; or, in case <strong>no</strong> <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①⑤">Agent-Specific Resource</a> was found for the requesting <a data-link-type="dfn" href="#client" id="ref-for-client①⑧">Client</a>, <strong>no</strong> <span>`<code><a data-link-type="http-header" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3" id="ref-for-section-3①">Link</a></code>`</span> headers of that type.</p>
+   <div class="example" id="ex-rdh-response">
+    <a class="self-link" href="#ex-rdh-response"></a> Example response from an <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②③">Resource Discovery Hub</a>. 
+<pre class="highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>200</c-> <c- ne>OK</c->
+<c- e>Link</c-><c- o>:</c-> <c- l>&lt;asr>; rel="TBD"; anchor="id"</c->
+</pre>
+   </div>
+   <p>In case the <a data-link-type="dfn" href="#client" id="ref-for-client①⑨">Client</a> receives a response from the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②④">Resource Discovery Hub</a> with <strong>no</strong> relevant <a data-link-type="biblio" href="#biblio-rfc9110" title="HTTP Semantics">HTTP</a> <code>Link</code> header, the requesting <a data-link-type="dfn" href="#client" id="ref-for-client②⓪">Client</a> <em class="rfc2119">SHOULD</em> take the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identity-document" id="ref-for-identity-document③">Identity Document</a> of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③①">Entity</a> to contain the <strong>only</strong> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information⑦">Information</a> immediately available.</p>
+   <p>To reduce header bloat, a <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②⑤">Resource Discovery Hub</a> <em class="rfc2119">SHOULD</em> only advertise a single <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①⑥">Agent-Specific Resource</a> to the requesting <a data-link-type="dfn" href="#client" id="ref-for-client②①">Client</a>. In scenarios where a <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②⑥">Resource Discovery Hub</a> has multiple <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①⑦">Agent-Specific Resources</a> for the requesting <a data-link-type="dfn" href="#client" id="ref-for-client②②">Client</a>, the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②⑦">Resource Discovery Hub</a> <em class="rfc2119">SHOULD</em> provide an <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="agent-specific-discovery-document">Agent-Specific Discovery Document</dfn>: a single <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①⑧">Agent-Specific Resource</a> encoding an RDF Graph relating the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③②">Entity</a> or the <a data-link-type="dfn" href="#client" id="ref-for-client②③">Client</a> to each of the other <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources①⑨">Agent-Specific Resources</a>. This <a data-link-type="dfn" href="#agent-specific-discovery-document" id="ref-for-agent-specific-discovery-document">Agent-Specific Discovery Document</a> is then the only <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources②⓪">Agent-Specific Resource</a> linked to in the response header of the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②⑧">Resource Discovery Hub</a>.</p>
+   <h2 class="heading settled" data-level="6" id="sec-agent-registration"><span class="secno">6. </span><span class="content">Agent Registration</span><a class="self-link" href="#sec-agent-registration"></a></h2>
+   <p>As pointed out in <a href="#sec-rdh-discovery">§ 4 Discovery of the Resource Discovery Hub</a> and <a href="#sec-asr-discovery">§ 5 Agent-Specific Resource Discovery</a>, if a <a data-link-type="dfn" href="#client" id="ref-for-client②④">Client</a> has found no <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub②⑨">Resource Discovery Hub</a> in the response header or body after dereferencing an <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③③">Entity’s</a> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identifier" id="ref-for-identifier⑤">Identifier</a> to the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③④">Entity’s</a> <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identity-document" id="ref-for-identity-document④">Identity Document</a>, or if a <a data-link-type="dfn" href="#client" id="ref-for-client②⑤">Client</a> did find an <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③⓪">Resource Discovery Hub</a> but receives a response from this <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③①">Resource Discovery Hub</a> with no <a data-link-type="biblio" href="#biblio-rfc9110" title="HTTP Semantics">HTTP</a> <code>Link</code> header of the <mark>type <code>rel="TBD"</code></mark>, then that <a data-link-type="dfn" href="#client" id="ref-for-client②⑥">Client</a> should take the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identity-document" id="ref-for-identity-document⑤">Identity Document</a> of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③⑤">Entity</a> to contain the only <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#information" id="ref-for-information⑧">Information</a> immediately available.</p>
+   <p>Both the <a data-link-type="dfn" href="#client" id="ref-for-client②⑦">Client</a> and the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③⑥">Entity</a> might, however, want to transition from such a situation to one in which the <a data-link-type="dfn" href="#client" id="ref-for-client②⑧">Client</a> <em>does</em> receive links to <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources②①">Agent-Specific Resources</a> from an <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③②">Resource Discovery Hub</a> of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③⑦">Entity</a>: the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③⑧">Entity</a> might want to set up an <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③③">Resource Discovery Hub</a> to begin with; it might <em>register</em> the <a data-link-type="dfn" href="#client" id="ref-for-client②⑨">Client</a> at the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③④">Resource Discovery Hub</a>, adding one or more <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources②②">Agent-Specific Resources</a> for it; the <a data-link-type="dfn" href="#client" id="ref-for-client③⓪">Client</a> might possibly register itself, e.g. to keep some state; or the <a data-link-type="dfn" href="#client" id="ref-for-client③①">Client</a> might request, from the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity③⑨">Entity</a> or the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③⑤">Resource Discovery Hub</a>, to be registered.</p>
+   <p>One can imagine any number of mechanisms that implement these flows, and this document will not specify how to do so. To follow up on the situation above, however, it will suggest an extendable framework for <span id="dfn-arr"><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="agent-registration-requests">Agent Registration Requests</dfn>: a one-step notification a <a data-link-type="dfn" href="#client" id="ref-for-client③②">Client</a> <a data-link-type="dfn" href="#agent" id="ref-for-agent②⑤">Agent</a> can perform in reaction to the absence of <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources②③">Agent-Specific Resources</a> when an <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③⑥">Resource Discovery Hub</a> is already available.</span> In this context, <span id="dfn-ar">we call the <a data-link-type="dfn" href="#agent-specific-discovery-document" id="ref-for-agent-specific-discovery-document①">Agent-Specific Discovery Document</a> resulting from the <a data-link-type="dfn" href="#agent-registration-requests" id="ref-for-agent-registration-requests">Agent Registration Request</a> an <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="agent-registration">Agent Registration</dfn></span>.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> This is in line with the use of the term <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration②">Agent Registration</a> in <a data-link-type="biblio" href="#biblio-interop" title="Solid Application Interoperability">Solid Application Interoperability</a>.</p>
+   <p>If a <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③⑦">Resource Discovery Hub</a> receives a request from a <a data-link-type="dfn" href="#client" id="ref-for-client③③">Client</a> for which it has no <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources②④">Agent-Specific Resources</a>, but to which it wants to provide the opportunity to <em>request</em> an <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration③">Agent Registration</a>, the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③⑧">Resource Discovery Hub</a> <em class="rfc2119">MAY</em> respond with a <span>`<code><a data-link-type="http-header" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3" id="ref-for-section-3②">Link</a></code>`</span> header to a third <a data-link-type="dfn" href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource" id="ref-for-dfn-resource①②">Resource</a>, in which case the <a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.3" id="ref-for-section-3.3">relation</a> type of the header <em class="rfc2119">MUST</em> hold the semantics that indicate how to perform an <a data-link-type="dfn" href="#agent-registration-requests" id="ref-for-agent-registration-requests①">Agent Registration Request</a> at the <a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.1" id="ref-for-section-3.1">target</a> of the <span>`<code><a data-link-type="http-header" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3" id="ref-for-section-3③">Link</a></code>`</span>, e.g. as specified in an extension to this document.</p>
+   <div class="example" id="ex-arr-link">
+    <a class="self-link" href="#ex-arr-link"></a> Example response from an <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub③⑨">Resource Discovery Hub</a> when no <a data-link-type="dfn" href="#agent-specific-resources" id="ref-for-agent-specific-resources②⑤">Agent-Specific Resource</a> is found for the requesting <a data-link-type="dfn" href="#client" id="ref-for-client③④">Client</a>. 
+<pre class="highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>200</c-> <c- ne>OK</c->
+<c- e>Location</c-><c- o>:</c-> <c- l>new-ar</c->
+<c- e>Link</c-><c- o>:</c-> <c- l>&lt;target>; rel="TBD"; anchor="id"</c->
+</pre>
+   </div>
+   <p>As a basic method of performing <a data-link-type="dfn" href="#agent-registration-requests" id="ref-for-agent-registration-requests②">Agent Registration Request</a>, this document provides the <mark><a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.3" id="ref-for-section-3.3①">relation</a> type <code>rel="TBD"</code></mark>. Upon receiving a response from the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub④⓪">Resource Discovery Hub</a> containing a <span>`<code><a data-link-type="http-header" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3" id="ref-for-section-3④">Link</a></code>`</span> header of this type, a <a data-link-type="dfn" href="#client" id="ref-for-client③⑤">Client</a> <em class="rfc2119">MAY</em> perform a <a data-link-type="biblio" href="#biblio-rfc9110" title="HTTP Semantics">HTTP</a> <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#post" id="ref-for-post">POST</a></code>`</span> request to the [target] IRI, in which the value of the <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#authorization" id="ref-for-authorization①">Authorization</a></code>`</span> header is set to a <mark>TBD Token</mark> containing the <mark><a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#identifier" id="ref-for-identifier⑥">Identifier</a> of the <a data-link-type="dfn" href="#client" id="ref-for-client③⑥">Client</a></mark>.</p>
+   <div class="example" id="ex-ar-request">
+    <a class="self-link" href="#ex-ar-request"></a> Example <a data-link-type="dfn" href="#agent-registration-requests" id="ref-for-agent-registration-requests③">Agent Registration Request</a> request and response. 
+<pre class="highlight"><c- nf>POST</c-> <c- nn>&lt;target></c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
+<c- e>Authorization</c-><c- o>:</c-> <c- l>TBD ...</c->
+</pre>
+<pre class="highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>201</c-> <c- ne>CREATED</c->
+<c- e>Location</c-><c- o>:</c-> <c- l>new-ar</c->
+</pre>
+   </div>
+   <p>The effect of such a valid request to the <a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.1" id="ref-for-section-3.1①">target</a> <em class="rfc2119">MUST</em> be that an <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration④">Agent Registration</a> is created for the requesting <a data-link-type="dfn" href="#client" id="ref-for-client③⑦">Client</a> at the <a data-link-type="dfn" href="#resource-discovery-hub" id="ref-for-resource-discovery-hub④①">Resource Discovery Hub</a> of the <a data-link-type="dfn" href="https://woutermont.github.io/solid/concepts-representation.html#entity" id="ref-for-entity④⓪">Entity</a>; the response on such requests <em class="rfc2119">SHOULD</em> be a [:201 Created:], with the IRI of the newly created <a data-link-type="dfn" href="#agent-registration" id="ref-for-agent-registration⑤">Agent Registration</a> in the <span>`<code><a data-link-type="http-header" href="https://httpwg.org/specs/rfc9110.html#location" id="ref-for-location">Location</a></code>`</span> header.</p>
+   <p class="issue" id="issue-68a18869①"><a class="self-link" href="#issue-68a18869①"></a> oauth access token, oidc id token, or more general (e.g. HttpSig, VC in body...) ?</p>
+   <h2 class="no-num heading settled" id="appendix-a-summary-sequence-diagram"><span class="content">Appendix A: Summary Sequence Diagram</span><a class="self-link" href="#appendix-a-summary-sequence-diagram"></a></h2>
+   <p><img class="sequence-diagram" src="diagrams/agent-specific-discovery.mmd.svg"></p>
+  </main>
+  <div data-fill-with="conformance">
+   <h2 class="no-ref no-num heading settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
+   <h3 class="no-ref no-num heading settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
+   <p>Conformance requirements are expressed
+    with a combination of descriptive assertions
+    and RFC 2119 terminology.
+    The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
+    in the normative parts of this document
+    are to be interpreted as described in RFC 2119.
+    However, for readability,
+    these words do not appear in all uppercase letters in this specification. </p>
+   <p>All of the text of this specification is normative
+    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a> </p>
+   <p>Examples in this specification are introduced with the words “for example”
+    or are set apart from the normative text
+    with <code>class="example"</code>,
+    like this: </p>
+   <div class="example" id="w3c-example">
+    <a class="self-link" href="#w3c-example"></a> 
+    <p>This is an example of an informative example. </p>
+   </div>
+   <p>Informative notes begin with the word “Note”
+    and are set apart from the normative text
+    with <code>class="note"</code>,
+    like this: </p>
+   <p class="note" role="note">Note, this is an informative note.</p>
+   <h3 class="no-ref no-num heading settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
+   <p>Requirements phrased in the imperative as part of algorithms
+    (such as "strip any leading space characters"
+    or "return false and abort these steps")
+    are to be interpreted with the meaning of the key word
+    ("must", "should", "may", etc)
+    used in introducing the algorithm. </p>
+   <p>Conformance requirements phrased as algorithms or specific steps
+    can be implemented in any manner,
+    so long as the end result is equivalent.
+    In particular, the algorithms defined in this specification
+    are intended to be easy to understand
+    and are not intended to be performant.
+    Implementers are encouraged to optimize. </p>
+  </div>
+<script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
+  <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
+  <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
+  <ul class="index">
+   <li><a href="#agent">Agent</a><span>, in § 1</span>
+   <li><a href="#agent-registration">Agent Registration</a><span>, in § 6</span>
+   <li><a href="#agent-registration-requests">Agent Registration Requests</a><span>, in § 6</span>
+   <li><a href="#agent-specific-discovery-document">Agent-Specific Discovery Document</a><span>, in § 5</span>
+   <li><a href="#agent-specific-resources">Agent-Specific Resources</a><span>, in § 2</span>
+   <li><a href="#client">Client</a><span>, in § 1</span>
+   <li><a href="#resource-discovery-hub">Resource Discovery Hub</a><span>, in § 3</span>
+   <li><a href="#server">Server</a><span>, in § 1</span>
+  </ul>
+  <aside class="dfn-panel" data-for="term-for-dereferenceable-identifier">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#dereferenceable-identifier">https://woutermont.github.io/solid/concepts-representation.html#dereferenceable-identifier</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dereferenceable-identifier">3.1. Considerations</a> <a href="#ref-for-dereferenceable-identifier①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-entity">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#entity">https://woutermont.github.io/solid/concepts-representation.html#entity</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-entity">1. Terminology</a>
+    <li><a href="#ref-for-entity①">2. Introduction</a> <a href="#ref-for-entity②">(2)</a> <a href="#ref-for-entity③">(3)</a> <a href="#ref-for-entity④">(4)</a> <a href="#ref-for-entity⑤">(5)</a> <a href="#ref-for-entity⑥">(6)</a> <a href="#ref-for-entity⑦">(7)</a> <a href="#ref-for-entity⑧">(8)</a> <a href="#ref-for-entity⑨">(9)</a>
+    <li><a href="#ref-for-entity①⓪">3. Resource Discovery Hub</a> <a href="#ref-for-entity①①">(2)</a> <a href="#ref-for-entity①②">(3)</a> <a href="#ref-for-entity①③">(4)</a>
+    <li><a href="#ref-for-entity①④">3.1. Considerations</a> <a href="#ref-for-entity①⑤">(2)</a> <a href="#ref-for-entity①⑥">(3)</a>
+    <li><a href="#ref-for-entity①⑦">4. Discovery of the Resource Discovery Hub</a> <a href="#ref-for-entity①⑧">(2)</a> <a href="#ref-for-entity①⑨">(3)</a> <a href="#ref-for-entity②⓪">(4)</a> <a href="#ref-for-entity②①">(5)</a> <a href="#ref-for-entity②②">(6)</a> <a href="#ref-for-entity②③">(7)</a> <a href="#ref-for-entity②④">(8)</a> <a href="#ref-for-entity②⑤">(9)</a> <a href="#ref-for-entity②⑥">(10)</a> <a href="#ref-for-entity②⑦">(11)</a>
+    <li><a href="#ref-for-entity②⑧">5. Agent-Specific Resource Discovery</a> <a href="#ref-for-entity②⑨">(2)</a> <a href="#ref-for-entity③⓪">(3)</a> <a href="#ref-for-entity③①">(4)</a> <a href="#ref-for-entity③②">(5)</a>
+    <li><a href="#ref-for-entity③③">6. Agent Registration</a> <a href="#ref-for-entity③④">(2)</a> <a href="#ref-for-entity③⑤">(3)</a> <a href="#ref-for-entity③⑥">(4)</a> <a href="#ref-for-entity③⑦">(5)</a> <a href="#ref-for-entity③⑧">(6)</a> <a href="#ref-for-entity③⑨">(7)</a> <a href="#ref-for-entity④⓪">(8)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-identifier">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#identifier">https://woutermont.github.io/solid/concepts-representation.html#identifier</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-identifier">2. Introduction</a>
+    <li><a href="#ref-for-identifier①">4. Discovery of the Resource Discovery Hub</a> <a href="#ref-for-identifier②">(2)</a> <a href="#ref-for-identifier③">(3)</a>
+    <li><a href="#ref-for-identifier④">5. Agent-Specific Resource Discovery</a>
+    <li><a href="#ref-for-identifier⑤">6. Agent Registration</a> <a href="#ref-for-identifier⑥">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-identity">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#identity">https://woutermont.github.io/solid/concepts-representation.html#identity</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-identity">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-identity-document">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#identity-document">https://woutermont.github.io/solid/concepts-representation.html#identity-document</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-identity-document">2. Introduction</a>
+    <li><a href="#ref-for-identity-document①">4. Discovery of the Resource Discovery Hub</a> <a href="#ref-for-identity-document②">(2)</a>
+    <li><a href="#ref-for-identity-document③">5. Agent-Specific Resource Discovery</a>
+    <li><a href="#ref-for-identity-document④">6. Agent Registration</a> <a href="#ref-for-identity-document⑤">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-information">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#information">https://woutermont.github.io/solid/concepts-representation.html#information</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-information">2. Introduction</a> <a href="#ref-for-information①">(2)</a> <a href="#ref-for-information②">(3)</a> <a href="#ref-for-information③">(4)</a> <a href="#ref-for-information④">(5)</a>
+    <li><a href="#ref-for-information⑤">3. Resource Discovery Hub</a>
+    <li><a href="#ref-for-information⑥">4. Discovery of the Resource Discovery Hub</a>
+    <li><a href="#ref-for-information⑦">5. Agent-Specific Resource Discovery</a>
+    <li><a href="#ref-for-information⑧">6. Agent Registration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-representation">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#representation">https://woutermont.github.io/solid/concepts-representation.html#representation</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-representation">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-source">
+   <a href="https://woutermont.github.io/solid/concepts-representation.html#source">https://woutermont.github.io/solid/concepts-representation.html#source</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-source">2. Introduction</a> <a href="#ref-for-source①">(2)</a> <a href="#ref-for-source②">(3)</a> <a href="#ref-for-source③">(4)</a>
+    <li><a href="#ref-for-source④">3. Resource Discovery Hub</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-decentralized-identifiers">
+   <a href="https://www.w3.org/TR/did-core/#dfn-decentralized-identifiers">https://www.w3.org/TR/did-core/#dfn-decentralized-identifiers</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-decentralized-identifiers">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-did-documents">
+   <a href="https://www.w3.org/TR/did-core/#dfn-did-documents">https://www.w3.org/TR/did-core/#dfn-did-documents</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-did-documents">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-authorization">
+   <a href="https://httpwg.org/specs/rfc9110.html#authorization">https://httpwg.org/specs/rfc9110.html#authorization</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-authorization">5. Agent-Specific Resource Discovery</a>
+    <li><a href="#ref-for-authorization①">6. Agent Registration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-get">
+   <a href="https://httpwg.org/specs/rfc9110.html#get">https://httpwg.org/specs/rfc9110.html#get</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-get">4. Discovery of the Resource Discovery Hub</a>
+    <li><a href="#ref-for-get①">5. Agent-Specific Resource Discovery</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-head">
+   <a href="https://httpwg.org/specs/rfc9110.html#head">https://httpwg.org/specs/rfc9110.html#head</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-head">5. Agent-Specific Resource Discovery</a> <a href="#ref-for-head①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-location">
+   <a href="https://httpwg.org/specs/rfc9110.html#location">https://httpwg.org/specs/rfc9110.html#location</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-location">6. Agent Registration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-post">
+   <a href="https://httpwg.org/specs/rfc9110.html#post">https://httpwg.org/specs/rfc9110.html#post</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-post">6. Agent Registration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-agent-registration-discovery">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery">https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-agent-registration-discovery">3. Resource Discovery Hub</a>
+    <li><a href="#termref-for-agent-registration-discovery">5. Agent-Specific Resource Discovery</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-agent-registry">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#agent-registry">https://solid.github.io/data-interoperability-panel/specification/#agent-registry</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-agent-registry">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-App">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#App">https://solid.github.io/data-interoperability-panel/specification/#App</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-App">2. Introduction</a> <a href="#ref-for-App①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-application-registration">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#application-registration">https://solid.github.io/data-interoperability-panel/specification/#application-registration</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-application-registration">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-authorization-agent">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#authorization-agent">https://solid.github.io/data-interoperability-panel/specification/#authorization-agent</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-authorization-agent">3. Resource Discovery Hub</a> <a href="#ref-for-authorization-agent①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-authorization-agent-discovery">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#authorization-agent-discovery">https://solid.github.io/data-interoperability-panel/specification/#authorization-agent-discovery</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-authorization-agent-discovery">4. Discovery of the Resource Discovery Hub</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-social-agent">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#social-agent">https://solid.github.io/data-interoperability-panel/specification/#social-agent</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-social-agent">2. Introduction</a> <a href="#ref-for-social-agent①">(2)</a> <a href="#ref-for-social-agent②">(3)</a> <a href="#ref-for-social-agent③">(4)</a> <a href="#ref-for-social-agent④">(5)</a>
+    <li><a href="#ref-for-social-agent⑤">3. Resource Discovery Hub</a> <a href="#ref-for-social-agent⑥">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-social-agent-registration">
+   <a href="https://solid.github.io/data-interoperability-panel/specification/#social-agent-registration">https://solid.github.io/data-interoperability-panel/specification/#social-agent-registration</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-social-agent-registration">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-rdf-document">
+   <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-document">https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-document</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-rdf-document">4. Discovery of the Resource Discovery Hub</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-resource">
+   <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-resource">https://www.w3.org/TR/rdf11-concepts/#dfn-resource</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-resource">2. Introduction</a> <a href="#ref-for-dfn-resource①">(2)</a> <a href="#ref-for-dfn-resource②">(3)</a> <a href="#ref-for-dfn-resource③">(4)</a> <a href="#ref-for-dfn-resource④">(5)</a> <a href="#ref-for-dfn-resource⑤">(6)</a> <a href="#ref-for-dfn-resource⑥">(7)</a> <a href="#ref-for-dfn-resource⑦">(8)</a> <a href="#ref-for-dfn-resource⑧">(9)</a>
+    <li><a href="#ref-for-dfn-resource⑨">3. Resource Discovery Hub</a> <a href="#ref-for-dfn-resource①⓪">(2)</a>
+    <li><a href="#ref-for-dfn-resource①①">3.1. Considerations</a>
+    <li><a href="#ref-for-dfn-resource①②">6. Agent Registration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-section-3.2">
+   <a href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.2">https://datatracker.ietf.org/doc/html/rfc8288#section-3.2</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-section-3.2">5. Agent-Specific Resource Discovery</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-section-3">
+   <a href="https://datatracker.ietf.org/doc/html/rfc8288#section-3">https://datatracker.ietf.org/doc/html/rfc8288#section-3</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-section-3">5. Agent-Specific Resource Discovery</a> <a href="#ref-for-section-3①">(2)</a>
+    <li><a href="#ref-for-section-3②">6. Agent Registration</a> <a href="#ref-for-section-3③">(2)</a> <a href="#ref-for-section-3④">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-section-3.3">
+   <a href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.3">https://datatracker.ietf.org/doc/html/rfc8288#section-3.3</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-section-3.3">6. Agent Registration</a> <a href="#ref-for-section-3.3①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-section-3.1">
+   <a href="https://datatracker.ietf.org/doc/html/rfc8288#section-3.1">https://datatracker.ietf.org/doc/html/rfc8288#section-3.1</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-section-3.1">6. Agent Registration</a> <a href="#ref-for-section-3.1①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-profile-document">
+   <a href="https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-profile-document">https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-profile-document</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-profile-document">2. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-webid">
+   <a href="https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-webid">https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-webid</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-webid">2. Introduction</a>
+   </ul>
+  </aside>
+  <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
+  <ul class="index">
+   <li>
+    <a data-link-type="biblio">[CON-WEB-REP]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-dereferenceable-identifier">dereferenceable identifier</span>
+     <li><span class="dfn-paneled" id="term-for-entity">entity</span>
+     <li><span class="dfn-paneled" id="term-for-identifier">identifier</span>
+     <li><span class="dfn-paneled" id="term-for-identity">identity</span>
+     <li><span class="dfn-paneled" id="term-for-identity-document">identity document</span>
+     <li><span class="dfn-paneled" id="term-for-information">information</span>
+     <li><span class="dfn-paneled" id="term-for-representation">representation</span>
+     <li><span class="dfn-paneled" id="term-for-source">source</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[DID]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-dfn-decentralized-identifiers">decentralized identifiers</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-did-documents">did documents</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[HTTP-SEMANTICS]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-authorization">authorization</span>
+     <li><span class="dfn-paneled" id="term-for-get">get</span>
+     <li><span class="dfn-paneled" id="term-for-head">head</span>
+     <li><span class="dfn-paneled" id="term-for-location">location</span>
+     <li><span class="dfn-paneled" id="term-for-post">post</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[INTEROP]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-agent-registration-discovery">agent registration discovery</span>
+     <li><span class="dfn-paneled" id="term-for-agent-registry">agent registry</span>
+     <li><span class="dfn-paneled" id="term-for-App">application</span>
+     <li><span class="dfn-paneled" id="term-for-application-registration">application registration</span>
+     <li><span class="dfn-paneled" id="term-for-authorization-agent">authorization agent</span>
+     <li><span class="dfn-paneled" id="term-for-authorization-agent-discovery">authorization agent discovery</span>
+     <li><span class="dfn-paneled" id="term-for-social-agent">social agent</span>
+     <li><span class="dfn-paneled" id="term-for-social-agent-registration">social agent registration</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[RDF11-CONCEPTS]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-dfn-rdf-document">rdf document</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-resource">resource</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[WEB-LINKING]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-section-3.2">anchor</span>
+     <li><span class="dfn-paneled" id="term-for-section-3">link</span>
+     <li><span class="dfn-paneled" id="term-for-section-3.3">relation</span>
+     <li><span class="dfn-paneled" id="term-for-section-3.1">target</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[WEBID]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-dfn-profile-document">profile document</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-webid">webid</span>
+    </ul>
+  </ul>
+  <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
+  <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
+  <dl>
+   <dt id="biblio-con-web-rep">[CON-WEB-REP]
+   <dd>Wouter Termont. <a href="https://woutermont.github.io/solid/concepts-representation.html"><cite>Concepts in Web Representation</cite></a>. URL: <a href="https://woutermont.github.io/solid/concepts-representation.html">https://woutermont.github.io/solid/concepts-representation.html</a>
+   <dt id="biblio-did">[DID]
+   <dd>Drummond Reed; et al. <a href="https://www.w3.org/TR/did-core/"><cite>Decentralized Identifiers (DIDs) v1.0</cite></a>. URL: <a href="https://www.w3.org/TR/did-core/">https://www.w3.org/TR/did-core/</a>
+   <dt id="biblio-http-semantics">[HTTP-SEMANTICS]
+   <dd>R. Fielding; M. Nottingham; J. Reschke. <a href="https://httpwg.org/specs/rfc9110.html"><cite>RFC 9110: HTTP Semantics</cite></a>. 2022. URL: <a href="https://httpwg.org/specs/rfc9110.html">https://httpwg.org/specs/rfc9110.html</a>
+   <dt id="biblio-rdf11-concepts">[RDF11-CONCEPTS]
+   <dd>Richard Cyganiak; David Wood; Markus Lanthaler. <a href="https://www.w3.org/TR/rdf11-concepts/"><cite>RDF 1.1 Concepts and Abstract Syntax</cite></a>. 25 February 2014. REC. URL: <a href="https://www.w3.org/TR/rdf11-concepts/">https://www.w3.org/TR/rdf11-concepts/</a>
+   <dt id="biblio-rfc2119">[RFC2119]
+   <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
+   <dt id="biblio-rfc8288">[RFC8288]
+   <dd>M. Nottingham. <a href="https://httpwg.org/specs/rfc8288.html"><cite>Web Linking</cite></a>. October 2017. Proposed Standard. URL: <a href="https://httpwg.org/specs/rfc8288.html">https://httpwg.org/specs/rfc8288.html</a>
+   <dt id="biblio-rfc9110">[RFC9110]
+   <dd>R. Fielding, Ed.; M. Nottingham, Ed.; J. Reschke, Ed.. <a href="https://www.rfc-editor.org/rfc/rfc9110"><cite>HTTP Semantics</cite></a>. June 2022. Internet Standard. URL: <a href="https://www.rfc-editor.org/rfc/rfc9110">https://www.rfc-editor.org/rfc/rfc9110</a>
+   <dt id="biblio-web-linking">[WEB-LINKING]
+   <dd>M. Nottingham. <a href="https://datatracker.ietf.org/doc/html/rfc8288"><cite>RFC 8288: Web Linking</cite></a>. 2017. URL: <a href="https://datatracker.ietf.org/doc/html/rfc8288">https://datatracker.ietf.org/doc/html/rfc8288</a>
+   <dt id="biblio-webid">[WEBID]
+   <dd>Tim Berners-Lee; Henry Story; Andrei Sambra. <a href="https://www.w3.org/2005/Incubator/webid/spec/identity/"><cite>WebID 1.0</cite></a>. URL: <a href="https://www.w3.org/2005/Incubator/webid/spec/identity/">https://www.w3.org/2005/Incubator/webid/spec/identity/</a>
+  </dl>
+  <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
+  <dl>
+   <dt id="biblio-interop">[INTEROP]
+   <dd>Justing Bingham; Eric Prud'hommeaux; elf Pavlik. <a href="https://solid.github.io/data-interoperability-panel/specification/"><cite>Solid Application Interoperability</cite></a>. URL: <a href="https://solid.github.io/data-interoperability-panel/specification/">https://solid.github.io/data-interoperability-panel/specification/</a>
+   <dt id="biblio-prof">[PROF]
+   <dd>Virginia Balseiro; Timea Turdean; Jeff Zucker. <a href="https://solid.github.io/webid-profile/"><cite>Solid WebID Profile</cite></a>. URL: <a href="https://solid.github.io/webid-profile/">https://solid.github.io/webid-profile/</a>
+   <dt id="biblio-ti">[TI]
+   <dd>Timea Turdean. <a href="https://solid.github.io/type-indexes/"><cite>Type Indexes</cite></a>. URL: <a href="https://solid.github.io/type-indexes/">https://solid.github.io/type-indexes/</a>
+  </dl>
+  <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
+  <div style="counter-reset:issue">
+   <div class="issue"> Relation type TBD (marked) <a class="issue-return" href="#issue-7a620132" title="Jump to section">↵</a></div>
+   <div class="issue"> Advantages of multiple RDHs? <a class="issue-return" href="#issue-7e80e0cd" title="Jump to section">↵</a></div>
+   <div class="issue"> claims TBD <a class="issue-return" href="#issue-d0132fb5" title="Jump to section">↵</a></div>
+   <div class="issue"> oauth access token, oidc id token, or more general (e.g. HttpSig, VC in body...) ? <a class="issue-return" href="#issue-68a18869" title="Jump to section">↵</a></div>
+   <div class="issue"> need for Entity’s ID as well ? <a class="issue-return" href="#issue-784b969f" title="Jump to section">↵</a></div>
+   <div class="issue"> oauth access token, oidc id token, or more general (e.g. HttpSig, VC in body...) ? <a class="issue-return" href="#issue-68a18869①" title="Jump to section">↵</a></div>
+  </div>
+  <aside class="dfn-panel" data-for="agent">
+   <b><a href="#agent">#agent</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-agent">1. Terminology</a> <a href="#ref-for-agent①">(2)</a> <a href="#ref-for-agent②">(3)</a> <a href="#ref-for-agent③">(4)</a> <a href="#ref-for-agent④">(5)</a>
+    <li><a href="#ref-for-agent⑤">2. Introduction</a> <a href="#ref-for-agent⑥">(2)</a> <a href="#ref-for-agent⑦">(3)</a> <a href="#ref-for-agent⑧">(4)</a> <a href="#ref-for-agent⑨">(5)</a> <a href="#ref-for-agent①⓪">(6)</a> <a href="#ref-for-agent①①">(7)</a> <a href="#ref-for-agent①②">(8)</a> <a href="#ref-for-agent①③">(9)</a> <a href="#ref-for-agent①④">(10)</a> <a href="#ref-for-agent①⑤">(11)</a> <a href="#ref-for-agent①⑥">(12)</a> <a href="#ref-for-agent①⑦">(13)</a> <a href="#ref-for-agent①⑧">(14)</a> <a href="#ref-for-agent①⑨">(15)</a> <a href="#ref-for-agent②⓪">(16)</a>
+    <li><a href="#ref-for-agent②①">3. Resource Discovery Hub</a> <a href="#ref-for-agent②②">(2)</a> <a href="#ref-for-agent②③">(3)</a> <a href="#ref-for-agent②④">(4)</a>
+    <li><a href="#ref-for-agent②⑤">6. Agent Registration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="server">
+   <b><a href="#server">#server</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-server">1. Terminology</a> <a href="#ref-for-server①">(2)</a>
+    <li><a href="#ref-for-server②">3. Resource Discovery Hub</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="client">
+   <b><a href="#client">#client</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-client">1. Terminology</a>
+    <li><a href="#ref-for-client①">3. Resource Discovery Hub</a>
+    <li><a href="#ref-for-client②">3.1. Considerations</a> <a href="#ref-for-client③">(2)</a> <a href="#ref-for-client④">(3)</a> <a href="#ref-for-client⑤">(4)</a>
+    <li><a href="#ref-for-client⑥">4. Discovery of the Resource Discovery Hub</a> <a href="#ref-for-client⑦">(2)</a> <a href="#ref-for-client⑧">(3)</a> <a href="#ref-for-client⑨">(4)</a> <a href="#ref-for-client①⓪">(5)</a> <a href="#ref-for-client①①">(6)</a> <a href="#ref-for-client①②">(7)</a> <a href="#ref-for-client①③">(8)</a>
+    <li><a href="#ref-for-client①④">5. Agent-Specific Resource Discovery</a> <a href="#ref-for-client①⑤">(2)</a> <a href="#ref-for-client①⑥">(3)</a> <a href="#ref-for-client①⑦">(4)</a> <a href="#ref-for-client①⑧">(5)</a> <a href="#ref-for-client①⑨">(6)</a> <a href="#ref-for-client②⓪">(7)</a> <a href="#ref-for-client②①">(8)</a> <a href="#ref-for-client②②">(9)</a> <a href="#ref-for-client②③">(10)</a>
+    <li><a href="#ref-for-client②④">6. Agent Registration</a> <a href="#ref-for-client②⑤">(2)</a> <a href="#ref-for-client②⑥">(3)</a> <a href="#ref-for-client②⑦">(4)</a> <a href="#ref-for-client②⑧">(5)</a> <a href="#ref-for-client②⑨">(6)</a> <a href="#ref-for-client③⓪">(7)</a> <a href="#ref-for-client③①">(8)</a> <a href="#ref-for-client③②">(9)</a> <a href="#ref-for-client③③">(10)</a> <a href="#ref-for-client③④">(11)</a> <a href="#ref-for-client③⑤">(12)</a> <a href="#ref-for-client③⑥">(13)</a> <a href="#ref-for-client③⑦">(14)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="agent-specific-resources">
+   <b><a href="#agent-specific-resources">#agent-specific-resources</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-agent-specific-resources">2. Introduction</a> <a href="#ref-for-agent-specific-resources①">(2)</a> <a href="#ref-for-agent-specific-resources②">(3)</a> <a href="#ref-for-agent-specific-resources③">(4)</a> <a href="#ref-for-agent-specific-resources④">(5)</a> <a href="#ref-for-agent-specific-resources⑤">(6)</a>
+    <li><a href="#ref-for-agent-specific-resources⑥">3. Resource Discovery Hub</a> <a href="#ref-for-agent-specific-resources⑦">(2)</a> <a href="#ref-for-agent-specific-resources⑧">(3)</a>
+    <li><a href="#ref-for-agent-specific-resources⑨">3.1. Considerations</a> <a href="#ref-for-agent-specific-resources①⓪">(2)</a> <a href="#ref-for-agent-specific-resources①①">(3)</a> <a href="#ref-for-agent-specific-resources①②">(4)</a>
+    <li><a href="#ref-for-agent-specific-resources①③">5. Agent-Specific Resource Discovery</a> <a href="#ref-for-agent-specific-resources①④">(2)</a> <a href="#ref-for-agent-specific-resources①⑤">(3)</a> <a href="#ref-for-agent-specific-resources①⑥">(4)</a> <a href="#ref-for-agent-specific-resources①⑦">(5)</a> <a href="#ref-for-agent-specific-resources①⑧">(6)</a> <a href="#ref-for-agent-specific-resources①⑨">(7)</a> <a href="#ref-for-agent-specific-resources②⓪">(8)</a>
+    <li><a href="#ref-for-agent-specific-resources②①">6. Agent Registration</a> <a href="#ref-for-agent-specific-resources②②">(2)</a> <a href="#ref-for-agent-specific-resources②③">(3)</a> <a href="#ref-for-agent-specific-resources②④">(4)</a> <a href="#ref-for-agent-specific-resources②⑤">(5)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="resource-discovery-hub">
+   <b><a href="#resource-discovery-hub">#resource-discovery-hub</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-resource-discovery-hub">3. Resource Discovery Hub</a>
+    <li><a href="#ref-for-resource-discovery-hub①">3.1. Considerations</a> <a href="#ref-for-resource-discovery-hub②">(2)</a> <a href="#ref-for-resource-discovery-hub③">(3)</a> <a href="#ref-for-resource-discovery-hub④">(4)</a> <a href="#ref-for-resource-discovery-hub⑤">(5)</a> <a href="#ref-for-resource-discovery-hub⑥">(6)</a> <a href="#ref-for-resource-discovery-hub⑦">(7)</a> <a href="#ref-for-resource-discovery-hub⑧">(8)</a>
+    <li><a href="#ref-for-resource-discovery-hub⑨">4. Discovery of the Resource Discovery Hub</a> <a href="#ref-for-resource-discovery-hub①⓪">(2)</a> <a href="#ref-for-resource-discovery-hub①①">(3)</a> <a href="#ref-for-resource-discovery-hub①②">(4)</a> <a href="#ref-for-resource-discovery-hub①③">(5)</a> <a href="#ref-for-resource-discovery-hub①④">(6)</a> <a href="#ref-for-resource-discovery-hub①⑤">(7)</a> <a href="#ref-for-resource-discovery-hub①⑥">(8)</a>
+    <li><a href="#ref-for-resource-discovery-hub①⑦">5. Agent-Specific Resource Discovery</a> <a href="#ref-for-resource-discovery-hub①⑧">(2)</a> <a href="#ref-for-resource-discovery-hub①⑨">(3)</a> <a href="#ref-for-resource-discovery-hub②⓪">(4)</a> <a href="#ref-for-resource-discovery-hub②①">(5)</a> <a href="#ref-for-resource-discovery-hub②②">(6)</a> <a href="#ref-for-resource-discovery-hub②③">(7)</a> <a href="#ref-for-resource-discovery-hub②④">(8)</a> <a href="#ref-for-resource-discovery-hub②⑤">(9)</a> <a href="#ref-for-resource-discovery-hub②⑥">(10)</a> <a href="#ref-for-resource-discovery-hub②⑦">(11)</a> <a href="#ref-for-resource-discovery-hub②⑧">(12)</a>
+    <li><a href="#ref-for-resource-discovery-hub②⑨">6. Agent Registration</a> <a href="#ref-for-resource-discovery-hub③⓪">(2)</a> <a href="#ref-for-resource-discovery-hub③①">(3)</a> <a href="#ref-for-resource-discovery-hub③②">(4)</a> <a href="#ref-for-resource-discovery-hub③③">(5)</a> <a href="#ref-for-resource-discovery-hub③④">(6)</a> <a href="#ref-for-resource-discovery-hub③⑤">(7)</a> <a href="#ref-for-resource-discovery-hub③⑥">(8)</a> <a href="#ref-for-resource-discovery-hub③⑦">(9)</a> <a href="#ref-for-resource-discovery-hub③⑧">(10)</a> <a href="#ref-for-resource-discovery-hub③⑨">(11)</a> <a href="#ref-for-resource-discovery-hub④⓪">(12)</a> <a href="#ref-for-resource-discovery-hub④①">(13)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="agent-specific-discovery-document">
+   <b><a href="#agent-specific-discovery-document">#agent-specific-discovery-document</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-agent-specific-discovery-document">5. Agent-Specific Resource Discovery</a>
+    <li><a href="#ref-for-agent-specific-discovery-document①">6. Agent Registration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="agent-registration-requests">
+   <b><a href="#agent-registration-requests">#agent-registration-requests</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-agent-registration-requests">6. Agent Registration</a> <a href="#ref-for-agent-registration-requests①">(2)</a> <a href="#ref-for-agent-registration-requests②">(3)</a> <a href="#ref-for-agent-registration-requests③">(4)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="agent-registration">
+   <b><a href="#agent-registration">#agent-registration</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-agent-registration">2. Introduction</a>
+    <li><a href="#ref-for-agent-registration①">3. Resource Discovery Hub</a>
+    <li><a href="#ref-for-agent-registration②">6. Agent Registration</a> <a href="#ref-for-agent-registration③">(2)</a> <a href="#ref-for-agent-registration④">(3)</a> <a href="#ref-for-agent-registration⑤">(4)</a>
+   </ul>
+  </aside>
+<script>/* script-dfn-panel */
+
+document.body.addEventListener("click", function(e) {
+    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+    // Find the dfn element or panel, if any, that was clicked on.
+    var el = e.target;
+    var target;
+    var hitALink = false;
+    while(el.parentElement) {
+        if(el.tagName == "A") {
+            // Clicking on a link in a <dfn> shouldn't summon the panel
+            hitALink = true;
+        }
+        if(el.classList.contains("dfn-paneled")) {
+            target = "dfn";
+            break;
+        }
+        if(el.classList.contains("dfn-panel")) {
+            target = "dfn-panel";
+            break;
+        }
+        el = el.parentElement;
+    }
+    if(target != "dfn-panel") {
+        // Turn off any currently "on" or "activated" panels.
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
+            el.classList.remove("on");
+            el.classList.remove("activated");
+        });
+    }
+    if(target == "dfn" && !hitALink) {
+        // open the panel
+        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
+        if(dfnPanel) {
+            dfnPanel.classList.add("on");
+            var rect = el.getBoundingClientRect();
+            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
+            dfnPanel.style.top = window.scrollY + rect.top + "px";
+            var panelRect = dfnPanel.getBoundingClientRect();
+            var panelWidth = panelRect.right - panelRect.left;
+            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
+                // Reposition, because the panel is overflowing
+                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+            }
+        } else {
+            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
+        }
+    } else if(target == "dfn-panel") {
+        // Switch it to "activated" state, which pins it.
+        el.classList.add("activated");
+        el.style.left = null;
+        el.style.top = null;
+    }
+
+});
+</script>
