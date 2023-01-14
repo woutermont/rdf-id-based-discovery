@@ -4,8 +4,8 @@ title: Analysis of Tim's response to Ruben
 
 I'm not sure which appals me most: the fact that [such a
 text](https://cloudflare-ipfs.com/ipfs/QmSB8WpxXAtd3Ny9G2ZsW39RJnRsfAt2X6Q7iNTGGWo9HE)
-could be published by an authoritative person as @timbl on the authoritative W3C
-domain, or the support it gets on the public mailing list. Half of the
+could be published by an authoritative person as @timbl, 
+or the support it gets on the public mailing list. Half of the
 paragraphs contain phrases for which any other person would be strongly reminded
 of the the [Solid Community Code of
 Conduct](https://github.com/solid/process/blob/main/code-of-conduct.md) and the
