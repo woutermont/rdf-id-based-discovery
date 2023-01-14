@@ -5,17 +5,16 @@ author: Wouter Termont
 
 I'm not sure which appals me most: the fact that [such a
 text](https://cloudflare-ipfs.com/ipfs/QmSB8WpxXAtd3Ny9G2ZsW39RJnRsfAt2X6Q7iNTGGWo9HE)
-could be published by an authoritative person as @timbl, 
-or the support it gets on the public mailing list. Half of the
-paragraphs contain phrases for which any other person would be strongly reminded
-of the the [Solid Community Code of
+was published by an authoritative person as Tim, or the support it gets on the
+public mailing list. Half of the paragraphs contain phrases for which any other
+person would be strongly reminded of the [Solid Community Code of
 Conduct](https://github.com/solid/process/blob/main/code-of-conduct.md) and the
 W3C's [Code of Ethics and Professional
 Conduct](https://www.w3.org/Consortium/cepc/).
 
-To constructively remark on the contents though: I think Tim has not understood
+To constructively remark on the content though: I think Tim has not understood
 Rubens point, which manifests itself in Tim's repetition that Ruben does not
-understand or ignores “client to client” standards. To the contrary,
+understand or ignores client-client standards. To the contrary,
 client-client standards are precisely what Ruben advocates! The core of Ruben's
 blog post is precisely about the preconditions that are necessary in order to
 arrive at standards that actually provide interoperability; and it shows that
@@ -25,10 +24,10 @@ According to Tim, client-client standards are established somewhat along the
 following lines:
 
   1. Developers building an app find no suitable standard that describes their
-     data needs.
-  2. They therefore design a data shape the first time.
+     data.
+  2. They therefore design a data shape for the first time.
   3. Their app writes data into a pod according to this shape.
-  4. The developers also documents their data shape as a specification.
+  4. The developers also document their data shape as a specification.
   5. The specification is reviewed by interested parties.
   6. The community adopts the specification.
   7. Other developers use this specification.
@@ -50,7 +49,7 @@ Solid Application Interoperability have been trying to get more attention for
 these issues, in order to overcome them. Tim is not wrong when he says that
 these meta-standard systems are much more complex than standard systems, but he
 is mistaken in his conviction that the current model works. He ends his text
-with a "counterexample" which does not counter, but rather confirms Rubens
+with a "counterexample" which does not counter, but rather confirms Ruben's
 original argument that the current model leads to a choice between redundant
 data copies or apps being able to access data they should not. This is precisely
 what Ruben addresses in his blog post: it is impossible to build working
@@ -67,22 +66,24 @@ narrow this interpretation of RDF graphs is compared to all the [semantics
 endorsed by the W3c Working
 Group](https://www.w3.org/TR/2014/NOTE-rdf11-datasets-20140225/), it is simply
 not correct that expressing these things becomes impossible in a hybrid graph
-model. The copies that Ruben talks about are real copies: identical data within
-the same context, which different applications want to access in that context
-(e.g. the birthday of my contacts), that are forced upon us when trying to
-achieve interoperability in a purely document based approach.
+model. The only copies that Ruben wants to avoid are real copies: identical data
+within the same context, which different applications want to access in that
+context (e.g. the birthdays of my contacts), but we are forced to copy when
+trying to achieve interoperability in a purely document based approach.
 
 In the end, it comes down to this: Ruben says that Solid’s model of reality is
 wrong; Tim answers that Solid is not a model of some reality which can measured
 experimentally. It is crucial to understand that the term "reality" here does
 not stand for the physical reality (which Copernicus tried to model), but for
 the reality of how businesses, developers, and applications want to interact in
-order to achieve interoperability (which Solid tries to model). I think on
-obvious measure of how good a modeling job we did will be the adoption of Solid
-over time. Tim notes that Solid is an newly designed space, with properties we
-chose. He adds that things like the document model, folder structure, slash
-semantics etc. are explicit design choices, which can only be reconsidered as a
-complete alternative system. To my ears, it sounds a lot like Solid is indeed a
-new space ... with the properties Tim choses. I hope these few paragraphs can
-remind him of step 5 of the development of standards (and perchance to reread
-the codes of conduct).
+order to achieve interoperability (which Solid tries to model). One obvious
+measure of how good a modeling job we are doing will be the adoption of Solid over
+time. 
+
+Tim notes that Solid is a newly designed space, with properties we chose.
+He adds that things like the document model, folder structure, slash semantics
+etc. are explicit design choices, which can only be reconsidered as a completely
+alternative system. To my ears, it sounds a lot like Solid is indeed a new space
+... with the properties Tim chooses. I hope these few paragraphs can remind him
+of step 5 of the development of standards (and perchance to reread the codes of
+conduct).
