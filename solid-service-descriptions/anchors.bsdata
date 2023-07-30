@@ -1,0 +1,90 @@
+
+urlPrefix: http://xmlns.com/foaf/0.1/#term_; type: dfn; spec: FOAF;
+    text: foaf:Agent; url: Agent
+    text: foaf:Person; url: Person
+    text: foaf:Organization; url: Organization
+
+urlPrefix: https://datatracker.ietf.org/doc/html/rfc3986#; type: dfn; spec: RFC3986;
+    text: URI; url: section-1.1
+    text: URI Prefix; url: section-4.1
+
+urlPrefix: https://datatracker.ietf.org/doc/html/rfc6570#; type: dfn; spec: RFC6570;
+    text: URI Template; url: section-2
+
+urlPrefix: https://httpwg.org/specs/rfc9110.html#; type: http-header; spec: HTTP-SEMANTICS;
+    text: OPTIONS
+    text: HEAD
+    text: GET
+    text: PUT
+    text: POST
+    text: DELETE
+    text: Authorization
+    text: Location
+    text: 201 Created; url: status.201
+
+urlPrefix: https://www.rfc-editor.org/rfc/rfc8259#; type: dfn; spec: JSON
+    text: true; url: section-3
+    text: false; url: section-3
+    text: null; url: section-3
+    text: object; url: section-4
+    text: array; url: section-5
+    text: number; url: section-6
+    text: string; url: section-7
+
+urlPrefix: https://w3c.github.io/N3/reports/20230703/#dfn-; type: dfn; spec: N3
+    text: N3 Graph; url: n3-graph
+    text: N3 Document; url: n3-document
+    text: N3 Rule; url: logical-implication
+    text: Premise; url: premise
+    text: Conclusion; url: conclusion
+
+urlPrefix: https://datatracker.ietf.org/doc/html/rfc8288#; spec: WEB-LINKING; 
+    type: dfn; 
+        url: section-3.1; text: target;
+        url: section-3.3; text: relation;
+    type: http-header;
+        url: section-3; text: Link;
+        url: section-3.2; text: anchor;
+        url: section-3.3; text: rel;
+
+urlPrefix: https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-; type: dfn; spec: WEBID; 
+    text: WebID
+    text: Profile Document
+
+urlPrefix: https://www.w3.org/TR/did-core/#dfn-; type: dfn; spec: DID;
+    text: Decentralized Identifiers
+    text: DID Documents
+
+urlPrefix: https://www.w3.org/TR/rdf11-concepts/#dfn-; type: dfn; spec: RDF11-CONCEPTS
+    text: Resource; url: resource
+    text: RDF Source; url: rdf-source
+    text: RDF Document; url: rdf-document
+    text: RDF Graph; url: rdf-graph
+
+urlPrefix: https://www.w3.org/TR/ldp/#dfn-; type: dfn; spec: LDP
+    text: LDP RDF Source; url: linked-data-platform-rdf-source
+
+urlPrefix: https://woutermont.github.io/solid/concepts-representation.html; type: dfn; spec: CON-WEB-REP
+    text: Entity
+    text: Identity
+    text: Identifier
+    text: Source
+    text: Document
+    text: Identity Document
+    text: Dereferenceable Identifier
+    text: RDF-Dereferenceable Identifier
+    text: Information
+    text: Representation
+    text: Referent
+
+urlPrefix: https://solid.github.io/data-interoperability-panel/specification/; type:dfn; spec: INTEROP;
+    text: Agents
+    text: Application; url: App
+    text: Social Agent
+    text: Agent Registry;
+    text: Agent Registration; url: AR
+    text: Application Registration
+    text: Social Agent Registration
+    text: Authorization Agent
+    text: Authorization Agent Discovery
+    text: Agent Registration Discovery

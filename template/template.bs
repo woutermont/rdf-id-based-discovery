@@ -1,0 +1,120 @@
+<pre class='metadata'>
+Title: Your Spec Title
+Shortname: your-spec
+Level: 1
+Status: w3c/UD
+Group: WGNAMEORWHATEVER
+Repository: org/repo-name
+URL: http://example.com/url-this-spec-will-live-at
+Editor: Your Name, Your Company http://example.com/your-company, your-email@example.com, http://example.com/your-personal-website
+Abstract: A short description of your spec, one or two sentences.
+Complain About: accidental-2119 yes, missing-example-ids yes
+Markup Shorthands: markdown yes, css no
+Note Class: note
+Issue Class: issue
+Assertion Class: assertion
+!Example Class: example
+Advisement Class: advisement
+</pre>
+
+<link rel="stylesheet" href="https://fred-wang.github.io/MathFonts/LatinModern/mathfonts.css" />
+<script src="https://fred-wang.github.io/mathml.css/mspace.js"></script>
+
+<style>
+
+    /* Reset base counters and additional ones */
+    body { counter-reset: example note issue assertion advisement figure !important; }
+
+    /* Configure increments for additional counters */
+    .note { counter-increment: note; }
+    .assertion { counter-increment: assertion; }
+    .advisement { counter-increment: advisement; }
+
+    /* Configure display of additional counters */
+    .note:not(.no-marker)::before { content: "Note " counter(note); }
+    .assertion:not(.no-marker)::before { content: "Assertion" counter(assertion); }
+    .advisement:not(.no-marker)::before { content: "Advisement" counter(advisement); }
+
+    /* Reduce font size of and markers */
+    .note,
+    .issue,
+    .example,
+    .assertion,
+    .advisement { 
+      .marker { 
+        display: none; 
+      }
+      font-size: 0.9em; 
+    }
+    pre { font-size: .8em; }
+
+    /* Style RFC2119 conformance terms */
+    em.rfc2119 {
+        text-transform: lowercase;
+        font-variant: small-caps;
+        font-style: normal;
+        font-size: 18px;
+        color: #900;
+    }
+
+</style>
+
+Introduction {#intro}
+=====================
+
+Introduction here.
+
+
+
+NOTE: some note ...
+
+NOTE: 
+  some note ...
+
+NOTE: some note ...
+
+NOTE, some note ...
+
+NOTE,
+  some note ...
+
+ISSUE: 
+  some issue ...
+
+ISSUE: some issue ...
+
+ISSUE: some issue ...
+
+ISSUE, some issue ...
+
+advisement: 
+  some advisement ...
+
+ADVISEMENT: some advisement ...
+
+Advisement: some advisement ...
+
+Advisement, some advisement ...
+
+
+
+assertion: 
+  some assertion ...
+
+ASSERTION: 
+  some assertion ...
+
+Assertion: some assertion ...
+
+Assertion, some assertion ...
+
+
+
+EXAMPLE: 
+  some example ...
+
+Example: some example ...
+
+Example, some example ...
+<p class=assertion> ...... </p>
+<p class=example> ...... </p>

@@ -1,0 +1,534 @@
+
+# Introduction
+
+[NO-NORM]
+
+This document proposes an alternative approach to authorization in the Solid ecosystem. 
+While it can exist next to existing authorization mechanisms (WAC, ACP),
+it provides a more secure way of authorizing different Solid agents,
+that can be used either in a direct or a delegated manner.
+
+The proposal is based on contemporary frameworks of (delegated) authorization, 
+in particular OAuth 2.1, UMA, and GNAP. 
+It does however not restrict the possible authorization mechanisms to these existing frameworks,
+but rather abstracts from them, and provides them as two initial 'profiles' (OAuth+UMA, GNAP).
+
+Key characteristics of this proposed approach are
+
+  - separation of concerns between serving resources and authorizing access to those resources;
+  - support for delegated authorization;
+  - minimal disclosure of user information to client applications; and
+  - full integration with the models of the Solid Data Interoperability specification;
+
+
+# Terminology
+
+<pre class=include>
+path: terms.bs
+</pre>
+
+<pre highlight="turtle">
+  @prefix http: &lt;http://www.w3.org/2011/http#&gt; .
+  @prefix sc: &lt;http://www.w3.org/2011/http-statusCodes&gt; .
+  @prefix solid: &lt;http://www.w3.org/ns/solid/terms#&gt; .
+  @prefix n3: &lt;...&gt; .
+</pre>
+
+# Conformance
+
+<pre class=include>
+path: conformance.bs
+</pre>
+
+
+# Solid Service Descriptions
+
+To clearly communicate about [=Authorizations=], the involved parties ([=Resource Servers=], [=Authorization Servers=], [=Software Agents=] and [=Client Applications=]) need to have some common knowledge about the [=Resources=] and related [=Web Services=] they protect. Moreover, because some of these product classes will need to share that knowledge with human parties ([=Resource Owners=], [=Software Developers=] and [=End-Users=]), it will need to include human-readable descriptions of those [=Resources=] and [=Services=].
+
+In order to fully capture these more elaborate need for information, this document introduces the concept of a [=Solid Service Description=], based on the notion of a [=Web Service Description=], as put forward in [[REST-DESC]]: a specification of the functionality of [=Web Services=] that are related to a certain [=Resource Set=].
+
+A <dfn>Solid Service Description</dfn> is [REQUIRED] to be an [=N3 Graph=], containing one or more [=Solid Service Description Rules=], with a publicly readable [HTTP] [URI] on which a [:GET:] requests results in its textual representation as an [=N3 Document=].
+
+Each <dfn>Solid Service Description Rule</dfn> of a [=Solid Service Description=] is [REQUIRED] to be an [=N3 Rule=], of which the [=Conclusion=] is a quoted [=RDF Graph=] containing exactly one node of the RDF Type `http:Request` [[HTTP-in-RDF10]]. 
+
+The `http:Request` instance in the [=Conclusion=] of a [=Solid Service Description Rule=] [MUST] be the subject of:
+
+  - exactly one statement with the predicate `http:requestURI`, and as object a string literal, the value of which is a [=URI Template=] in *relative form*.
+
+  - exactly one statement with the predicate `http:mthd`, and as object the [URI] of an instance of the class `http:Method`;
+
+  - exactly one statement with the predicate `http:resp`, and as object a node of the RDF Type `http:Response`. 
+
+  ISSUE: 
+    Maybe use <a href="https://code.google.com/archive/p/court/wikis/COIN.wiki">COIN</a> descriptions to have real N3 variables in the URI templates?
+
+Apart from the mandatory [=Graph=] defined above, the [=Conclusion=] [MAY] also contain any number of statements describing the [=Request=] further. It is [RECOMMENDED] to use the terms defined in [[HTTP-in-RDF10]] for this purpose.
+
+  <div class="example">
+
+    Minimal example of a [=Solid Service Description Rule=], stating that a [:POST:] request to the [=URI=] `/people/` containing a body that represents a `foaf:Person` results in a [=Response=] with status code `201`, and the 
+
+    <pre highlight="turtle">
+
+      # Any resource conforming to this Solid Service Description
+      # provides the following two services:
+
+      {
+        
+        # For every request body ...
+        ?reqBody tmpl:represents { 
+
+          # ... that represents a graph stating someone is person ...
+          _:person a foaf:Person . 
+        
+        } .
+
+      } => {
+
+        # ... there exists a POST request to '/people/' ...
+        _:req
+          a http:Request ;
+          http:mthd http:POST ;
+          http:requestURI "/people/" ;
+
+          # ... with that request body ...
+          http:body ?reqBody ;
+
+          # ... which results in a response with status 201 ...
+          http:resp [
+            a http:Response ;
+            http:sc sc:Created .
+
+            # ... and a location header pointing to a URI containing an id; ...
+            http:headers (
+              [ 
+                http:hdrName headers:Location ; 
+                http:fieldValue "/people/{id}" .
+              ]
+            ) .
+
+          ] .
+
+        # ... and changes the resource state to include the facts ...
+        _:person 
+          
+          ... that this someone is indeed a person ...
+          a foaf:Person 
+          
+          # ... which has been assigned the identifier declared in the header.
+          dc:identifier ?id.
+
+      } .
+
+      {
+
+        # For everyone who is a person (according to the resource state) ...
+        ?person 
+          a foaf:Person ;
+
+          # with a certain identifier (according to the resource state) ...
+          dc:identifier ?id .
+
+      } => {
+
+        # ... there exists a GET request to '/people/{id}' ...
+        _:req
+          a http:Request ;
+          http:mthd http:GET ;
+          http:requestURI "/people/{id}" ;
+
+          # which results in a response with status 200 ...
+          http:resp [
+            a http:Response ;
+            http:sc sc:Ok .
+
+            # ... and a body that represents a graph stating that person is a person.
+            http:body [
+              tmpl:represents {
+                ?person a foaf:Person .
+              }
+            ] .
+
+          ] .
+
+      } .
+    </pre>
+
+  </div>
+
+  <div class="note">
+
+    The [=Conclusion=] of a [=Solid Service Description Rule=] [MAY] contain any number of statements describing the [=Request=] further. It is [RECOMMENDED] to use the terms defined in [[HTTP-in-RDF10]] for this purpose.
+
+    <pre highlight="turtle">
+      {
+        ?req
+          a http:Request ;
+          http:mthd http:GET ;
+          http:requestURI "/path/{segment}/resource?{param1,param2}#{fragment}" ;
+          http:resp [
+            a http:Response ;
+            http:sc sc:OK ;
+            http:body ?body .
+          ] .
+        ?body 
+          a n3:Document ;
+          tmpl:represents ?desc .
+      } => {
+        ?desc a n3:graph .
+      } .
+    </pre>
+
+  </div>
+
+
+Apart from the mandatory [=Graph=] defined above, the [=Conclusion=] of a [=Solid Service Description Rule=] [MAY] additionally contain any number of Post-Conditions: statements describing the [=Resource State=] after the [=Request=] has been processed.
+
+The [=Premise=] of a [=Solid Service Description Rule=] [MAY] contain any number of Pre-Conditions: statements describing the [=Resource State=] prior to the [=Request=] being processed. These statements [SHOULD] be limited to linking this [=Resource State=] to the variables used in the [=Conclusion=] of the [=Solid Service Description Rule=].
+
+A single [=Solid Service Description Rule=] describes a [=Web Service=] that is related to a single [=Resource Set=].
+
+[=Solid Service Description Rules=] contained within the same [=Solid Service Description=] describe a [=Resource Set=] containing all [=Resources=] under an [=URI Prefix=].
+
+  <div class="example">
+
+    Elaborate example of a [=Solid Service Description=].
+
+    <pre highlight="turtle">
+      {
+        ?resource a rdf:Resource .
+        ?resource solid:uri ?uri .
+      } => {
+        ?req
+          a http:Request ;
+          http:mthd http:GET ;
+          http:requestURI "/path/{segment}/resource?{param1,param2}#{fragment}" ;
+          http:resp [
+            a http:Response ;
+            http:sc sc:OK ;
+            http:body ?body .
+          ] .
+        ?body 
+          a n3:Document ;
+          tmpl:represents ?desc .
+      } .
+    </pre>
+
+  </div>
+
+  <div class="note">
+
+    Since [=Solid Service Descriptions=] are themselves [=Resources=], of which the [=Service=] is described above,
+    they can likewise be specified by a [=Service Description=], which is provided below. Note that this [=Service Description=] is not a [=Solid Service Description=], because [=Solid Service Descriptions=] are not necessarily hosted on a [=Solid Server=].
+
+    <pre highlight="turtle">
+      @prefix http: &lt;http://www.w3.org/2011/http#&gt; .
+      @prefix sc: &lt;http://www.w3.org/2011/http-statusCodes&gt; .
+      @prefix solid: &lt;http://www.w3.org/ns/solid/terms#&gt; .
+      @prefix n3: &lt;...&gt; .
+
+      {
+        ?desc a solid:ServiceDescription .
+        ?desc solid:uri ?uri .
+      } => {
+        ?desc a n3:graph .
+        ?req
+          a http:Request ;
+          http:mthd http:GET ;
+          http:requestURI ?uri ;
+          http:resp [
+            a http:Response ;
+            http:sc sc:OK ;
+            http:body ?body .
+          ] .
+        ?body 
+          a n3:Document ;
+          tmpl:represents ?desc .
+      } .
+    </pre>
+
+  </div>
+    
+  ISSUE:
+    Construct N3 namespace doc and fill in URI in examples.
+
+# Interactions
+
+...
+
+
+## Resource Server - Authorization Server
+
+...
+
+
+### Establishing a trust relation
+
+The authorization framework described in this document relies on a trust relation between the Resource Server(s) and the Authorization Server of a Resource Owner. This mutual trust is established by the Resource Owner themselves.
+
+A [RS] [MUST] allow a [RO] to register a single [AS].
+
+An [AS] [SHOULD] allow a [RO] to register one or more [RS]s.
+
+An [AS] [MAY] instead wait for a [RS] to register a first [Resource]. In that case, the [AS] [MUST] ask the [RO] for confirmation of the [RS]'s identity. 
+
+
+  <div class="note">
+    The RS has no need for any other information identifying the RO. Any further interaction can happen between the RS and the AS.
+  <div>
+
+
+
+...AS allows the RO to change these Permissions at any time, using an appropriate interface.
+
+... An RO MAY NOT have more than one AS at each given time. 
+How an RO signs up for an AS is out of the scope of this proposal;
+obvious candidates to identify the RO are simple credentials, 
+single sign-on (SSO), or identity document based approaches (e.g. Solid-OIDC).
+An AS MUST at any time be able to export all data pertaining an RO
+in the serialization described by the Solid Data Interoperability (SAI) specification;
+each AS MUST likewise provide the option to import such serialization.
+
+
+### Resource Registration (RS -> AS)
+
+A [RS] can place one or more Resources under the protection of an [AS]. It registers the set of ResourcesThe lifecycle of Authorizations is tightly bound to that of the Resources they protect. Multiple Resources can be protected by a single Authorization. Each [AS] therefore keeps track of the relevant Resource Sets.The necessary granularity for doing so depends on 
+
+- the Resource Types, which specify the interface of possible operations that can be performed on the resources, and
+- the number of resources protected together.
+
+The former is the Resource Type. <!-- == scopes? -->
+Given a Resource Type, the latter is a Resource Set of that Resource Type. <!-- == data registration -->
+
+A [RS] protected by an [AS] [SHOULD] register the Resources it wants to protect as Resource Sets with that [AS]. 
+Each [AS] [MUST] provide a [RS]-facing Registration Endpoint for this purpose.
+To register a Resource Set at the Registration Endpoint,
+a [RS] [SHOULD] include the Resource Type and the possible ways of access (scopes/actions) in the request,
+and provide sufficient identification to authenticate itself.
+
+...profiles ... description, icon_uri, human-readable name, semantic type (uri), actions (~scopes), locations (of RS), identifier (of resource within RS), privileges (level of access), token_format_required, token_introspection_required
+
+
+... AS assigns it the applicable default permissions.
+
+
+
+On successful registration of a Resource Set, 
+the [AS] [MUST] respond with an identifier with which the [RS] can reference the registered Resource Set.
+
+The [AS] [MUST] provide the necessary endpoints to read, update and delete a registered Resource Set.
+To perform any of those actions, the [RS] [SHOULD] send a request to the relevant endpoint,
+including the corresponding identifier for reference, and sufficient identification to authenticate itself.
+
+Apart from the endpoints mentioned above, the [AS] [MUST] also provide an endpoint 
+to list all Resource Sets registered by a [RS]. 
+To retrieve that list, an [AS] [SHOULD] send a request to the endpoint,
+including sufficient identification to authenticate itself.
+
+<!-- RS MUST update and delete !! -->
+
+A [RS] [MUST_NOT] sent resource registration requests to any other [AS] than the one registered.
+
+An [AS] [MUST_NOT] process any resource registration request by a [RS] that is not (yet) confirmed.
+
+
+## Client/Agent - Resource Server
+
+...
+
+
+### Authorization Server Discovery
+
+The [AS] protecting the Resources of a [RO] can be discovered via the following two ways.
+
+1. When the [RO] is known, one can dereference a dereferenceable identifier of that [RO] to its corresponding identity document,
+    which [SHOULD] contain a triple that has the identifier as subject, 
+    `solid:as-uri` as predicate, and the URI of the [AS] as object.
+
+1. When the URI of a Resource is known, one can try to access that Resource, 
+    upon which the [RS] [MUST] respond with a [:WWW-Authenticate:] header 
+    that contains an `as-uri` parameter the value of which is the URI of the [AS].
+
+
+### Resource Type Discovery
+
+In many use cases, the Software Agent or Client Application requesting access to Resources
+will already know the Resource Type of those Resources, as well as other parameters
+needed to request access.
+In some cases, however, it can occur that the Agent or Client only knows the Resource URI,
+and has to discover the necessary parameters in order to request access.
+
+
+## Client - Authorization Server
+
+...
+
+
+### Requesting Authorization
+
+
+
+
+#####
+
+
+#####
+
+
+
+
+# Solid Authorization Interoperability
+
+On export, registered Resources and their type are serialized as SAI Data Registrations.
+On export, registered Social Agents are serialized as SAI Social Agent Registrations, 
+and their permissions as SAI Access Authorizations.
+On export, registered Clients are serialized as SAI Application Registrations, 
+and their permissions as SAI Access Authorizations.
+On export, registered Software Agents are serialized as SAI Application Registrations, 
+and their permissions as SAI Access Authorizations.
+
+
+# Profiles
+
+...
+
+
+# Authorization flows
+
+_This section is non-normative._
+
+Social Agents and Software Agents interact with the RS and AS to access an RO's Resources. 
+This section describes several flows in which this can happen.
+
+<!-- Say that Alice, the delegating client, has previously obtained a capability (access token) granting permission to invoke to Carol, the RS.  Alice wishes to delegate that access to Bob, the delegatee client.  With opaque tokens, which I'll try to explain below, Alice presents her capability to the AS, which doesn't enter into our standard terminology, and gets a new capability, perhaps with fewer permissions (scopes), which she sends to Bob.  Bob can now use that capability to invoke Carol.  When Bob invokes Carol, she forwards the request to the AS.  The AS validates that the capability Bob used in the invocation authorizes what he is asking to do and tells Carol to honor the request. -->
+
+
+## RO shares access with Social Agent through the AS
+
+  1. The RO opens their interface to their AS (a.k.a their Authorization Agent, AA for short).
+
+  1. The RO authenticates with their AS; how this happens is out of the scope of this proposal.
+
+  1. The RO provides an identity of the Agent to the AS,
+    e.g. by selecting a previously registered one, pasting/scanning an identifier,
+    or having the AS access a resource providing their contacts.
+
+    NOTE: 
+      If the Agent was not yet known to the AS, the latter registers the Agent for reference.
+
+  1. The RO changes default permissions for the Agent, 
+    or sets specific permissions for the Agent regarding some (type of) Resources.
+
+  1. The AS of the RO registers the Resources at the AS of the Agent.
+
+  1. The Agent can now access the configured Resources at the RO's RS.
+  
+
+## RO shares access with Social Agent through a Client Application
+
+  1. The RO opens their Client Application (Client).
+
+  1. The RO selects the Resources to share and the Agent to share them with; 
+    how this happens is out of the scope of this proposal.
+
+  1. The Client formulates the selection as a request to the RO's AS.
+
+  1. The RO authenticates with their AS; how this happens is out of the scope of this proposal.
+
+  1. The AS performs validity checks, and asks the RO for confirmation.
+
+  1. The RO confirms the request (and their implicit trust in the Client).
+
+  1. The AS of the RO registers the Resources at the AS of the Agent.
+
+  1. The Agent can now access the configured Resources at the RO's RS.
+
+
+## Software Agent requests access from RO.
+
+  1. The Agent determines the AS of the RO.
+
+  1. The Agent requests an Access Token (AT) from the AS, 
+    providing the available details (e.g. URI or type of the Resource).
+
+  1. The AS interacts with the Agent to gather the necessary Claims.
+
+    - If needed, the AS signals the RO to update their permissions regarding the Agent asynchronously.
+
+    NOTE: 
+      If the Agent was not yet known to the AS, the latter registers the Agent for reference.
+
+  1. If the necessary Claims are gathered, the AS provides an AT to the Agent.
+
+  1. If the Resource URI is not yet known to the Agent, it retrieves it from the AT.
+
+  1. The Agent can access the Resource, providing the AT to the RS. 
+
+
+## End-User employs Client Application to access Resource of RO.
+
+  1. The Client Application (Client) determines the relevant AS, 
+    based on the End-User's (User's) knowledge.
+
+    - The User knows the Resource URI.
+
+      1. The User passes the Resource URI on to the Client, 
+        e.g. by using an "open with" dialog, scanning a QR code etc.
+
+      1. The Client tries to access the Resource.
+
+      1. The RS refers the Client to the AS.
+
+    - The User knows the RO.
+
+      1. The User provides an identity of the RO to the Client.
+
+      1. The Client determines the AS of the RO.
+
+  1. The Client requests an Access Token (AT) from the AS, 
+    providing the available details (e.g. URI or type of the Resource).
+  
+  1. The AS interacts with the Client and the User to gather the necessary Claims,
+    e.g. to provide some VCs, or authenticate using an identity provider.
+
+    - If the User is the RO, they can update their permissions regarding the Client synchronously.
+
+    - If not, the AS can signal the RO to update their permissions regarding the User and the Client asynchronously. 
+
+    Note: 
+      The interaction of the AS with the User/RO happens separately from that with the Client. Information passed from the User/RO to the AS should not pass the Client.
+
+    Note: 
+      If the Client was not yet known to the AS, the latter registers the Client for reference.
+
+  1. If the necessary Claims are gathered, the AS provides an AT to the Client.
+
+  1. If the Resource URI is not yet known to the Client, it retrieves it from the AT.
+
+  1. The User can access the Resource, employing the Client, providing the AT to the RS.
+
+
+<h2>IANA Considerations</h2>
+
+<!-- Based on https://www.ietf.org/archive/id/draft-ietf-gnap-core-protocol-15.html#name-iana-considerations-4 -->
+
+<!-- "MUST be one of the ... ... defined in the IANA ... Registry. " -->
+
+IANA is requested to create the following X registries for the Solid Authorization Framework and to populate those registries with initial values as described in this section.
+
+  ISSUE: 
+    Update number of registries.
+
+All use of value typing is based on [JSON] data types and [MUST] be one of the following: [=true=], [=false=], [=number=], [=string=], [=array=], or [=object=]. When the type is [=array=], the contents of the array [MUST] be specified, as in *"array of objects"* when one subtype is allowed or *"array of strings/objects"* when multiple simultaneous subtypes are allowed. When the type is [=object=], the structure of the object [MUST] be specified in the definition. If a parameter is available in different types, each type [SHOULD] be registered separately.
+
+  ISSUE: 
+    Add registry sections.
+
+
+<!-- 
+
+include unnumbered sections with  <h2 class="no-num">Appendix A: Summary Sequence Diagram</h2>
+
+include images with  <img class="sequence-diagram" src="diagrams/agent-specific-discovery.mmd.svg" />
+
+-->
