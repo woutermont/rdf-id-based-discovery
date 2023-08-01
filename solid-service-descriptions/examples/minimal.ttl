@@ -1,0 +1,87 @@
+@prefix http: <http://www.w3.org/2011/http#>; .
+@prefix sc: <http://www.w3.org/2011/http-statusCodes>; .
+@prefix solid: <http://www.w3.org/ns/solid/terms#>; .
+@prefix n3: <...>; .
+
+# Any resource conforming to this Solid Service Description
+# provides the following two services:
+      
+{
+  
+  # For every request body ...
+  ?reqBody tmpl:represents { 
+
+    # ... that represents a graph stating someone is person ...
+    _:person a foaf:Person . 
+  
+  } .
+
+} => {
+
+  # ... there exists a POST request to '/people/' ...
+  _:req
+    a http:Request ;
+    http:mthd http:POST ;
+    http:requestURI "/people/" ;
+
+    # ... with that request body ...
+    http:body ?reqBody ;
+
+    # ... which results in a response with status 201 ...
+    http:resp [
+      a http:Response ;
+      http:sc sc:Created .
+
+      # ... and a location header pointing to a URI containing an id; ...
+      http:headers (
+        [ 
+          http:hdrName headers:Location ; 
+          http:fieldValue "/people/{id}" .
+        ]
+      ) .
+
+    ] .
+
+  # ... and changes the resource state to include the facts ...
+  _:person 
+    
+    ... that this someone is indeed a person ...
+    a foaf:Person 
+    
+    # ... which has been assigned the identifier declared in the header.
+    dc:identifier ?id.
+
+} .
+
+{
+
+  # For everyone who is a person (according to the resource state) ...
+  ?person 
+    a foaf:Person ;
+
+    # with a certain identifier (according to the resource state) ...
+    dc:identifier ?id .
+
+} => {
+
+  # ... there exists a GET request to '/people/{id}' ...
+  _:req
+    a http:Request ;
+    http:mthd http:GET ;
+    http:requestURI "/people/{id}" ;
+
+    # which results in a response with status 200 ...
+    http:resp [
+      a http:Response ;
+      http:sc sc:Ok .
+
+      # ... and a body that represents a graph stating that person is a person.
+      http:body [
+        tmpl:represents {
+          ?person a foaf:Person .
+        }
+      ] .
+
+    ] .
+
+} .

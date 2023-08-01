@@ -3,8 +3,8 @@
 
 <pre class="metadata">
 
-Title: Solid Authorization Framework
-Shortname: SAF
+Title: Solid Service Descriptions
+Shortname: SSD
 
 Editor: Wouter Termont, w3cid 115604, https://github.com/woutermont
 
@@ -12,7 +12,7 @@ Group: w3c
 Status: w3c/UD
 Revision: 1
 
-URL: https://woutermont.github.io/solid/saf/index.html
+URL: https://woutermont.github.io/solid/solid-service-descriptions
 Repository: https://github.com/solid/authorization-panel
 
 Abstract: 
@@ -41,7 +41,7 @@ MIT License Copyright 2019 - 2021 W3C Solid Community Group
 
 <pre class="metadata">
 
-Boilerplate: style-darkmode off
+Dark Mode: no
 Markup Shorthands: markdown yes
 Inline Github Issues: title
 Max ToC Depth: 4
@@ -132,7 +132,7 @@ Text Macro: SA <l>[=Software Agent=]</l>
 
 <pre class="metadata">
 
-Text Macro: SOLID-PROTOCOL <l>[[!SOLID-PROTOCOL|Solid Protocol]]</l>
+Text Macro: SOLID-PROTOCOL <l>[[!SOLID|Solid Protocol]]</l>
 
 Text Macro: URI <l>[[!RFC3986|URI]]</l>
 Text Macro: HTTP <l>[[!RFC9110|HTTP]]</l>

@@ -3,38 +3,18 @@
   Include a conformance clause.
   (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#include-conformance-clause) -->
 
-All important information about conformance to the Solid Authorization Framework can be found starting here in the Conformance section, which follows the W3C [QA Framework](https://www.w3.org/TR/2005/REC-qaframe-spec-20050817) and [Variability in Specifications](https://www.w3.org/TR/spec-variability) guidelines.
+All important information about conformance to the Solid Service Descriptions specification can be found starting here in the Conformance section, which follows the W3C [QA Framework](https://www.w3.org/TR/2005/REC-qaframe-spec-20050817) and [Variability in Specifications](https://www.w3.org/TR/spec-variability) guidelines.
 
 <!-- QA Framework Good Practice 1:
   Define the specification's conformance model in the conformance clause.
   (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#conformance-model) -->
 
-The conformance model of this specification can be [categorized](www.w3.org/TR/spec-variability/#spec-cat) as defining the following modules.
-
-  - A *data definition* for [=Web Service Descriptions=] based on [[REST-DESC]].
-
-  - *Abstract APIs and protocols* for interaction between the following [classes of products](www.w3.org/TR/spec-variability/#cop): [RS]s, [AS]s, as well as [CA]s and other [SA]s interacting with them. This document treats them in three interaction-based submodules:
-
-    - [RS] - [AS]
-    - [CA]/[SA] - [RS]
-    - [CA]/[SA] - [AS]
-    
-  - A *data definition* for exchanging the state of an [AS] in RDF.
-
-  - *Rules for deriving profiles* implementing the abstract APIs and protocols using concrete technologies.
-
-  - Two *concrete profiles*: one using OAuth 2.1, RAR, Token Exchange and UMA; another using GNAP.
+The conformance model of this specification can be [categorized](www.w3.org/TR/spec-variability/#spec-cat) as defining the a **data definition** for [=Web Service Descriptions=] based on [[REST-DESC]].
 
 <!--
-Draw a diagram to put it all together – sometimes it is easier to work from a picture.
-Diagram the classes of products with associated conformance designations.
-Add in the subdivisions and any other variability (e.g., options, extensibility).
-Extract from this diagram and define the conformance model.
-Write the description into the specification. Bonus - if the diagram helps to understand the model, include it.
-
-Discretionary items - Deliberate and explicit grants of discretion by the specification to the implementations, that describe or allow optionality of behavior, functionality, parameter values, error handling, etc.
-Deprecation - The process of marking certain features as outdated and phasing them out.
-Extensibility - A mechanism allowing any party to create extensions.
+  Discretionary items - Deliberate and explicit grants of discretion by the specification to the implementations, that describe or allow optionality of behavior, functionality, parameter values, error handling, etc.
+  Deprecation - The process of marking certain features as outdated and phasing them out.
+  Extensibility - A mechanism allowing any party to create extensions.
 -->
 
 <!-- QA Framework Good Practice 2: 
@@ -52,9 +32,14 @@ RFC 2119.
   Provide the wording for conformance claims.
   (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#conformance-claim) -->
 
-Products claiming conformance with the Solid Authorization Framework can declare so using the following conformance claim template, substituting the date, product, product version, product class, specification version and specification URL.
+Documents claiming conformance with this Solid Service Description specification can declare so using the following conformance claim template, substituting the date, product, product version, product class, specification version and specification URL.
 
-<pre>On 1 April 2004, ExampleAuthZ, version 1.2, 1 January 2004, claims conformance as an “Authorization Server” to the Solid Authorization Framework 1.0, 29 February 2003, available at http://www.example.org/TR/2003/FOO-20032902</pre>
+<pre>
+On 1 April 2004, ExampleService, version 1.2, 1 January 2024, claims 
+conformance as a "Solid Service Description" to the Solid Service 
+Description specification, version 0.1, 31 August 2023, available at 
+https://woutermont.github.io/solid/solid-service-descriptions
+</pre>
 
 <!-- QA Framework Good Practice 4: 
   Provide an Implementation Conformance Statement pro forma.

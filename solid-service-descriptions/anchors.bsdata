@@ -1,4 +1,8 @@
 
+urlPrefix: https://solidproject.org/TR/protocol#; type: dfn; spec: SOLID;
+    text: Solid Server; url: Server
+    text: Solid Client; url: Client
+
 urlPrefix: http://xmlns.com/foaf/0.1/#term_; type: dfn; spec: FOAF;
     text: foaf:Agent; url: Agent
     text: foaf:Person; url: Person

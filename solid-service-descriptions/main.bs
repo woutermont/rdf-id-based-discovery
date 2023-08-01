@@ -1,59 +1,26 @@
 
-# Introduction
+# Introduction # {#sec-intro}
 
 [NO-NORM]
 
-<h3 class='no-num'>Background</h3>
+The burgeoning ecosystem of the Solid Project aims for individuals to be more equitable, empowered, informed, and interconnected within society, maintaining their autonomy, control of their data and their privacy, and being able to choose (decentralized) applications and services that best fulfil their needs for information exchange. [[SOLID]]
 
-The burgeoning ecosystem of the Solid Project aims for individuals to be more equitable, empowered, informed, and interconnected within society, maintaining their autonomy, control of their data and their privacy, and being able to choose (decentralized) applications and services that best fulfil their needs for information exchange.
+The [SOLID-PROTOCOL], and the set of specifications it connects, describe how applications and services should conform in order to provide the needed permissioned, privacy-respecting information exchange with decentrally stored data in an interoperable way. In doing so, Solid tries to adhere to a number of overarching design goals, in particular the **principle of orthogonality**: specifications of different components are *loosely coupled* to allow then to *evolve independently*, thereby increases the *flexibility and robustness* of the Solid ecosystem. This is, of course, only possible when carefully discovering and describing the necessary hooks for *extensibility and variability* among conforming technology. [[SOLID]]
 
-The Solid Protocol, and the set of specifications it connects, describe how applications and services should conform in order to provide the needed permissioned, privacy-respecting information exchange with decentrally stored data in an interoperable way.
+This document aims to provide an **interoperable semantic baseline** for Solid applications and services to provide and respect the informed choices that underlie the Solid Project's goals. It does so by defining a *data definition* of [=Solid Service Descriptions=], that can serve as shared knowledge between the parties involved.
 
-In doing so, Solid tries to adhere to a number of overarching design goals, in particular the **principle of orthogonality**: specifications of different components are *loosely coupled* to allow then to *evolve independently*, thereby increases the *flexibility and robustness* of the Solid ecosystem. This is, of course, only possible when carefully discovering and describing the necessary hooks for *extensibility and variability* among conforming technology.
+Key characteristics of this data definition are:
 
-\[REF\](https://solidproject.org/TR/protocol#introduction)
-
----
-
-This document 
-
-Highlighting some phrases in the paraphrase of the Solid Protocol above, take a look at how they apply to the Solid Protocol's Specification Categories and Classes of Products.
-
-individuals autonomy, control, privacy, choice
-apps/services security, permission, privacy-respecting, interoperable, flexibility, robustness, evolvability
-
-protocol: orthogonal, extendible, variable, loosely coupled, independent, flexible, robust
-
-  - API: extendible, evolveabile
-  
-  - notation/syntax: extendible, evolveabile
-  
-  - set of events: extendible, evolveabile
-  
-  - processor behaviour: flexible, robust, extendible
-
-  - A Server that builds on HTTP server [[RFC9112]] and [[RFC9110]] by defining media types, HTTP header fields, and the behaviour of resources, as identified by link relations.
-  - A client that builds on HTTP client [[RFC9112]], [[RFC9110]], and [[FETCH]] by defining behaviour in terms of fetching across the platform.
+  - reuse of existing standard vocabularies, in particular [[HTTP-in-RDF10]] and [[REST-DESC]];
+  - an intuitive notation in the form of [=N3 Rules=];
+  - attention for human-readable annotation;
+  - foundations in robust RESTful Web architecture;
+  - alignment with reference authorization frameworks;
+  - easy incorporation into existing protocols;
+  - multiple extension points for orthogonal evolution.
 
 
-
-
-Key characteristics of this proposed approach areP
-
-  - separation of concerns between serving resources and authorizing access to those resources;
-  
-  - minimal disclosure of user information to client applications; and
-
-
-# Solid Service Descriptions
-
-To clearly communicate about [=Authorizations=], the involved parties ([=Resource Servers=], [=Authorization Servers=], [=Software Agents=] and [=Client Applications=]) need to have some common knowledge about the [=Resources=] and related [=Web Services=] they protect. Moreover, because some of these product classes will need to share that knowledge with human parties ([=Resource Owners=], [=Software Developers=] and [=End-Users=]), it will need to include human-readable descriptions of those [=Resources=] and [=Services=].
-
-In order to fully capture these more elaborate need for information, this document introduces the concept of a [=Solid Service Description=], based on the notion of a [=Web Service Description=], as put forward in [[REST-DESC]]: a specification of the functionality of [=Web Services=] that are related to a certain [=Resource Set=].
-
-
-
-# Terminology
+# Terminology # {#sec-terms}
 
 <pre class=include>
 path: terms.bs
@@ -66,12 +33,32 @@ path: terms.bs
   @prefix n3: &lt;...&gt; .
 </pre>
 
-# Conformance
+# Conformance # {#sec-conformance}
 
 <pre class=include>
 path: conformance.bs
 </pre>
 
+
+# Web Services # {#sec-ws}
+
+[NO-NORM]
+
+[=Social Agents=] fulfill their needs for information exchange by [=providing=] online [=Web Services=], hosted on [=Servers=], and [=using=] those [=Web Services=] through [=Client Applications=]. 
+
+[=Web Services=] are [=Resources=] characterized by the abstract set of functionality (i.e. the interface) they provide. [=Resources=] provide this functionality on behalf of their [=Owner=], i.e. the [=Provider=] of the [=Service=]. This [=ownership=] incorporates control over the [=Resource=]: the right to set policy on the resource.
+[[WS-ARCH]]
+
+[=Social Agents=] [=requesting=] the use of some functionality from a [=Resource=], i.e. the [=Requester=] of the [=Service=], use a [=Client=] to exchange messages with the [=Resource Server=]. For this communication to be successful, there must be a certain degree of mutual knowledge between the parties involved. [[WS-ARCH]]
+
+To achieve such 'agreement' between parties, several [=Web Service Architecture=] specifications provide standardized ways to describe this mutual knowledge in formal 'contracts', called [=Web Service Descriptions=]. Until recent, however, these descriptions have been mostly limited to technical details about the mechanics of the communication; their functional interpretation depending implicitly on the context. 
+
+In order to truly empower [=Social Agents=] to make informed choices about the [=Web Services=] they use, and the [=Clients=] they employ to do so, it is necessary for the Solid ecosystem to make the functional interpretation of [=Web Service Descriptions=] explicit in a machine- *and* human-readable way.
+
+
+# Solid Service Descriptions # {#sec-ssd}
+
+In order to fully capture this need for explicit functional information, this document builds on the work of  [[REST-DESC]]: a lightweight approach to the description of RESTful [=Web Services=] related to a certain [=Resource Set=], expressing their semantics as pre- and post-conditions written in [N3|Notation3]. 
 
 A <dfn>Solid Service Description</dfn> is [REQUIRED] to be an [=N3 Graph=], containing one or more [=Solid Service Description Rules=], with a publicly readable [HTTP] [URI] on which a [:GET:] requests results in its textual representation as an [=N3 Document=].
 
@@ -90,94 +77,13 @@ The `http:Request` instance in the [=Conclusion=] of a [=Solid Service Descripti
 
 Apart from the mandatory [=Graph=] defined above, the [=Conclusion=] [MAY] also contain any number of statements describing the [=Request=] further. It is [RECOMMENDED] to use the terms defined in [[HTTP-in-RDF10]] for this purpose.
 
-  <div class="example">
+  <div class="example" id="ex-minimal">
 
     Minimal example of a [=Solid Service Description Rule=], stating that a [:POST:] request to the [=URI=] `/people/` containing a body that represents a `foaf:Person` results in a [=Response=] with status code `201`, and the 
 
-    <pre highlight="turtle">
-
-      # Any resource conforming to this Solid Service Description
-      # provides the following two services:
-
-      {
-        
-        # For every request body ...
-        ?reqBody tmpl:represents { 
-
-          # ... that represents a graph stating someone is person ...
-          _:person a foaf:Person . 
-        
-        } .
-
-      } => {
-
-        # ... there exists a POST request to '/people/' ...
-        _:req
-          a http:Request ;
-          http:mthd http:POST ;
-          http:requestURI "/people/" ;
-
-          # ... with that request body ...
-          http:body ?reqBody ;
-
-          # ... which results in a response with status 201 ...
-          http:resp [
-            a http:Response ;
-            http:sc sc:Created .
-
-            # ... and a location header pointing to a URI containing an id; ...
-            http:headers (
-              [ 
-                http:hdrName headers:Location ; 
-                http:fieldValue "/people/{id}" .
-              ]
-            ) .
-
-          ] .
-
-        # ... and changes the resource state to include the facts ...
-        _:person 
-          
-          ... that this someone is indeed a person ...
-          a foaf:Person 
-          
-          # ... which has been assigned the identifier declared in the header.
-          dc:identifier ?id.
-
-      } .
-
-      {
-
-        # For everyone who is a person (according to the resource state) ...
-        ?person 
-          a foaf:Person ;
-
-          # with a certain identifier (according to the resource state) ...
-          dc:identifier ?id .
-
-      } => {
-
-        # ... there exists a GET request to '/people/{id}' ...
-        _:req
-          a http:Request ;
-          http:mthd http:GET ;
-          http:requestURI "/people/{id}" ;
-
-          # which results in a response with status 200 ...
-          http:resp [
-            a http:Response ;
-            http:sc sc:Ok .
-
-            # ... and a body that represents a graph stating that person is a person.
-            http:body [
-              tmpl:represents {
-                ?person a foaf:Person .
-              }
-            ] .
-
-          ] .
-
-      } .
+    <pre class=include-code>
+      path: examples/minimal.ttl
+      highlight: turtle
     </pre>
 
   </div>
@@ -186,23 +92,9 @@ Apart from the mandatory [=Graph=] defined above, the [=Conclusion=] [MAY] also 
 
     The [=Conclusion=] of a [=Solid Service Description Rule=] [MAY] contain any number of statements describing the [=Request=] further. It is [RECOMMENDED] to use the terms defined in [[HTTP-in-RDF10]] for this purpose.
 
-    <pre highlight="turtle">
-      {
-        ?req
-          a http:Request ;
-          http:mthd http:GET ;
-          http:requestURI "/path/{segment}/resource?{param1,param2}#{fragment}" ;
-          http:resp [
-            a http:Response ;
-            http:sc sc:OK ;
-            http:body ?body .
-          ] .
-        ?body 
-          a n3:Document ;
-          tmpl:represents ?desc .
-      } => {
-        ?desc a n3:graph .
-      } .
+    <pre class=include-code>
+      path: examples/ssd.ttl
+      highlight: turtle
     </pre>
 
   </div>
@@ -216,28 +108,13 @@ A single [=Solid Service Description Rule=] describes a [=Web Service=] that is 
 
 [=Solid Service Description Rules=] contained within the same [=Solid Service Description=] describe a [=Resource Set=] containing all [=Resources=] under an [=URI Prefix=].
 
-  <div class="example">
+  <div class="example" id="ex-elaborate">
 
     Elaborate example of a [=Solid Service Description=].
 
-    <pre highlight="turtle">
-      {
-        ?resource a rdf:Resource .
-        ?resource solid:uri ?uri .
-      } => {
-        ?req
-          a http:Request ;
-          http:mthd http:GET ;
-          http:requestURI "/path/{segment}/resource?{param1,param2}#{fragment}" ;
-          http:resp [
-            a http:Response ;
-            http:sc sc:OK ;
-            http:body ?body .
-          ] .
-        ?body 
-          a n3:Document ;
-          tmpl:represents ?desc .
-      } .
+    <pre class=include-code>
+      path: examples/elaborate.ttl
+      highlight: turtle
     </pre>
 
   </div>
@@ -248,29 +125,7 @@ A single [=Solid Service Description Rule=] describes a [=Web Service=] that is 
     they can likewise be specified by a [=Service Description=], which is provided below. Note that this [=Service Description=] is not a [=Solid Service Description=], because [=Solid Service Descriptions=] are not necessarily hosted on a [=Solid Server=].
 
     <pre highlight="turtle">
-      @prefix http: &lt;http://www.w3.org/2011/http#&gt; .
-      @prefix sc: &lt;http://www.w3.org/2011/http-statusCodes&gt; .
-      @prefix solid: &lt;http://www.w3.org/ns/solid/terms#&gt; .
-      @prefix n3: &lt;...&gt; .
 
-      {
-        ?desc a solid:ServiceDescription .
-        ?desc solid:uri ?uri .
-      } => {
-        ?desc a n3:graph .
-        ?req
-          a http:Request ;
-          http:mthd http:GET ;
-          http:requestURI ?uri ;
-          http:resp [
-            a http:Response ;
-            http:sc sc:OK ;
-            http:body ?body .
-          ] .
-        ?body 
-          a n3:Document ;
-          tmpl:represents ?desc .
-      } .
     </pre>
 
   </div>
