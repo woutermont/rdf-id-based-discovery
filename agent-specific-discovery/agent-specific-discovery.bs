@@ -14,7 +14,7 @@ Revision: 6
 URL: https://woutermont.github.io/solid/agent-specific-discovery.html
 Repository: https://github.com/woutermont/solid
 
-Boilerplate: style-darkmode off
+Dark Mode: no
 Markup Shorthands: markdown yes
 Inline Github Issues: title
 Max ToC Depth: 2

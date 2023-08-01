@@ -41,7 +41,7 @@ MIT License Copyright 2019 - 2021 W3C Solid Community Group
 
 <pre class="metadata">
 
-Boilerplate: style-darkmode off
+Dark Mode: no
 Markup Shorthands: markdown yes
 Inline Github Issues: title
 Max ToC Depth: 4
