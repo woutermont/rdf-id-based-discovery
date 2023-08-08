@@ -23,11 +23,11 @@ jobs:
 
       - name: run bikeshed
         run: |
-          bikeshed spec concepts-in-representation/concepts-representation.bs
           bikeshed spec agent-specific-discovery/agent-specific-discovery.bs
           bikeshed spec data-discovery/data-discovery.bs
           bikeshed spec solid-service/index.bs
           bikeshed spec solid-authorization-framework/index.bs
+        #  bikeshed spec concepts-in-representation/concepts-representation.bs
 
       - name: generate svg
         run: for diagram in proposals/diagrams/*.mmd; do docker run --rm -v "$PWD:/data" minlag/mermaid-cli -i /data/$diagram; done
