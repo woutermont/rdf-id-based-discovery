@@ -23,7 +23,7 @@ jobs:
 
       - name: run bikeshed
         run: |
-          bikeshed spec concepts-representation/concepts-representation.bs
+          bikeshed spec concepts-in-representation/concepts-representation.bs
           bikeshed spec agent-specific-discovery/agent-specific-discovery.bs
           bikeshed spec data-discovery/data-discovery.bs
           bikeshed spec solid-service/index.bs
