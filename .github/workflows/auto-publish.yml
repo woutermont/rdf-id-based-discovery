@@ -24,27 +24,23 @@ jobs:
       - name: run bikeshed
         run: |
           bikeshed spec proposals/concepts-representation.bs
-          bikeshed spec proposals/agent-specific-discovery.bs
-          bikeshed spec proposals/data-discovery.bs
+          bikeshed spec agent-specific-discovery/agent-specific-discovery.bs
+          bikeshed spec data-discovery/data-discovery.bs
+          bikeshed spec solid-service/index.bs
+          bikeshed spec solid-authorization-framework/index.bs
 
       - name: generate svg
         run: for diagram in proposals/diagrams/*.mmd; do docker run --rm -v "$PWD:/data" minlag/mermaid-cli -i /data/$diagram; done
 
-      - name: run pandoc
-        uses: docker://pandoc/latex:latest
-        with:
-          args: "./notes/response-tim-ruben.md -so ./notes/response-tim-ruben.html"
+      # - name: run pandoc
+      #   uses: docker://pandoc/latex:latest
+      #   with:
+      #     args: "./notes/response-tim-ruben.md -so ./notes/response-tim-ruben.html"
 
       - name: deploy proposals
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: ./proposals
-          destination_dir: ./specification
+          publish_dir: ./
+          destination_dir: ./
           personal_token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: deploy notes
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          publish_dir: ./notes
-          destination_dir: ./notes
-          personal_token: ${{ secrets.GITHUB_TOKEN }}
+
