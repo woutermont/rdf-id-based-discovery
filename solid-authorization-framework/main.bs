@@ -264,7 +264,7 @@ A single [=Solid Service Description Rule=] describes a [=Web Service=] that is 
 
 ### Establishing a trust relation
 
-The authorization framework described in this document relies on a trust relation between the Resource Server(s) and the Authorization Server of a Resource Owner. This mutual trust is established by the Resource Owner themselves.
+The authorization framework described in this document relies on a trust relation between the Resource Server(s) and the Authorization Server of a Resource Owner. This mutual trust is established by the Resource Owner themself.
 
 A [RS] [MUST] allow a [RO] to register a single [AS].
 
@@ -275,7 +275,7 @@ An [AS] [MAY] instead wait for a [RS] to register a first [Resource]. In that ca
 
   <div class="note">
     The RS has no need for any other information identifying the RO. Any further interaction can happen between the RS and the AS.
-  <div>
+  </div>
 
 
 
