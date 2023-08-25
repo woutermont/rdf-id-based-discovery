@@ -1,0 +1,60 @@
+
+<!-- QA Framework Requirement 1:
+  Include a conformance clause.
+  (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#include-conformance-clause) -->
+
+All important information about conformance to the Solid Service Descriptions specification can be found starting here in the Conformance section, which follows the W3C [QA Framework](https://www.w3.org/TR/2005/REC-qaframe-spec-20050817) and [Variability in Specifications](https://www.w3.org/TR/spec-variability) guidelines.
+
+<!-- QA Framework Good Practice 1:
+  Define the specification's conformance model in the conformance clause.
+  (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#conformance-model) -->
+
+The conformance model of this specification can be [categorized](www.w3.org/TR/spec-variability/#spec-cat) as defining the a **data definition** for [=Web Service Descriptions=] based on [[REST-DESC]].
+
+<!--
+  Discretionary items - Deliberate and explicit grants of discretion by the specification to the implementations, that describe or allow optionality of behavior, functionality, parameter values, error handling, etc.
+  Deprecation - The process of marking certain features as outdated and phasing them out.
+  Extensibility - A mechanism allowing any party to create extensions.
+-->
+
+<!-- QA Framework Good Practice 2: 
+  Specify in the conformance clause how to distinguish normative from informative content.
+  (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#norm-informative) -->
+
+All sections of this document are considered normative, unless otherwise stated at the very top of the section. Notes, issues, examples and other asides styled separately into boxes are always non-normative (i.e. informative).
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in
+RFC 2119.
+
+<!-- QA Framework Good Practice 3: 
+  Provide the wording for conformance claims.
+  (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#conformance-claim) -->
+
+Documents claiming conformance with this Solid Service Description specification can declare so using the following conformance claim template, substituting the date, product, product version, product class, specification version and specification URL.
+
+<pre>
+On 1 April 2004, ExampleService, version 1.2, 1 January 2024, claims 
+conformance as a "Solid Service Description" to the Solid Service 
+Description specification, version 0.1, 31 August 2023, available at 
+https://woutermont.github.io/solid/solid-service-descriptions
+</pre>
+
+<!-- QA Framework Good Practice 4: 
+  Provide an Implementation Conformance Statement pro forma.
+  (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#ics) -->
+  
+  ISSUE: 
+    Add Implementation Conformance Statement (depending on features/discretionary items).
+
+<!-- QA Framework Good Practice 5: 
+  Require an Implementation Conformance Statement as part of conformance claims.
+  (www.w3.org/TR/2005/REC-qaframe-spec-20050817/#ics-claim) -->
+
+  ISSUE: 
+    Add ICS to conformance claim template.
+
+...
+
+...

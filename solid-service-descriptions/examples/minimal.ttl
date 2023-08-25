@@ -1,0 +1,85 @@
+@prefix http: <http://www.w3.org/2011/http#> .
+@prefix sc: <http://www.w3.org/2011/http-statusCodes> .
+@prefix solid: <http://www.w3.org/ns/solid/terms#> .
+@prefix ttl: <https://www.w3.org/ns/iana/media-types/text/turtle#Resource> .
+#@prefix ttl: <http://www.sparontologies.net/mediatype/text/turtle> .
+
+# Any resource conforming to this Solid Service Description
+# provides the following two services:
+ 
+{
+  
+  # For every request body that represents an RDF graph in Turtle format ...
+  ?reqBody 
+    dc:format ttl: ;
+    solid:represents { 
+
+      # ... stating someone is person called Wouter ...
+      _:person 
+        a foaf:Person ; 
+        foaf:name "Wouter" .
+    
+    } .
+
+} => {
+
+  # ... there exists a POST request to '/people/' with that request body ...
+  _:req
+    a http:Request ;
+    http:mthd http:POST ;
+    http:requestURI "/people/" ;
+    http:body ?reqBody ;
+
+    # ... which results in a response with status 201 ...
+    # ... pointing to the location '/people/{id}' ...
+    http:resp [
+      a http:Response ;
+      http:sc sc:Created .
+      http:headers (
+        [ 
+          http:hdrName headers:Location ; 
+          http:fieldValue "/people/{id}" .
+        ]
+      ) .
+
+    ] .
+
+  # ... confirming the resource state now includes this person and their identifier.
+  _:person 
+    a foaf:Person ;
+    foaf:name "Wouter" ;
+    dc:identifier ?id .
+
+} .
+
+{
+
+  # For everyone who is a person with an identifier ...
+  # ... (according to the resource state) ...
+  ?person 
+    a foaf:Person ;
+    dc:identifier ?id .
+
+} => {
+
+  # ... there exists a GET request to '/people/{id}' ...
+  _:req
+    a http:Request ;
+    http:mthd http:GET ;
+    http:requestURI "/people/{id}" ;
+    http:resp _:resp .
+    
+  # ... which results in a response with status 200 ...
+  _:resp
+    a http:Response ;
+    http:sc sc:Ok ;
+    http:body _:body .
+    
+  # ... containing a body that represents a graph about the person and their name.
+  _:body 
+    solid:represents {
+      ?person a foaf:Person .
+      foaf:name ?name .
+    } .
+
+} .

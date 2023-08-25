@@ -1,0 +1,300 @@
+<pre class="metadata">
+
+Title: Solid Application Interoperability: Data Discovery
+Shortname: SAI-DATA
+
+Editor: Wouter Termont, w3cid 115604, Digita https://digita.ai, https://github.com/woutermont
+
+!Contributor: Wouter Termont
+
+Group: w3c
+Status: w3c/UD
+Revision: 1
+
+URL: https://woutermont.github.io/solid/data-discovery.html
+Repository: https://github.com/woutermont/solid
+
+Dark Mode: no
+Markup Shorthands: markdown yes
+Inline Github Issues: title
+Max ToC Depth: 2
+
+Complain About: accidental-2119 yes, broken-links yes, missing-example-ids yes, mixed-indents yes
+
+Text Macro: NONORM *This section is non-normative.*
+Text Macro: MUST <em class="rfc2119">MUST</em>
+Text Macro: SHOULD <em class="rfc2119">SHOULD</em>
+Text Macro: MAY <em class="rfc2119">MAY</em>
+
+Abstract: 
+
+  This specification details how Agents can discover data about an Entity.
+
+Status Text: 
+
+  This document was published by the Editor(s) for the [Solid Community Group](https://www.w3.org/community/solid/) as an Unofficial Proposal Draft. The sections that have been incorporated have <strong>NOT</strong> been reviewed following the [Solid process](https://github.com/solid/process). The information in this document is still subject to change. You are invited to [contribute](https://github.com/woutermont/solid/issues) any feedback, comments, or questions you might have. Publication as an Unofficial Proposal Draft does not imply endorsement by the W3C Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress. This document was produced by a group operating under the [W3C Community Contributor License Agreement (CLA)](https://www.w3.org/community/about/process/cla/). A human-readable [summary](https://www.w3.org/community/about/process/cla-deed/) is available.
+
+</pre>
+
+<style>
+    .note,
+    .issue,
+    .example,
+    .assertion,
+    .advisement {
+        font-size: 0.9em;
+    }
+    pre {
+        font-size: .8em;
+    }
+    em.rfc2119 {
+        text-transform: lowercase;
+        font-variant: small-caps;
+        font-style: normal;
+        font-size: 18px;
+        color: #900;
+    }
+</style>
+
+<div boilerplate="copyright">
+MIT License Copyright 2019 - 2021 W3C Solid Community Group
+</div>
+
+
+# Terminology # {#terms}
+
+<!-- Set macros for long definitions -->
+
+<pre class="metadata">
+Text Macro: HTTP <l>[[!RFC9110|HTTP]]</l>
+Text Macro: WEB-LINKING <l>[[!WEB-LINKING|Web-Linking]]</l>
+Text Macro: RDF <l>[[!RDF11-CONCEPTS|RDF 1.1]]</l>
+Text Macro: INTEROP <l>[[INTEROP|Solid Application Interoperability]]</l>
+Text Macro: PROF <l>[[PROF|Solid WebID Profile]]</l>
+Text Macro: TI <l>[[TI|Type Indexes]]</l>
+</pre>
+
+<!-- Set macros for long references -->
+
+<pre class="metadata">
+Text Macro: ASR <l>[=Agent-Specific Resource=]</l>
+Text Macro: ASRS <l>[=Agent-Specific Resources=]</l>
+Text Macro: RDH <l>[=Resource Discovery Hub=]</l>
+Text Macro: ARR <l>[=Agent Registration Request=]</l>
+</pre>
+
+<!-- Load anchors from other specifications -->
+
+<pre class="anchors">
+urlPrefix: https://httpwg.org/specs/rfc9110.html#; type: http-header; spec: HTTP-SEMANTICS;
+    text: OPTIONS
+    text: HEAD
+    text: GET
+    text: PUT
+    text: POST
+    text: DELETE
+    text: Authorization
+    text: Location
+    text: 201 Created; url: status.201
+urlPrefix: https://datatracker.ietf.org/doc/html/rfc8288#; spec: WEB-LINKING; 
+    type: dfn; 
+        url: section-3.1; text: target;
+        url: section-3.3; text: relation;
+    type: http-header;
+        url: section-3; text: Link;
+        url: section-3.2; text: anchor;
+        url: section-3.3; text: rel;
+urlPrefix: https://www.w3.org/2005/Incubator/webid/spec/identity/#dfn-; type: dfn; spec: WEBID; 
+    text: WebID
+    text: Profile Document
+urlPrefix: https://www.w3.org/TR/did-core/#dfn-; type: dfn; spec: DID;
+    text: Decentralized Identifiers
+    text: DID Documents
+urlPrefix: https://www.w3.org/TR/rdf11-concepts/#dfn-; type: dfn; spec: RDF11-CONCEPTS
+    text: Resource
+    text: RDF Source
+    text: RDF Document
+urlPrefix: https://woutermont.github.io/solid/concepts-representation.html; type: dfn; spec: CON-WEB-REP
+    text: Entity
+    text: Identity
+    text: Identifier
+    text: Source
+    text: Document
+    text: Identity Document
+    text: Dereferenceable Identifier
+    text: RDF-Dereferenceable Identifier
+    text: Information
+    text: Representation
+    text: Referent
+urlPrefix: https://solid.github.io/data-interoperability-panel/specification/; type:dfn; spec: INTEROP;
+    text: Agents
+    text: Application; url: App
+    text: Social Agent
+    text: Agent Registry;
+    text: Agent Registration; url: AR
+    text: Application Registration
+    text: Social Agent Registration
+    text: Authorization Agent
+    text: Authorization Agent Discovery
+    text: Agent Registration Discovery
+</pre>
+
+This document relies heavily on parts of the architecture proposed in [INTEROP] and [TI] borrows concepts from [[CON-WEB-REP|Concepts in Web Representation]] and definitions from [[ASD|Agent-Specific Discovery]]. For conformance, terms from [HTTP] semantics and [WEB-LINKING] are used. <!--References to all these are linked throughout the text, and in [[#index-defined-elsewhere]].-->
+
+
+# Introduction # {#sec-intro}
+
+When an [=Agent=] wishes to *discover* [=Information=] about an [=Entity=] (e.g. a person, document or API), and the possible ways to interact with that [=Entity=], the [=Agent=] typically starts its inquiry at one or more *initial [=Source=] of [=Information=]*, such as the [=Identity Document=] corresponding to one of the [=Entity's=] [=Identifier=] (e.g. the [=Profile Document=] of a [=WebID=] or [=DID Document=] of a [=Decentralized Identifier=]). In the [=Representations=] of these initial [=Source=], other [=Resources=] might be referenced, which in turn might be further [=Source=] of [=Information=].
+
+One kind of further [=Resources=] are those that describe the nature, location and structure of (accessible) [=Data=] *of* the [=Entity=] and *about* the [=Entity=]. These [=Resources=] often take the form of [=Data Indexes=]. This document defines a design pattern to use and manage these [=Data Indexes=].
+
+
+# Data Indexes # {#sec-data-indexes}
+
+<span id="dfn-data-index">A <dfn export>Data Index</dfn> or [=Data Registry=] is a [=Document=] containing statements that link specific categories of data to specific locations.</span> <span id="dfn-dat-index-entry">These <dfn export>Data Index Entries</dfn>, or [=Data Registrations=] represent unique categories of data, identified by ... .</span>
+
+<!-- A Data Registry can be used for basic discovery, but it is not designed nor intended to be an efficient means to query or index data. However, it is intended to be used as reliable source data for different query engines or indexing schemes. -->
+
+<!-- Complex hierarchies that hinder interoperability are avoided by storing data in a relatively flat hierarchy. This creates natural data boundaries that make data storage and authorization more intuitive. -->
+
+
+
+A <dfn export>Data Instance</dfn>
+
+The registration entries map a specific category of data onto a location.
+
+Data of various categories is organized and stored in a uniform way to aid validation, authorization, discovery, and more.
+
+
+A Data Instance is a unique, stored instance of data in a Data Registration that conforms to it's ShapeTree.
+Each Data Instance is linked to the Data Registration via the ldp:contains property.
+
+
+# Type Indexes
+
+The type index documents MAY contain any number of statements of type solid:TypeRegistration which map RDF classes/types to their locations in a WebID owner's dataspace/root storage.
+
+# Shape Indexes
+
+
+# Shape Tree Indexes
+
+
+# Triple Pattern Fragment Indexes
+
+
+
+<!-- Bibliography -->
+
+<!-- Includes
+  https://www.specref.org
+  https://drafts.csswg.org/biblio.ref
+-->
+
+<!-- oauth: [[rfc6749|OAuth 2.0]] -->
+
+<pre class="biblio">
+{
+  "CON-WEB-REP": {
+    "href": "https://woutermont.github.io/solid/concepts-representation.html",
+    "title": "Concepts in Web Representation",
+    "authors": [
+      "Wouter Termont"
+    ]
+  },
+  "ASD": {
+    "href": "https://solid.github.io/woutermont/specifications/agent-specific-discovery",
+    "title": "Agent-Specific Discovery",
+    "authors": [
+      "Wouter Termont"
+    ]
+  },
+  "INTEROP": {
+    "href": "https://solid.github.io/data-interoperability-panel/specification/",
+    "title": "Solid Application Interoperability",
+    "authors": [
+      "Justing Bingham",
+      "Eric Prud'hommeaux",
+      "elf Pavlik"
+    ]
+  },
+  "TI": {
+    "href": "https://solid.github.io/type-indexes/",
+    "title": "Type Indexes",
+    "authors": [
+      "Timea Turdean"
+    ]
+  },
+  "PROF": {
+    "href": "https://solid.github.io/webid-profile/",
+    "title": "Solid WebID Profile",
+    "authors": [
+      "Virginia Balseiro",
+      "Timea Turdean",
+      "Jeff Zucker"
+    ]
+  },
+  "WEBID": {
+    "href": "https://www.w3.org/2005/Incubator/webid/spec/identity/",
+    "title": "WebID 1.0",
+    "authors": [
+      "Tim Berners-Lee",
+      "Henry Story",
+      "Andrei Sambra"
+    ]
+  },
+  "DID": {
+    "href": "https://www.w3.org/TR/did-core/",
+    "title": "Decentralized Identifiers (DIDs) v1.0",
+    "authors": [
+      "Drummond Reed",
+      "Manu Sporney",
+      "Dave Longley",
+      "Christopher Allen",
+      "Ryan Grant",
+      "Markus Sabadello"
+    ]
+  },
+  "HTTP-SEMANTICS": {
+    "href": "https://httpwg.org/specs/rfc9110.html",
+    "title": "RFC 9110: HTTP Semantics",
+    "date": "2022",
+    "authors": [
+        "R. Fielding",
+        "M. Nottingham",
+        "J. Reschke"
+    ]
+  },
+  "WEB-LINKING": {
+    "href": "https://datatracker.ietf.org/doc/html/rfc8288",
+    "title": "RFC 8288: Web Linking",
+    "date": "2017",
+    "authors": [
+        "M. Nottingham"
+    ]
+  },
+  "OIDC": {
+    "href": "https://openid.net/specs/openid-connect-core-1_0.html",
+    "title": "OpenID Connect Core 1.0",
+    "authors": [
+      "N. Sakimura",
+      "J. Bradley",
+      "M. Jones",
+      "B. de Medeiros",
+      "C. Mortimore"
+    ]
+  },
+  "DPOP": {
+    "href": "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop",
+    "title": "OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer",
+    "authors": [
+      "D. Fett",
+      "B. Campbell",
+      "J. Braidley",
+      "T. Lodderstedt",
+      "M. Jones",
+      "D. Waite"
+    ]
+  }
+}
+</pre>

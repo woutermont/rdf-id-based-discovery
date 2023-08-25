@@ -1,0 +1,168 @@
+
+<!---- GENERAL METADATA ------------------------------------------------------>
+
+<pre class="metadata">
+
+Title: Solid Authorization Framework
+Shortname: SAF
+
+Editor: Wouter Termont, w3cid 115604, https://github.com/woutermont
+
+Group: w3c
+Status: w3c/UD
+Revision: 1
+
+URL: https://woutermont.github.io/solid/saf/index.html
+Repository: https://github.com/solid/authorization-panel
+
+Abstract: 
+
+  ...
+
+Status Text: 
+
+  This document was published by the Editor(s) for the [Solid Community Group](https://www.w3.org/community/solid/) as an Unofficial Proposal Draft. The sections that have been incorporated have been reviewed following the [Solid process](https://github.com/solid/process). The information in this document is still subject to change. You are invited to [contribute](https://github.com/solid/authorization-panel/issues) any feedback, comments, or questions you might have. Publication as an Unofficial Proposal Draft does not imply endorsement by the W3C Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress. This document was produced by a group operating under the [W3C Community Contributor License Agreement (CLA)](https://www.w3.org/community/about/process/cla/). A human-readable [summary](https://www.w3.org/community/about/process/cla-deed/) is available.
+
+</pre>
+
+<!---- MAIN CONTENT ---------------------------------------------------------->
+
+<pre class=include>
+path: main.bs
+</pre>
+
+<!---- CUSTOM COPYRIGHT BOILERPLATE ------------------------------------------>
+
+<div boilerplate="copyright">
+MIT License Copyright 2019 - 2021 W3C Solid Community Group
+</div>
+
+<!---- PROCESSOR SETTINGS ---------------------------------------------------->
+
+<pre class="metadata">
+
+Dark Mode: no
+Markup Shorthands: markdown yes
+Inline Github Issues: title
+Max ToC Depth: 4
+
+External Infotrees: anchors.bsdata yes, link-defaults.infotree yes
+
+Complain About: accidental-2119 yes, broken-links yes, missing-example-ids yes, mixed-indents yes
+
+</pre>
+
+<!---- CUSTOM STYLING -------------------------------------------------------->
+
+<link rel="stylesheet" href="https://fred-wang.github.io/MathFonts/LatinModern/mathfonts.css" />
+<script src="https://fred-wang.github.io/mathml.css/mspace.js"></script>
+
+<style>
+
+    /* Reset base counters and additional ones */
+    body { counter-reset: example note issue assertion advisement figure !important; }
+
+    /* Configure increments for additional counters */
+    .note { counter-increment: note; }
+    .assertion { counter-increment: assertion; }
+    .advisement { counter-increment: advisement; }
+
+    /* Configure display of additional counters */
+    .note:not(.no-marker)::before { content: "Note " counter(note); }
+    .assertion:not(.no-marker)::before { content: "Assertion" counter(assertion); }
+    .advisement:not(.no-marker)::before { content: "Advisement" counter(advisement); }
+
+    /* Reduce font size of boxes and preformatted blocks */
+    .note,
+    .issue,
+    .example,
+    .assertion,
+    .advisement { font-size: 0.9em; }
+    pre { font-size: .8em; }
+
+    /* Style RFC2119 conformance terms */
+    em.rfc2119 {
+        text-transform: lowercase;
+        font-variant: small-caps;
+        font-style: normal;
+        font-size: 18px;
+        color: #900;
+    }
+
+</style>
+
+<!---- CONFORMANCE MACROS ---------------------------------------------------->
+
+<pre class="metadata">
+
+Text Macro: NO-NORM *This section is non-normative.*
+
+Text Macro: MUST <em class="rfc2119">MUST</em>
+Text Macro: SHALL <em class="rfc2119">SHALL</em>
+Text Macro: REQUIRED <em class="rfc2119">REQUIRED</em>
+
+Text Macro: MUST-NOT <em class="rfc2119">MUST NOT</em>
+Text Macro: SHALL-NOT <em class="rfc2119">SHALL NOT</em>
+
+Text Macro: SHOULD <em class="rfc2119">SHOULD</em>
+Text Macro: RECOMMENDED <em class="rfc2119">RECOMMENDED</em>
+
+Text Macro: SHOULD-NOT <em class="rfc2119">SHOULD NOT</em>
+Text Macro: NOT-RECOMMENDED <em class="rfc2119">NOT RECOMMENDED</em>
+
+Text Macro: MAY <em class="rfc2119">MAY</em>
+Text Macro: OPTIONAL <em class="rfc2119">OPTIONAL</em>
+
+</pre>
+
+<!---- DEFINITION MACROS ----------------------------------------------------->
+
+<pre class="metadata">
+
+Text Macro: RO <l>[=Resource Owner=]</l>
+Text Macro: RS <l>[=Resource Server=]</l>
+Text Macro: AS <l>[=Authorization Server=]</l>
+Text Macro: RT <l>[=Resource Type=]</l>
+Text Macro: CA <l>[=Client Application=]</l>
+Text Macro: SA <l>[=Software Agent=]</l>
+
+</pre>
+
+<!---- REFERENCE MACROS ------------------------------------------------------>
+
+<pre class="metadata">
+
+Text Macro: SOLID-PROTOCOL <l>[[!SOLID-PROTOCOL|Solid Protocol]]</l>
+
+Text Macro: URI <l>[[!RFC3986|URI]]</l>
+Text Macro: HTTP <l>[[!RFC9110|HTTP]]</l>
+Text Macro: MEDIA-TYPE <l>[[RFC6838|Media Type]]</l>
+Text Macro: URI-TEMPLATES <l>[[RFC6570|URI Templates]]</l>
+
+Text Macro: JSON <l>[[!RFC8259|JSON]]</l>
+Text Macro: RDF <l>[[!RDF11-CONCEPTS|RDF]]</l>
+Text Macro: RDF-MT <l>[[!RDF11-MT|RDF Semantics]]</l>
+Text Macro: N3 <l>[[!N3|Notation3]]</l>
+
+Text Macro: FOAF <l>[[!FOAF]]</l>
+
+
+
+Text Macro: WEB-LINKING <l>[[!WEB-LINKING|Web-Linking]]</l>
+Text Macro: INTEROP <l>[[INTEROP|Solid Application Interoperability]]</l>
+Text Macro: PROF <l>[[PROF|Solid WebID Profile]]</l>
+Text Macro: TI <l>[[TI|Type Indexes]]</l>
+
+</pre>
+
+<!---- REFERENCE ANCHORS ----------------------------------------------------->
+
+    <!--- Loaded from ./anchors.bsdata, with defaults from ./link-defaults.infotree -->
+
+<!---- BIBLIOGRAPHY ---------------------------------------------------------->
+
+    <!-- Includes
+    https://www.specref.org
+    https://drafts.csswg.org/biblio.ref
+    ./biblio.json
+    -->

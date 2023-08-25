@@ -1,0 +1,4 @@
+info: link-defaults
+    type: dfn;
+        text: Client; spec: SOLID
+        text: Server; spec: SOLID

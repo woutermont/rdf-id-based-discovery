@@ -1,0 +1,134 @@
+
+# Introduction # {#sec-intro}
+
+[NO-NORM]
+
+The burgeoning ecosystem of the Solid Project aims for individuals to be more equitable, empowered, informed, and interconnected within society, maintaining their autonomy, control of their data and their privacy, and being able to choose (decentralized) applications and services that best fulfil their needs for information exchange. [[SOLID]]
+
+The [SOLID-PROTOCOL], and the set of specifications it connects, describe how applications and services should conform in order to provide the needed permissioned, privacy-respecting information exchange with decentrally stored data in an interoperable way. In doing so, Solid tries to adhere to a number of overarching design goals, in particular the **principle of orthogonality**: specifications of different components are *loosely coupled* to allow then to *evolve independently*, thereby increases the *flexibility and robustness* of the Solid ecosystem. This is, of course, only possible when carefully discovering and describing the necessary hooks for *extensibility and variability* among conforming technology. [[SOLID]]
+
+This document aims to provide an **interoperable semantic baseline** for Solid applications and services to provide and respect the informed choices that underlie the Solid Project's goals. It does so by defining a *data definition* of [=Solid Service Descriptions=], that can serve as shared knowledge between the parties involved.
+
+Key characteristics of this data definition are:
+
+  - reuse of existing standard vocabularies, in particular [[HTTP-in-RDF10]] and [[REST-DESC]];
+  - an intuitive notation in the form of [=N3 Rules=];
+  - attention for human-readable annotation;
+  - foundations in robust RESTful Web architecture;
+  - alignment with reference authorization frameworks;
+  - easy incorporation into existing protocols;
+  - multiple extension points for orthogonal evolution.
+
+
+# Terminology # {#sec-terms}
+
+<pre class=include>
+path: terms.bs
+</pre>
+
+<pre highlight="turtle">
+  @prefix http: &lt;http://www.w3.org/2011/http#&gt; .
+  @prefix sc: &lt;http://www.w3.org/2011/http-statusCodes&gt; .
+  @prefix solid: &lt;http://www.w3.org/ns/solid/terms#&gt; .
+  @prefix n3: &lt;...&gt; .
+</pre>
+
+# Conformance # {#sec-conformance}
+
+<pre class=include>
+path: conformance.bs
+</pre>
+
+
+# Web Services # {#sec-ws}
+
+[NO-NORM]
+
+[=Social Agents=] fulfill their needs for information exchange by [=providing=] online [=Web Services=], hosted on [=Servers=], and [=using=] those [=Web Services=] through [=Client Applications=]. 
+
+[=Web Services=] are [=Resources=] characterized by the abstract set of functionality (i.e. the interface) they provide. [=Resources=] provide this functionality on behalf of their [=Owner=], i.e. the [=Provider=] of the [=Service=]. This [=ownership=] incorporates control over the [=Resource=]: the right to set policy on the resource.
+[[WS-ARCH]]
+
+[=Social Agents=] [=requesting=] the use of some functionality from a [=Resource=], i.e. the [=Requester=] of the [=Service=], use a [=Client=] to exchange messages with the [=Resource Server=]. For this communication to be successful, there must be a certain degree of mutual knowledge between the parties involved. [[WS-ARCH]]
+
+To achieve such 'agreement' between parties, several [=Web Service Architecture=] specifications provide standardized ways to describe this mutual knowledge in formal 'contracts', called [=Web Service Descriptions=]. Until recent, however, these descriptions have been mostly limited to technical details about the mechanics of the communication; their functional interpretation depending implicitly on the context. 
+
+In order to truly empower [=Social Agents=] to make informed choices about the [=Web Services=] they use, and the [=Clients=] they employ to do so, it is necessary for the Solid ecosystem to make the functional interpretation of [=Web Service Descriptions=] explicit in a machine- *and* human-readable way.
+
+
+# Solid Service Descriptions # {#sec-ssd}
+
+In order to fully capture this need for explicit functional information, this document builds on the work of  [[REST-DESC]]: a lightweight approach to the description of RESTful [=Web Services=] related to a certain [=Resource Set=], expressing their semantics as pre- and post-conditions written in [N3|Notation3]. 
+
+A <dfn>Solid Service Description</dfn> is [REQUIRED] to be an [=N3 Graph=], containing one or more [=Solid Service Description Rules=], with a publicly readable [HTTP] [URI] on which a [:GET:] requests results in its textual representation as an [=N3 Document=].
+
+Each <dfn>Solid Service Description Rule</dfn> of a [=Solid Service Description=] is [REQUIRED] to be an [=N3 Rule=], of which the [=Conclusion=] is a quoted [=RDF Graph=] containing exactly one node of the RDF Type `http:Request` [[HTTP-in-RDF10]]. 
+
+The `http:Request` instance in the [=Conclusion=] of a [=Solid Service Description Rule=] [MUST] be the subject of:
+
+  - exactly one statement with the predicate `http:requestURI`, and as object a string literal, the value of which is a [=URI Template=] in *relative form*.
+
+  - exactly one statement with the predicate `http:mthd`, and as object the [URI] of an instance of the class `http:Method`;
+
+  - exactly one statement with the predicate `http:resp`, and as object a node of the RDF Type `http:Response`. 
+
+  ISSUE: 
+    Maybe use <a href="https://code.google.com/archive/p/court/wikis/COIN.wiki">COIN</a> descriptions to have real N3 variables in the URI templates?
+
+Apart from the mandatory [=Graph=] defined above, the [=Conclusion=] [MAY] also contain any number of statements describing the [=Request=] further. It is [RECOMMENDED] to use the terms defined in [[HTTP-in-RDF10]] for this purpose.
+
+  <div class="example" id="ex-minimal">
+
+    Minimal example of a [=Solid Service Description Rule=], stating that a [:POST:] request to the [=URI=] `/people/` containing a body that represents a `foaf:Person` results in a [=Response=] with status code `201`, and the 
+
+    <pre class=include-code>
+      path: examples/minimal.ttl
+      highlight: turtle
+    </pre>
+
+  </div>
+
+  <div class="note">
+
+    The [=Conclusion=] of a [=Solid Service Description Rule=] [MAY] contain any number of statements describing the [=Request=] further. It is [RECOMMENDED] to use the terms defined in [[HTTP-in-RDF10]] for this purpose.
+
+    <pre class=include-code>
+      path: examples/ssd.ttl
+      highlight: turtle
+    </pre>
+
+  </div>
+
+
+Apart from the mandatory [=Graph=] defined above, the [=Conclusion=] of a [=Solid Service Description Rule=] [MAY] additionally contain any number of Post-Conditions: statements describing the [=Resource State=] after the [=Request=] has been processed.
+
+The [=Premise=] of a [=Solid Service Description Rule=] [MAY] contain any number of Pre-Conditions: statements describing the [=Resource State=] prior to the [=Request=] being processed. These statements [SHOULD] be limited to linking this [=Resource State=] to the variables used in the [=Conclusion=] of the [=Solid Service Description Rule=].
+
+A single [=Solid Service Description Rule=] describes a [=Web Service=] that is related to a single [=Resource Set=].
+
+[=Solid Service Description Rules=] contained within the same [=Solid Service Description=] describe a [=Resource Set=] containing all [=Resources=] under an [=URI Prefix=].
+
+  <div class="example" id="ex-elaborate">
+
+    Elaborate example of a [=Solid Service Description=].
+
+    <pre class=include-code>
+      path: examples/elaborate.ttl
+      highlight: turtle
+    </pre>
+
+  </div>
+
+  <div class="note">
+
+    Since [=Solid Service Descriptions=] are themselves [=Resources=], of which the [=Service=] is described above,
+    they can likewise be specified by a [=Service Description=], which is provided below. Note that this [=Service Description=] is not a [=Solid Service Description=], because [=Solid Service Descriptions=] are not necessarily hosted on a [=Solid Server=].
+
+    <pre highlight="turtle">
+
+    </pre>
+
+  </div>
+    
+  ISSUE:
+    Construct N3 namespace doc and fill in URI in examples.

@@ -1,0 +1,75 @@
+
+: <dfn noexport>Agent</dfn>
+:: An entity that acts, either on its own or under the direction of some other [=Agent=]. 
+    This corresponds to the notion of a [=foaf:Agent=] as defined in the [[FOAF]] vocabulary.
+
+: <dfn noexport>Social Agent</dfn>
+:: An [=Agent=] that acts within a social environment, i.e. a natural or legal person.
+    This corresponds to the union of [=foaf:Person=] and [=foaf:Organization=].
+
+: <dfn noexport>Software Agent</dfn>
+:: An [=Agent=] that exists as [=Software=] that can act *autonomously*,
+    without the synchronous involvement of a [=Social Agent=].
+
+: <dfn noexport>Client Application</dfn>, a.k.a. *Client*
+:: A [=Software=] application used synchronously by a [=Social Agent=].
+
+: <dfn noexport>Software Developer</dfn>
+:: The [=Social Agent=] producing a [=Software Agent=] or [=Client Application=].
+
+: <dfn noexport>End-User</dfn>, a.k.a. *User*
+:: The [=Social Agent=] using a [=Client Application=].
+
+: <dfn noexport>Resource</dfn>
+:: A source of data.
+
+: <dfn noexport>RDF-Resource</dfn>
+:: A [=Resource=] of which the state can be fully represented in [RDF].
+    This definition is consistent with that of an [=RDF Source=] [[RDF11-CONCEPTS]],
+    and that of an [=LDP RDF Source=] [[LDP]].
+
+: <dfn noexport>Resource Set</dfn>
+:: A set of [=Resources=] treated as a whole for some purpose.
+
+: <dfn export>Resource Owner</dfn> (RO), a.k.a. *Owner*
+:: The [=Social Agent=] that owns a particular [=Resource=], 
+    i.e. who has ultimate control over it.
+    A [=Resource=] can have at most one [=Resource Owner=].
+
+: <dfn noexport>Resource Server</dfn> (RS)
+:: A server that provides access to [=Resources=].
+
+: <dfn noexport>Solid Resource Server</dfn>, a.k.a. *Solid Server*
+:: A [=Resource Server=] conforming to the [Solid Protocol].
+
+: <dfn export>Web Service</dfn>, a.k.a. *Service*
+:: A multimedia interface (API) through which a [=Resource=] can be accessed,
+    provided by a [=Resource Server=].
+    A [=Resource=] can have multiple related [=Web Services=];
+    a specific [=Web Service=] is only related to a single [=Resources=].
+
+: <dfn export>Web Service Description</dfn>, a.k.a. *Service Description*
+:: A descriptive communication model of the functionality 
+    (pre- and post-conditions) of one or more [=Web Services'=] algorithms,
+    related to a [=Resource Set=] under a certain [=URL Prefix=].
+
+: <dfn export>Authorization</dfn>
+:: The permission of some [=Agents=] to access certain [=Resources=]
+    through some of their related [=Web Services=].
+
+: <dfn export>Grant</dfn>
+:: The approval of an [=Authorization=].
+
+: <dfn export>Denial</dfn>
+:: The disapproval of an [=Authorization=].
+
+: <dfn export>Authorization Server</dfn> (AS)
+:: A server that manages the [=Authorizations=] 
+    (i.e. the [=Grants=] and [=Denials=] thereof) 
+    concerning the [=Resources=] of a [=Resource Owner=].
+
+---
+
+: [=URI|Uniform Resource Identifier=] (URI)
+:: ...
+    a string literal, the value of which is a relative [URI] reference

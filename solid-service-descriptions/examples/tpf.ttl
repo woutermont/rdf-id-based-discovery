@@ -1,0 +1,94 @@
+@prefix http: <http://www.w3.org/2011/http#> .
+@prefix sc: <http://www.w3.org/2011/http-statusCodes> .
+@prefix solid: <http://www.w3.org/ns/solid/terms#> .
+@prefix ttl: <https://www.w3.org/ns/iana/media-types/text/turtle#Resource> .
+#@prefix ttl: <http://www.sparontologies.net/mediatype/text/turtle> .
+
+# Any resource conforming to this Solid Service Description
+# provides the following services (only writing the s+p case out in full):
+ 
+{
+  
+  # For every subject-predicate pair (in the resource state), of which we collect the objects ...  
+  ( ?object { ?subject ?predicate ?object . } ?objects ) log:collectAllIn _:state .
+
+  # ... with s and p the string format the pair's URIs ...
+  ?subject log:uri ?s .
+  ?predicate log:uri ?p .
+
+
+} => {
+
+  # ... there exists a GET request with query parameters s and p ...
+  _:req
+    a http:Request ;
+    http:mthd http:GET ;
+    http:requestURI "/{?s,p}" ;
+    http:resp _:resp .
+
+  # ... which results in a response with status 200 and a Turtle fragment ...
+  _:resp
+    a http:Response ;
+    http:sc sc:Ok ;
+    http:body [
+      dc:format ttl: ;
+      solid:represents _:fragment .
+    ] .
+
+  _:fragment
+
+    # ... which includes the triples of all the collected objects ...
+    log:includes [
+      @is log:collectAllIn @of ( ?object { ?subject ?predicate ?object . } ?objects ) .
+    ] ;
+    
+    # ... and the necessary TPF metadata.
+    log:includes {
+
+      hydra:search [
+          hydra:template "/{?s,p,o}";
+          hydra:mapping  [ hydra:variable "s"; hydra:property rdf:subject ],
+                        [ hydra:variable "p"; hydra:property rdf:predicate ],
+                        [ hydra:variable "o"; hydra:property rdf:object ]
+      ].
+      
+      </> void:subset <>;
+      <> void:triples ?n .
+      
+    } .
+
+} .
+
+{
+  
+  # For every request body that represents an RDF graph in Turtle format ...
+  ?reqBody 
+    dc:format ttl: ;
+    solid:represents _:fragment .
+    
+  # ... which is a subject-predicate pattern fragment over a collection of objects ...
+  ( ?object { ?subject ?predicate ?object . } ?objects ) log:collectAllIn _:fragment .
+
+  # ... with s and p the string format of the subject and predicate URIs ...
+  ?subject log:uri ?s .
+  ?predicate log:uri ?p .
+
+} => {
+
+  # ... there exists a POST request with query parameters s and p ...
+  _:req
+    a http:Request ;
+    http:mthd http:POST ;
+    http:requestURI "/{?s,p}" ;
+    http:body ?reqBody ;
+
+    # ... which results in a response with status 200 ...
+    http:resp [
+      a http:Response ;
+      http:sc sc:Ok .
+    ] .
+
+  # ... confirming the resource state now includes the provided triples.
+  ( ?object { ?subject ?predicate ?object . } ?objects ) log:collectAllIn _:state .
+
+} .

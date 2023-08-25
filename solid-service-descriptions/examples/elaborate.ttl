@@ -1,0 +1,76 @@
+@prefix http: <http://www.w3.org/2011/http#> .
+@prefix sc: <http://www.w3.org/2011/http-statusCodes> .
+@prefix solid: <http://www.w3.org/ns/solid/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix ttl: <https://www.w3.org/ns/iana/media-types/text/turtle#Resource> .
+#@prefix ttl: <http://www.sparontologies.net/mediatype/text/turtle> .
+
+# Any resource conforming to this Solid Service Description
+# understands the following facts ...
+
+:Computers rdfs:subClassOf :Item ; rdfs:label "computer" ;
+:Smartphones rdfs:subClassOf :Item ; rdfs:label "smartphone" .
+
+:apple a :Make ; rdfs:label "apple" .
+:google a :Make ; rdfs:label "google" .
+:microsoft a :Make ; rdfs:label "microsoft", "ms" .
+
+# ... and provides the following service:
+
+{
+
+  # For every item ...
+  ?item
+    a ?itemClass ;
+    :make ?itemMake ;
+    :score ?itemScore ;
+    :price ?itemPrice .
+
+  # ... whose class label matches a certain string ...
+  ?itemClass 
+    rdfs:subClassOf :Item ; 
+    rdfs:label ?classLabel .
+  ?classLabel string:matches ?class .
+
+  # ... whose make label matches a certain string ...
+  ?itemMake 
+    a :Make ; 
+    rdfs:label ?makeLabel .
+  ?makeLabel string:matches ?make .
+
+  # ... whose score is at least a certain integer value ...
+  ( ?minscore xsd:integer ) log:dtlit ?_minscore . 
+  ?itemScore math:greaterThanOrEqual ?_minscore .
+
+  # ... and whose price is at most a certain integer value ...
+  ( ?maxprice xsd:integer ) log:dtlit ?_maxprice . 
+  ?itemPrice math:lessThanOrEqual ?_maxprice . 
+
+} => {
+
+  # ... there exists a GET request to '/store/{class}?{minscore,maxprice,make}' ...
+  # ... e.g. 'GET /store/computer?make=apple&minscore=4&maxprice=2000' ...
+  _:req
+    a http:Request ;
+    http:mthd http:GET ;
+    http:requestURI "/store/{class}?{minscore,maxprice,make}" ;
+    http:resp _:resp .
+    
+  # ... which results in a response with status 200 ...
+  _:resp
+    a http:Response ;
+    http:sc sc:Ok .
+    http:body _:body .
+    
+  # ... containing a body that represents a result list ...
+  _:body 
+    solid:represents _:resultList .
+
+  # ... including all items that match the query.
+  ?item list:in ?resultList .
+
+} .
