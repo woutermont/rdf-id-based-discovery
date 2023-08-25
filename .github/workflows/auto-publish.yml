@@ -25,12 +25,18 @@ jobs:
         run: |
           bikeshed spec agent-specific-discovery/agent-specific-discovery.bs
           bikeshed spec data-discovery/data-discovery.bs
-          bikeshed spec solid-service/index.bs
-          bikeshed spec solid-authorization-framework/index.bs
-        #  bikeshed spec concepts-in-representation/concepts-representation.bs
+          bikeshed spec concepts-in-representation/concepts-representation.bs
+      - name: run bikeshed in subdirectory
+        working-directory: ./solid-service-descriptions
+        run: |
+          bikeshed spec index.bs
+      - name: run bikeshed in subdirectory
+        working-directory: ./solid-authorization-framework
+        run: |
+          bikeshed spec index.bs
 
       - name: generate svg
-        run: for diagram in proposals/diagrams/*.mmd; do docker run --rm -v "$PWD:/data" minlag/mermaid-cli -i /data/$diagram; done
+        run: for diagram in */diagrams/*.mmd; do docker run --rm -v "$PWD:/data" minlag/mermaid-cli -i /data/$diagram; done
 
       # - name: run pandoc
       #   uses: docker://pandoc/latex:latest
